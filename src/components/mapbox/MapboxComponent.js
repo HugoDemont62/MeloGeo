@@ -19,11 +19,12 @@ export default function MapboxComponent() {
     const [currentTemp, setCurrentTemp] = useState(null);
 
 
-    useEffect(() => {
-        if(clickedPosition) {
-            setClickedPositionInfos(apiManager.getPositionClickedInfos(clickedPosition.lng, clickedPosition.lat, token));
-        }
-    }, [clickedPosition]);
+
+    // useEffect(() => {
+    //     if(clickedPosition) {
+    //         setClickedPositionInfos(apiManager.getPositionClickedInfos(clickedPosition.lng, clickedPosition.lat, token));
+    //     }
+    // }, [clickedPosition]);
 
 
     // Configuration de la carte
@@ -45,6 +46,11 @@ export default function MapboxComponent() {
     }, []);
 
     const handleClick = useCallback((event) => {
+        const features = mapRef.current.queryRenderedFeatures(event.point, {
+            layers: ['trees-layer'] // Remplacez par l'ID de votre couche si nécessaire
+        });
+        console.log(features)
+
         setClickedPosition(event.lngLat);
     }, []);
 
@@ -89,6 +95,7 @@ export default function MapboxComponent() {
                         }}
                     />
                 </Source>
+
             </Map>
         </>
     );

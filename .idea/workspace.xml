@@ -5,17 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4b8663a-5597-4a27-85b0-571c43711fbf" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.env" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/mapbox/MenuComponent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/map/page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/map/page.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/MapComponent.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/mapbox/MapboxComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/mapbox/MapboxComponent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/services/api-manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/api-manager.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +41,7 @@
   &quot;keyToString&quot;: {
     &quot;DefaultHtmlFileTemplate&quot;: &quot;HTML File&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;develop&quot;,
     &quot;last_opened_file_path&quot;: &quot;/Users/tomengelibert/Documents/web/competition&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -89,10 +80,14 @@
       <workItem from="1718706191437" duration="14024000" />
       <workItem from="1718722391243" duration="9593000" />
       <workItem from="1718781852974" duration="16390000" />
+      <workItem from="1718957702050" duration="3597000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="LAST_COMMIT_MESSAGE" value="" />
   </component>
 </project>
