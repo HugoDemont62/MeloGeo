@@ -2,6 +2,7 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import * as React from 'react';
 import Map, {GeolocateControl, Layer, Marker, NavigationControl, Source} from 'react-map-gl';
+import {clusterLayer, clusterCountLayer, unclusteredPointLayer} from '../../layers/layer';
 import {useCallback, useEffect, useRef, useState} from "react";
 import dynamic from "next/dynamic";
 import apiManager from "../../services/api-manager";
@@ -14,17 +15,18 @@ export default function MapboxComponent() {
 
     // Gestion des états des données
     const [clickedPosition, setClickedPosition] = useState(null);
-    const [clickedPositionInfos, setClickedPositionInfos] = useState(null);
-    const [cityInfos, setCityInfos] = useState(null);
-    const [currentTemp, setCurrentTemp] = useState(null);
-
-
+    const [featurePoint, setFeaturePoint] = useState(null);
+    // const [clickedPositionInfos, setClickedPositionInfos] = useState(null);
 
     // useEffect(() => {
     //     if(clickedPosition) {
     //         setClickedPositionInfos(apiManager.getPositionClickedInfos(clickedPosition.lng, clickedPosition.lat, token));
     //     }
     // }, [clickedPosition]);
+
+    useEffect(() => {
+    console.log(featurePoint)
+    },[featurePoint])
 
 
     // Configuration de la carte
@@ -47,12 +49,15 @@ export default function MapboxComponent() {
 
     const handleClick = useCallback((event) => {
         const features = mapRef.current.queryRenderedFeatures(event.point, {
-            layers: ['trees-layer'] // Remplacez par l'ID de votre couche si nécessaire
+            layers: ['unclustered-point']
         });
-        console.log(features)
-
+        setFeaturePoint(features)
         setClickedPosition(event.lngLat);
     }, []);
+
+    const handleMouseEnter = useCallback((event) => {
+
+    })
 
 
 
@@ -65,6 +70,7 @@ export default function MapboxComponent() {
                     latitude: 45.7640,
                     zoom: 11
                 }}
+                onMouseMove={handleMouseEnter}
                 onClick={handleClick}
                 mapboxAccessToken={token}
                 style={{ width: '100%', height: '100vh' }}
@@ -85,7 +91,8 @@ export default function MapboxComponent() {
                 {clickedPosition && (
                     <Marker longitude={clickedPosition.lng} latitude={clickedPosition.lat} />
                 )}
-                <Source id="trees" type="geojson" data={geojson}>
+                <Source id="trees" type="geojson" data={geojson} cluster={true} clusterMaxZoom={14}
+                        clusterRadius={50}>
                     <Layer
                         id="trees-layer"
                         type="circle"
@@ -93,9 +100,11 @@ export default function MapboxComponent() {
                             'circle-radius': 6,
                             'circle-color': '#B42222'
                         }}
+                        {...clusterLayer}
                     />
+                    <Layer {...clusterCountLayer} />
+                    <Layer {...unclusteredPointLayer} />
                 </Source>
-
             </Map>
         </>
     );
