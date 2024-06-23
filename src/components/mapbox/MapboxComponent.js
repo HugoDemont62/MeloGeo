@@ -7,6 +7,7 @@ import {useCallback, useEffect, useRef, useState} from "react";
 import dynamic from "next/dynamic";
 import apiManager from "../../services/api-manager";
 import {geojson} from '@/geojson/geojson'
+import {styles} from "next/dist/client/components/react-dev-overlay/internal/components/Toast";
 
 
 
@@ -16,19 +17,12 @@ export default function MapboxComponent() {
     // Gestion des états des données
     const [clickedPosition, setClickedPosition] = useState(null);
     const [featurePoint, setFeaturePoint] = useState(null);
-    // const [clickedPositionInfos, setClickedPositionInfos] = useState(null);
-
-    // useEffect(() => {
-    //     if(clickedPosition) {
-    //         setClickedPositionInfos(apiManager.getPositionClickedInfos(clickedPosition.lng, clickedPosition.lat, token));
-    //     }
-    // }, [clickedPosition]);
 
     useEffect(() => {
     console.log(featurePoint)
     },[featurePoint])
 
-
+    
     // Configuration de la carte
     const DynamicGeocoder = dynamic(() => import('@mapbox/search-js-react').then(mod => mod.Geocoder), {
         ssr: false
@@ -55,14 +49,21 @@ export default function MapboxComponent() {
         setClickedPosition(event.lngLat);
     }, []);
 
-    const handleMouseEnter = useCallback((event) => {
-
+    const handleMouseMove = useCallback((event) => {
+        const features = mapRef.current.queryRenderedFeatures(event.point, {
+            layers: ['unclustered-point']
+        });
+        if (features.length > 0) {
+            mapRef.current.getCanvasContainer().style.cursor = 'pointer'
+        } else {
+            mapRef.current.getCanvasContainer().style.cursor = 'crosshair'
+        }
     })
 
 
 
     return (
-        <>
+        <div style={{cursor:'crosshair'}}>
             <Map
                 ref={mapRef}
                 initialViewState={{
@@ -70,15 +71,15 @@ export default function MapboxComponent() {
                     latitude: 45.7640,
                     zoom: 11
                 }}
-                onMouseMove={handleMouseEnter}
+                onMouseMove={handleMouseMove}
                 onClick={handleClick}
                 mapboxAccessToken={token}
-                style={{ width: '100%', height: '100vh' }}
+                style={{width: '100%', height: '100vh'}}
                 projection='globe'
                 mapStyle="mapbox://styles/mapbox/dark-v11"
             >
-                <GeolocateControl position="bottom-right" />
-                <NavigationControl position="bottom-right" />
+                <GeolocateControl position="bottom-right"/>
+                <NavigationControl position="bottom-right"/>
                 <DynamicGeocoder
                     accessToken={token}
                     options={{
@@ -89,7 +90,7 @@ export default function MapboxComponent() {
                     value="Rechercher un endroit"
                 />
                 {clickedPosition && (
-                    <Marker longitude={clickedPosition.lng} latitude={clickedPosition.lat} />
+                    <Marker longitude={clickedPosition.lng} latitude={clickedPosition.lat}/>
                 )}
                 <Source id="trees" type="geojson" data={geojson} cluster={true} clusterMaxZoom={14}
                         clusterRadius={50}>
@@ -106,6 +107,6 @@ export default function MapboxComponent() {
                     <Layer {...unclusteredPointLayer} />
                 </Source>
             </Map>
-        </>
+        </div>
     );
 }

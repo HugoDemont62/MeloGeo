@@ -4,7 +4,7 @@ import MapboxComponent from "@/components/mapbox/MapboxComponent";
 
 const Map = () => {
     return (
-        <div>
+        <div style={{cursor: 'crosshair'}}>
             <h1>Carte</h1>
             <MapboxComponent/>
         </div>
