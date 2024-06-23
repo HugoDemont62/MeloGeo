@@ -1,9 +1,22 @@
 
 import axios from "axios";
 class ApiManager {
-    getPositionClickedInfos(longitude, latitude, token) {
+    getPositionClickedInfos = async(longitude, latitude, token) =>
+    {
         const url = `https://api.mapbox.com/search/geocode/v6/reverse?longitude=${longitude}&latitude=${latitude}&access_token=${token}`;
-        return axios.get(url)
+         return await axios.get(url)
+            .then(res => {
+                 return res.data;
+            })
+            .catch(error => {
+                throw new Error(`Failed to fetch reverse geocode: ${error.message}`);
+            });
+    }
+
+    getCityByLngLat = async(longitude, latitude, token) =>
+    {
+        const url = `https://api.mapbox.com/search/geocode/v6/reverse?longitude=${longitude}&latitude=${latitude}&types=place&access_token=${token}`;
+        return await axios.get(url)
             .then(res => {
                 return res.data;
             })

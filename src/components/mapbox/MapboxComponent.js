@@ -7,28 +7,41 @@ import {useCallback, useEffect, useRef, useState} from "react";
 import dynamic from "next/dynamic";
 import apiManager from "../../services/api-manager";
 import {geojson} from '@/geojson/geojson'
-import {styles} from "next/dist/client/components/react-dev-overlay/internal/components/Toast";
 
-
-
-export default function MapboxComponent() {
-    const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+export default function MapboxComponent({setClickedElement, setCityName, setMapRef, markers, checked}) {
+    const tokenMapbox = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
+    const tokenOWeather = process.env.NEXT_PUBLIC_OWEATHER_TOKEN;
+    const mapRef = useRef();
+    const [clickedLngLat, setClickedLngLat] = useState(null);
 
     // Gestion des états des données
-    const [clickedPosition, setClickedPosition] = useState(null);
-    const [featurePoint, setFeaturePoint] = useState(null);
+
+    useEffect(() =>  {
+        if(clickedLngLat) {
+            apiManager.getCityByLngLat(clickedLngLat.lng, clickedLngLat.lat, tokenMapbox)
+                .then(data => {
+                    const cityName = data.features[0].properties.name;
+                    setCityName(cityName)
+                    return apiManager.getWeatherByCity(cityName, tokenOWeather);
+                })
+                .then(weatherData => {
+                    console.log(weatherData);
+                })
+                .catch(err => console.error(err));
+        }
+    }, [clickedLngLat]);
 
     useEffect(() => {
-    console.log(featurePoint)
-    },[featurePoint])
+        if(checked) {
+            setMapRef(mapRef);
+        }
+    }, [checked])
 
-    
     // Configuration de la carte
     const DynamicGeocoder = dynamic(() => import('@mapbox/search-js-react').then(mod => mod.Geocoder), {
         ssr: false
     });
 
-    const mapRef = useRef();
 
     // Gestion des comportements de la carte
     const handleRetrieve = useCallback((retrieve) => {
@@ -45,8 +58,8 @@ export default function MapboxComponent() {
         const features = mapRef.current.queryRenderedFeatures(event.point, {
             layers: ['unclustered-point']
         });
-        setFeaturePoint(features)
-        setClickedPosition(event.lngLat);
+        setClickedElement(features)
+        setClickedLngLat(event.lngLat);
     }, []);
 
     const handleMouseMove = useCallback((event) => {
@@ -73,25 +86,31 @@ export default function MapboxComponent() {
                 }}
                 onMouseMove={handleMouseMove}
                 onClick={handleClick}
-                mapboxAccessToken={token}
+                mapboxAccessToken={tokenMapbox}
                 style={{width: '100%', height: '100vh'}}
-                projection='globe'
+                // projection='globe'
                 mapStyle="mapbox://styles/mapbox/dark-v11"
             >
                 <GeolocateControl position="bottom-right"/>
                 <NavigationControl position="bottom-right"/>
-                <DynamicGeocoder
-                    accessToken={token}
-                    options={{
-                        language: 'fr',
-                        country: 'FR'
-                    }}
-                    onRetrieve={handleRetrieve}
-                    value="Rechercher un endroit"
-                />
-                {clickedPosition && (
-                    <Marker longitude={clickedPosition.lng} latitude={clickedPosition.lat}/>
-                )}
+                {/*<DynamicGeocoder*/}
+                {/*    accesstokenMapbox={tokenMapbox}*/}
+                {/*    options={{*/}
+                {/*        language: 'fr',*/}
+                {/*        country: 'FR'*/}
+                {/*    }}*/}
+                {/*    onRetrieve={handleRetrieve}*/}
+                {/*    value="Rechercher un endroit"*/}
+                {/*/>*/}
+                {/*{clickedLngLat && (*/}
+                {/*    <Marker longitude={clickedLngLat.lng} latitude={clickedLngLat.lat}/>*/}
+                {/*)}*/}
+
+                {markers.map((marker) => (
+                    <Marker key={marker.id} longitude={marker.lngLat.lng} latitude={marker.lngLat.lat}>
+                        <div style={{ fontSize: '24px' }}>🌳</div>
+                    </Marker>
+                ))}
                 <Source id="trees" type="geojson" data={geojson} cluster={true} clusterMaxZoom={14}
                         clusterRadius={50}>
                     <Layer
