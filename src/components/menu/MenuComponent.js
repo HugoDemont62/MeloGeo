@@ -24,7 +24,7 @@ const MenuComponent = ({clickedElement, cityName, mapRef}) => {
             {/*<p>Temperature maximale enregistrée : {temperature}</p>*/}
             {/*<p>Temperature du point de chaleur : {temperature}</p>*/}
 
-            <SelectATreeComponent/>
+            <SelectATreeComponent mapRef={mapRef}/>
         </>
     )
 

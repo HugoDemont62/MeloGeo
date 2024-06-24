@@ -12,6 +12,7 @@ const Map = () => {
     const [clickedElement, setClickedElement] = useState([]);
     const [cityName, setCityName] = useState('');
     const [checked, setChecked] = useState(false);
+    const [mapRef, setMapRef] = useState(null)
 
 
     useEffect(() => {
@@ -26,10 +27,12 @@ const Map = () => {
     return (
         <Grid container>
             <Grid item xs>
-                <MapboxComponent setClickedElement={setClickedElement} setCityName={setCityName}/>
+                <MapboxComponent setClickedElement={setClickedElement} setCityName={setCityName} setMapRef={setMapRef}/>
             </Grid>
                 <Slide direction="left" in={checked} mountOnEnter unmountOnExit>
-                <Grid item xs={4}><MenuComponent clickedElement={clickedElement} cityName={cityName}/></Grid>
+                <Grid item xs={4}>
+                    <MenuComponent clickedElement={clickedElement} cityName={cityName} mapRef={mapRef}/>
+                </Grid>
                 </Slide>
         </Grid>
     );

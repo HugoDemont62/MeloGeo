@@ -2,12 +2,12 @@ import Image from 'next/image';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
-import { useEffect, useRef, useState } from "react";
+import {useCallback, useEffect, useRef, useState} from "react";
 import '../../../app/styles/slider.css';
 import '../../../app/styles/map.css'
 import {Button} from "@mui/material";
 
-export default function SelectATreeComponent() {
+export default function SelectATreeComponent({mapRef}) {
 
     const [slideIndex, setSlideIndex] = useState(0);
     const sliderRef = useRef(null);
@@ -41,6 +41,11 @@ export default function SelectATreeComponent() {
         }
     }, [currentTree]);
 
+  const handleSelectedTree = () => {
+      let treeDatas = currentTree.querySelector('div');
+      mapRef.current.getCanvasContainer().style.cursor = 'url(/images/custom-cursors/tree-removebg.png), auto'
+  }
+
     return (
         <div>
             <h2 style={{textAlign:'center', marginBottom:-50}}>{treeName}</h2>
@@ -56,7 +61,7 @@ export default function SelectATreeComponent() {
                 </div>
             </Slider>
             <div style={{textAlign:'center', marginTop:-40}}>
-                <button className="custom-button">Sélectionner cet arbre</button>
+                <button onClick={handleSelectedTree} className="custom-button">Sélectionner cet arbre</button>
             </div>
             {/*<div style={{marginLeft:'5%', marginRight:'5%', marginTop:20}}>*/}
             {/*    <p style={{fontWeight:'bold'}}>Impacts environnementaux :</p>*/}

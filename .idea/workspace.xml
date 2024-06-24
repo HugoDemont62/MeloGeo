@@ -5,15 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4b8663a-5597-4a27-85b0-571c43711fbf" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/app/styles/map.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/app/styles/slider.css" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/menu/menu-parts/SelectATreeComponent.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/images/custom-cursors/custom.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/map/page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/map/page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/styles/map.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/map.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/mapbox/MapboxComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/mapbox/MapboxComponent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/mapbox/MenuComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/menu/MenuComponent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/menu/MenuComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/menu/MenuComponent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/menu/menu-parts/SelectATreeComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/menu/menu-parts/SelectATreeComponent.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -63,6 +61,8 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/images/custom-cursors" />
+      <recent name="$PROJECT_DIR$/public/images" />
       <recent name="$PROJECT_DIR$/src/components/menu" />
       <recent name="$PROJECT_DIR$/src/components" />
       <recent name="$PROJECT_DIR$/src/components/mapbox" />

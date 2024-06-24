@@ -8,7 +8,7 @@ import dynamic from "next/dynamic";
 import apiManager from "../../services/api-manager";
 import {geojson} from '@/geojson/geojson'
 
-export default function MapboxComponent({setClickedElement, setCityName}) {
+export default function MapboxComponent({setClickedElement, setCityName, setMapRef}) {
     const tokenMapbox = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     const tokenOWeather = process.env.NEXT_PUBLIC_OWEATHER_TOKEN;
     const mapRef = useRef();
@@ -30,6 +30,10 @@ export default function MapboxComponent({setClickedElement, setCityName}) {
                 .catch(err => console.error(err));
         }
     }, [clickedLngLat]);
+
+    useEffect(() => {
+        setMapRef(mapRef)
+    },[mapRef])
 
 
     // Configuration de la carte
@@ -63,9 +67,10 @@ export default function MapboxComponent({setClickedElement, setCityName}) {
         });
         if (features.length > 0) {
             mapRef.current.getCanvasContainer().style.cursor = 'pointer'
-        } else {
-            mapRef.current.getCanvasContainer().style.cursor = 'crosshair'
         }
+        // else {
+        //     mapRef.current.getCanvasContainer().style.cursor = 'crosshair'
+        // }
     })
 
 
