@@ -8,7 +8,7 @@ import dynamic from "next/dynamic";
 import apiManager from "../../services/api-manager";
 import {geojson} from '@/geojson/geojson'
 
-export default function MapboxComponent({setClickedElement, setCityName, setMapRef, markers, checked}) {
+export default function MapboxComponent({setClickedElement, setCityName, markers, checked}) {
     const tokenMapbox = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     const tokenOWeather = process.env.NEXT_PUBLIC_OWEATHER_TOKEN;
     const mapRef = useRef();
@@ -31,11 +31,6 @@ export default function MapboxComponent({setClickedElement, setCityName, setMapR
         }
     }, [clickedLngLat]);
 
-    useEffect(() => {
-        if(checked) {
-            setMapRef(mapRef);
-        }
-    }, [checked])
 
     // Configuration de la carte
     const DynamicGeocoder = dynamic(() => import('@mapbox/search-js-react').then(mod => mod.Geocoder), {
@@ -102,15 +97,11 @@ export default function MapboxComponent({setClickedElement, setCityName, setMapR
                 {/*    onRetrieve={handleRetrieve}*/}
                 {/*    value="Rechercher un endroit"*/}
                 {/*/>*/}
-                {/*{clickedLngLat && (*/}
-                {/*    <Marker longitude={clickedLngLat.lng} latitude={clickedLngLat.lat}/>*/}
-                {/*)}*/}
+                {clickedLngLat && (
+                    <Marker longitude={clickedLngLat.lng} latitude={clickedLngLat.lat}/>
+                )}
 
-                {markers.map((marker) => (
-                    <Marker key={marker.id} longitude={marker.lngLat.lng} latitude={marker.lngLat.lat}>
-                        <div style={{ fontSize: '24px' }}>🌳</div>
-                    </Marker>
-                ))}
+
                 <Source id="trees" type="geojson" data={geojson} cluster={true} clusterMaxZoom={14}
                         clusterRadius={50}>
                     <Layer
