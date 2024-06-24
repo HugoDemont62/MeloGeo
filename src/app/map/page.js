@@ -4,7 +4,7 @@ import * as React from 'react';
 import {useEffect, useState} from "react";
 import MapboxComponent from "@/components/mapbox/MapboxComponent";
 import {Button, Grid} from "@mui/material";
-import MenuComponent from "@/components/mapbox/MenuComponent";
+import MenuComponent from "@/components/menu/MenuComponent";
 import Slide from '@mui/material/Slide';
 
 const Map = () => {
@@ -26,7 +26,7 @@ const Map = () => {
     return (
         <Grid container>
             <Grid item xs>
-                <MapboxComponent setClickedElement={setClickedElement} setCityName={setCityName} checked={checked}/>
+                <MapboxComponent setClickedElement={setClickedElement} setCityName={setCityName}/>
             </Grid>
                 <Slide direction="left" in={checked} mountOnEnter unmountOnExit>
                 <Grid item xs={4}><MenuComponent clickedElement={clickedElement} cityName={cityName}/></Grid>

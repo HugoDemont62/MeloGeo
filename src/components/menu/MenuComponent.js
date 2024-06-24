@@ -1,5 +1,6 @@
 'use client'
 import React, {useEffect, useState} from 'react';
+import SelectATreeComponent from "@/components/menu/menu-parts/SelectATreeComponent";
 
 const MenuComponent = ({clickedElement, cityName, mapRef}) => {
 
@@ -19,10 +20,11 @@ const MenuComponent = ({clickedElement, cityName, mapRef}) => {
 
     return (
         <>
-            <h1>{cityName} </h1>
-            <p>Temperature maximale enregistrée : {temperature}</p>
-            <p>Temperature du point de chaleur : {temperature}</p>
+            {/*<h1>{cityName} </h1>*/}
+            {/*<p>Temperature maximale enregistrée : {temperature}</p>*/}
+            {/*<p>Temperature du point de chaleur : {temperature}</p>*/}
 
+            <SelectATreeComponent/>
         </>
     )
 
