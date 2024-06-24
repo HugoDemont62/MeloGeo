@@ -1,0 +1,43 @@
+.sectionContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.flexRowReverse {
+    flex-direction: row-reverse;
+}
+
+.content {
+    flex: 1;
+    padding: 20px;
+    margin-left: 20rem;
+    margin-top: 13rem;
+    margin-bottom: 13rem;
+}
+
+.title {
+    font-size: 34px;
+    margin-bottom: 10px;
+}
+
+.description {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+    color: #666;
+    margin-top: 2rem;
+}
+
+.image {
+    flex: 1;
+    padding: 20px;
+}
+
+.imageElement {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+    margin-left: 22rem;
+    margin-top: -20rem;
+}

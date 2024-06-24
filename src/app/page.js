@@ -4,6 +4,7 @@ import Header from '../components/Header';
 import Banner from '../components/Banner';
 import Section from '../components/Section';
 import Section2 from '../components/Section2';
+import Section3 from '../components/Section3';
 import styles from './page.module.css'; // Styles spécifiques à la page, optionnel
 
 export default function Home() {
@@ -35,7 +36,12 @@ export default function Home() {
           imageUrl="/images/temperature.png"
           reverse={false} // ou true selon vos besoins
         />
-
+        <Section3
+          title="Anticiper"
+          description="Afin de garantir un avenir sain et juste pour les générations futures, le temps presse, il est plus que temps de prendre au sérieux les risques encourus dû au réchauffement climatique et de celui de nos villes : la volonté de Simularbre est également de permettre au plus grand nombre d’observer qu’avec peu, on pourrait déjà faire beaucoup."
+          imageUrl="/images/vue-face-arbre-3d-feuilles-tronc 2.png"
+          reverse={false} // ou true selon vos besoins
+        />
         <div className={styles.center}>
           <Image
             className={styles.logo}
