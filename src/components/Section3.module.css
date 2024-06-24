@@ -2,6 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    height: 500px;
 }
 
 .flexRowReverse {
@@ -31,13 +32,10 @@
 
 .image {
     flex: 1;
-    padding: 20px;
 }
 
 .imageElement {
     max-width: 100%;
     height: auto;
-    border-radius: 8px;
-    margin-left: 22rem;
-    margin-top: -20rem;
+    margin-left: 15rem;
 }

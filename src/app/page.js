@@ -1,6 +1,7 @@
 import React from 'react';
 import Image from 'next/image';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import Banner from '../components/Banner';
 import Section from '../components/Section';
 import Section2 from '../components/Section2';
@@ -42,21 +43,8 @@ export default function Home() {
           imageUrl="/images/vue-face-arbre-3d-feuilles-tronc 2.png"
           reverse={false} // ou true selon vos besoins
         />
-        <div className={styles.center}>
-          <Image
-            className={styles.logo}
-            src="/next.svg"
-            alt="Next.js Logo"
-            width={180}
-            height={37}
-            priority
-          />
-        </div>
-
-        <div className={styles.grid}>
-          {/* Vos autres éléments existants */}
-        </div>
       </main>
+      <Footer />
     </>
   );
 }
