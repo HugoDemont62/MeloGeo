@@ -31,7 +31,7 @@ const Map = () => {
                 <MapboxComponent setClickedElement={setClickedElement} setCityName={setCityName} setMapRef={setMapRef} selectedTree={selectedTree}/>
             </Grid>
                 <Slide direction="left" in={checked} mountOnEnter unmountOnExit>
-                <Grid item xs={4}>
+                <Grid item xs={4} sm={3}>
                     <MenuComponent clickedElement={clickedElement} cityName={cityName} mapRef={mapRef} setSelectedTree={setSelectedTree}/>
                 </Grid>
                 </Slide>
