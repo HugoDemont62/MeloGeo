@@ -5,7 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e4b8663a-5597-4a27-85b0-571c43711fbf" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/public/fonts/Poppins-Bold.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/public/fonts/Poppins-Regular.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/styles/menu-city.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/app/test/page.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/menu/menu-parts/CityDetailsComponent.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/globals.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/globals.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/map/page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/map/page.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,8 +48,8 @@
   "keyToString": {
     "DefaultHtmlFileTemplate": "HTML File",
     "RunOnceActivity.ShowReadmeOnStart": "true",
-    "git-widget-placeholder": "feature/add-tree-marker",
-    "last_opened_file_path": "/Users/tomengelibert/Documents/web/competition",
+    "git-widget-placeholder": "feature/menu",
+    "last_opened_file_path": "/Users/tomengelibert/Documents/web/competition/public/fonts",
     "list.type.of.created.stylesheet": "CSS",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
@@ -54,6 +61,9 @@
   }
 }]]></component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/fonts" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/public/images/custom-cursors" />
       <recent name="$PROJECT_DIR$/public/images" />
