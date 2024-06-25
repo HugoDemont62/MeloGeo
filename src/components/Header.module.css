@@ -1,0 +1,41 @@
+.header {
+    background-color: #0b0e14;
+    padding: 1rem;
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    padding-left: 10rem;
+    flex: 1;
+}
+
+.logoImg {
+    max-height: 80px;
+}
+
+.nav {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-right: 15rem;
+}
+
+.link {
+    color: #fff;
+    font-weight: 500;
+    margin: 0 1rem;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 1rem 2rem;
+    border-radius: 2rem;
+    transition: background-color 0.2s, color 0.3s;
+}
+
+.link:hover {
+    background-color: #a9e5ac;
+    color: #0b0e14;
+    font-weight: 500;
+}

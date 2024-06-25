@@ -1,0 +1,45 @@
+.sectionContainer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #d0f1d2;
+    overflow: hidden;
+}
+
+.flexRowReverse {
+    flex-direction: row-reverse;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    padding-right: 10rem;
+    margin: 6rem;
+}
+
+.title {
+    font-size: 34px;
+    margin-bottom: 10px;
+}
+
+.description {
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 27px;
+    color: #666;
+    margin-top: 2rem;
+}
+
+.image {
+    left: 0;
+    bottom: 0;
+    transform: translate(-10%, 25%);
+}
+
+.imageElement {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
