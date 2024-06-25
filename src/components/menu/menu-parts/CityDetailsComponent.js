@@ -32,6 +32,11 @@ export default function CityDetailsComponent() {
                         </div>
                     </div>
                 </div>
+                <div className="air item ">
+                    <p><strong>Qualité de l'air</strong></p>
+                    <img src="/images/map-menu/jauge.png" alt="jauge qualite air"/>
+                    <p>Moyen</p>
+                </div>
                 <br/>
                 <hr/>
                 <br/>

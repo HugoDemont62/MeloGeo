@@ -20,6 +20,7 @@
 
 * {
     font-family: "Poppins", sans-serif;
+    color:black;
 }
 
 h2 {
@@ -66,7 +67,7 @@ span {
     display: flex;
     padding: 12px 16px;
     margin-top:12px;
-    margin-bottom: 12px;
+
 
 }
 
@@ -122,4 +123,17 @@ span {
 p {
     margin-top:6px;
     margin-bottom:6px;
+}
+
+.air {
+    text-align: center;
+    display:flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    gap:8px
+}
+
+.air img {
+    height:90px;
 }
