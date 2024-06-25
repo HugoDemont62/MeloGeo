@@ -8,11 +8,12 @@ import dynamic from "next/dynamic";
 import apiManager from "../../services/api-manager";
 import {geojson} from '@/geojson/geojson'
 
-export default function MapboxComponent({setClickedElement, setCityName, setMapRef}) {
+export default function MapboxComponent({setClickedElement, setCityName, setMapRef, selectedTree}) {
     const tokenMapbox = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     const tokenOWeather = process.env.NEXT_PUBLIC_OWEATHER_TOKEN;
     const mapRef = useRef();
     const [clickedLngLat, setClickedLngLat] = useState(null);
+    const [markers, setMarkers] = useState([]);
 
     // Gestion des états des données
 
@@ -34,6 +35,10 @@ export default function MapboxComponent({setClickedElement, setCityName, setMapR
     useEffect(() => {
         setMapRef(mapRef)
     },[mapRef])
+
+    useEffect(() => {
+        console.log(selectedTree)
+    },[selectedTree])
 
 
     // Configuration de la carte
@@ -61,16 +66,30 @@ export default function MapboxComponent({setClickedElement, setCityName, setMapR
         setClickedLngLat(event.lngLat);
     }, []);
 
+    const handleDoubleClick = useCallback((event) => {
+        if (selectedTree) {
+
+            const newMarker = {
+                id: Date.now(),
+                longitude: event.lngLat.lng,
+                latitude: event.lngLat.lat,
+                icon: selectedTree.getAttribute('data-icon')
+            };
+            setMarkers([...markers, newMarker]);
+        }
+    });
+
     const handleMouseMove = useCallback((event) => {
         const features = mapRef.current.queryRenderedFeatures(event.point, {
             layers: ['unclustered-point']
         });
-        if (features.length > 0) {
-            mapRef.current.getCanvasContainer().style.cursor = 'pointer'
+        if(!selectedTree) {
+            if (features.length > 0) {
+                mapRef.current.getCanvasContainer().style.cursor = 'pointer'
+            } else {
+                mapRef.current.getCanvasContainer().style.cursor = 'crosshair'
+            }
         }
-        // else {
-        //     mapRef.current.getCanvasContainer().style.cursor = 'crosshair'
-        // }
     })
 
 
@@ -86,6 +105,7 @@ export default function MapboxComponent({setClickedElement, setCityName, setMapR
                 }}
                 onMouseMove={handleMouseMove}
                 onClick={handleClick}
+                onDblClick={handleDoubleClick}
                 mapboxAccessToken={tokenMapbox}
                 style={{width: '100%', height: '100vh'}}
                 // projection='globe'
@@ -102,9 +122,23 @@ export default function MapboxComponent({setClickedElement, setCityName, setMapR
                 {/*    onRetrieve={handleRetrieve}*/}
                 {/*    value="Rechercher un endroit"*/}
                 {/*/>*/}
-                {clickedLngLat && (
-                    <Marker longitude={clickedLngLat.lng} latitude={clickedLngLat.lat}/>
-                )}
+                {/*{clickedLngLat && (*/}
+                {/*    <Marker longitude={clickedLngLat.lng} latitude={clickedLngLat.lat}/>*/}
+                {/*)}*/}
+                {markers.map(marker => (
+                    <Marker
+                        key={marker.id}
+                        longitude={marker.longitude}
+                        latitude={marker.latitude}
+                        anchor="bottom"
+                    >
+                        <img
+                            src={`/images/custom-cursors/${marker.icon}.png`}
+                            alt="Tree Icon"
+                            style={{ width: '40px', height: '40px' }}
+                        />
+                    </Marker>
+                ))}
 
 
                 <Source id="trees" type="geojson" data={geojson} cluster={true} clusterMaxZoom={14}

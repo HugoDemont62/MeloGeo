@@ -17,7 +17,7 @@ export const trees = {
 
         },
         {
-            "name" : "Cerisier",
+            "name" : "Pommier",
             "tempReduced" : 3,
             "img": "tree3",
             "icon": "tree3"

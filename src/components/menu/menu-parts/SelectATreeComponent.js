@@ -8,7 +8,7 @@ import '../../../app/styles/map.css'
 import {trees} from '@/trees/trees'
 import {Button} from "@mui/material";
 
-export default function SelectATreeComponent({mapRef}) {
+export default function SelectATreeComponent({mapRef, setSelectedTree}) {
 
     const [slideIndex, setSlideIndex] = useState(0);
     const sliderRef = useRef(null);
@@ -48,6 +48,7 @@ export default function SelectATreeComponent({mapRef}) {
             let icon = treeDatas.getAttribute('data-icon');
             let canvasContainer = mapRef.current.getCanvasContainer();
             canvasContainer.style.cursor = `url(/images/custom-cursors/${icon}.png), auto`;
+            setSelectedTree(treeDatas);
         }
     }
 
