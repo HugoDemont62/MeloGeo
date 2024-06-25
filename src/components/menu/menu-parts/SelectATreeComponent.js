@@ -5,6 +5,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import {useCallback, useEffect, useRef, useState} from "react";
 import '../../../app/styles/slider.css';
 import '../../../app/styles/map.css'
+import {trees} from '@/trees/trees'
 import {Button} from "@mui/material";
 
 export default function SelectATreeComponent({mapRef}) {
@@ -41,24 +42,25 @@ export default function SelectATreeComponent({mapRef}) {
         }
     }, [currentTree]);
 
-  const handleSelectedTree = () => {
-      let treeDatas = currentTree.querySelector('div');
-      mapRef.current.getCanvasContainer().style.cursor = 'url(/images/custom-cursors/tree-removebg.png), auto'
-  }
+    const handleSelectedTree = () => {
+        let treeDatas = currentTree.querySelector('div');
+        if (treeDatas && mapRef.current) {
+            let icon = treeDatas.getAttribute('data-icon');
+            let canvasContainer = mapRef.current.getCanvasContainer();
+            canvasContainer.style.cursor = `url(/images/custom-cursors/${icon}.png), auto`;
+        }
+    }
+
 
     return (
         <div>
             <h2 style={{textAlign:'center', marginBottom:-50}}>{treeName}</h2>
             <Slider ref={sliderRef} {...settings}>
-                <div data-name='Boulot'>
-                    <Image src='/images/tree.png' alt='icone arbre' width={100} height={100} />
-                </div>
-                <div data-name='Sapin'>
-                    <Image src='/images/tree2.png' alt='icone arbre' width={100} height={100} />
-                </div>
-                <div data-name='Cerisier'>
-                    <Image src='/images/tree3.png' alt='icone arbre' width={100} height={100} />
-                </div>
+                {trees.trees.map((tree, index) => (
+                    <div key={index} data-name={tree.name} data-icon={tree.icon}>
+                        <Image src={`/images/${tree.img}.png`} alt={`icone ${tree.name}`} width={100} height={100} />
+                    </div>
+                ))}
             </Slider>
             <div style={{textAlign:'center', marginTop:-40}}>
                 <button onClick={handleSelectedTree} className="custom-button">Sélectionner cet arbre</button>
