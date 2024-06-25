@@ -11,7 +11,10 @@ const Howitworks = () => {
             <div className={styles.logo}>
                 <img src="/images/Simularbrehowitworkslogo.png" alt="Simularbre Logo" />
             </div>
-            <p>Simulateur de régulation arboricole des températures dans les villes</p>
+            <div className={styles.desc}>
+                <p>Simulateur de régulation arboricole des températures dans les villes</p>
+            </div>
+            <hr className={styles.separator} /> 
             </header>
             <main className={styles.main}>
             <h2>Comment ça marche ?</h2>
