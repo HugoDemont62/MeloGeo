@@ -6,15 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="e4b8663a-5597-4a27-85b0-571c43711fbf" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/custom-cursors/tree1.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/custom-cursors/tree2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/custom-cursors/tree3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/tree.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/tree2.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/public/images/tree3.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app/styles/menu-city.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/menu-city.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/menu/menu-parts/CityDetailsComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/menu/menu-parts/CityDetailsComponent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trees/trees.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/trees/trees.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/map/page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/map/page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/styles/slider.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/slider.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/menu/MenuComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/menu/MenuComponent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/menu/menu-parts/SelectATreeComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/menu/menu-parts/SelectATreeComponent.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

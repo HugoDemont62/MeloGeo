@@ -111,8 +111,8 @@ export default function MapboxComponent({setClickedElement, setCityName, setMapR
                 // projection='globe'
                 mapStyle="mapbox://styles/mapbox/dark-v11"
             >
-                <GeolocateControl position="bottom-right"/>
-                <NavigationControl position="bottom-right"/>
+                <GeolocateControl position="bottom-left"/>
+                <NavigationControl position="bottom-left"/>
                 {/*<DynamicGeocoder*/}
                 {/*    accesstokenMapbox={tokenMapbox}*/}
                 {/*    options={{*/}

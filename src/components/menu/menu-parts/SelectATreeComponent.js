@@ -55,7 +55,7 @@ export default function SelectATreeComponent({mapRef, setSelectedTree}) {
 
     return (
         <div>
-            <h2 style={{textAlign:'center', marginBottom:-50}}>{treeName}</h2>
+            <h2 style={{textAlign:'center', marginBottom:-50, fontSize:24}}>{treeName}</h2>
             <Slider ref={sliderRef} {...settings}>
                 {trees.trees.map((tree, index) => (
                     <div key={index} data-name={tree.name} data-icon={tree.icon}>

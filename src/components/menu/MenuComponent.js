@@ -19,13 +19,9 @@ const MenuComponent = ({clickedElement, cityName, mapRef, setSelectedTree}) => {
     },[mapRef])
 
     return (
-        <>
-            {/*<h1>{cityName} </h1>*/}
-            {/*<p>Temperature maximale enregistrée : {temperature}</p>*/}
-            {/*<p>Temperature du point de chaleur : {temperature}</p>*/}
-
+        <div style={{height:'100vh', backgroundColor:'white', padding: 20, borderRadius: 10 }}>
             <SelectATreeComponent mapRef={mapRef} setSelectedTree={setSelectedTree}/>
-        </>
+        </div>
     )
 
 }

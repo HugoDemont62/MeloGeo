@@ -1,12 +1,12 @@
 'use client'
 import '../../../app/styles/menu-city.css';
-export default function CityDetailsComponent() {
+export default function CityDetailsComponent({cityName}) {
 
 
     return (
         <>
             <div className="container">
-                <h2>Lille</h2>
+                <h2>{cityName}</h2>
                 <h3>Les ilots de chaleurs</h3>
                 <p>Regarde l’impact en direct sur la carte, cela correspond à des zones de fortes chaleur en été et
                     si on ne fait rien ça ne cessera pas d’augmenter !</p>
