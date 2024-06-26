@@ -2,7 +2,7 @@
 import React, {useEffect, useState} from 'react';
 import SelectATreeComponent from "@/components/menu/menu-parts/SelectATreeComponent";
 
-const MenuComponent = ({clickedElement, cityName, mapRef, setSelectedTree}) => {
+const MenuComponent = ({clickedElement, cityName, mapRef, setSelectedTree, selectedTree}) => {
 
     const [temperature, setTemperature] = useState('0');
 
@@ -19,13 +19,9 @@ const MenuComponent = ({clickedElement, cityName, mapRef, setSelectedTree}) => {
     },[mapRef])
 
     return (
-        <>
-            {/*<h1>{cityName} </h1>*/}
-            {/*<p>Temperature maximale enregistrée : {temperature}</p>*/}
-            {/*<p>Temperature du point de chaleur : {temperature}</p>*/}
-
-            <SelectATreeComponent mapRef={mapRef} setSelectedTree={setSelectedTree}/>
-        </>
+        <div style={{height:'100vh', backgroundColor:'white', padding: 20, borderRadius: 10, overflowY:"scroll"}}>
+            <SelectATreeComponent mapRef={mapRef} setSelectedTree={setSelectedTree} selectedTree={selectedTree}/>
+        </div>
     )
 
 }
