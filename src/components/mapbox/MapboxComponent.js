@@ -8,7 +8,7 @@ import dynamic from "next/dynamic";
 import apiManager from "../../services/api-manager";
 import {geojson} from '@/geojson/geojson'
 
-export default function MapboxComponent({setClickedElement, setCityName, setMapRef, selectedTree}) {
+export default function MapboxComponent({setClickedElement, setCityName, setMapRef, selectedTree, setIsMarkerClicked}) {
     const tokenMapbox = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     const tokenOWeather = process.env.NEXT_PUBLIC_OWEATHER_TOKEN;
     const mapRef = useRef();
@@ -92,6 +92,10 @@ export default function MapboxComponent({setClickedElement, setCityName, setMapR
         }
     })
 
+    const handleClickMarker = useCallback((event) => {
+    console.log(event)
+    })
+
 
 
     return (
@@ -127,6 +131,8 @@ export default function MapboxComponent({setClickedElement, setCityName, setMapR
                 {/*)}*/}
                 {markers.map(marker => (
                     <Marker
+                        draggable
+                        onClick={handleClickMarker}
                         key={marker.id}
                         longitude={marker.longitude}
                         latitude={marker.latitude}

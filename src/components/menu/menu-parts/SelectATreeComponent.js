@@ -7,8 +7,9 @@ import '../../../app/styles/slider.css';
 import '../../../app/styles/map.css'
 import {trees} from '@/trees/trees'
 import {Button} from "@mui/material";
+import Slide from "@mui/material/Slide";
 
-export default function SelectATreeComponent({mapRef, setSelectedTree}) {
+export default function SelectATreeComponent({mapRef, setSelectedTree, selectedTree}) {
 
     const [slideIndex, setSlideIndex] = useState(0);
     const sliderRef = useRef(null);
@@ -52,6 +53,11 @@ export default function SelectATreeComponent({mapRef, setSelectedTree}) {
         }
     }
 
+    const handleClose = () => {
+        console.log('test')
+        setSelectedTree(null)
+    }
+
 
     return (
         <div>
@@ -63,12 +69,15 @@ export default function SelectATreeComponent({mapRef, setSelectedTree}) {
                     </div>
                 ))}
             </Slider>
-            <div style={{textAlign:'center', marginTop:-40}}>
+            <div style={{textAlign:'center', marginTop:-10, display:"flex", justifyContent:'center', alignItems:'center', gap:12}}>
                 <button onClick={handleSelectedTree} className="custom-button">Sélectionner cet arbre</button>
+                <Slide direction="left"  in={selectedTree} mountOnEnter unmountOnExit>
+                <button onClick={handleClose}
+                        style={{background: 'none', border: 'none'}}>
+                    <img className="cross-button" style={{height: 30}} src="/images/map-menu/cross.png" alt='icone fermer'/>
+                </button>
+                </Slide>
             </div>
-            {/*<div style={{marginLeft:'5%', marginRight:'5%', marginTop:20}}>*/}
-            {/*    <p style={{fontWeight:'bold'}}>Impacts environnementaux :</p>*/}
-            {/*</div>*/}
 
         </div>
     );
