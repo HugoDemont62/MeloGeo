@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../progressbar/Progressbar.module.css';
+import styles from './Progressbar.module.css';
 
 const ProgressBar = ({ title, value }) => {
     return (
@@ -9,8 +9,8 @@ const ProgressBar = ({ title, value }) => {
                 <div className={styles.progress} style={{ width: `${value}%` }}></div>
             </div>
             <div className={styles.labels}>
-                <span>Très faible</span>
-                <span>Très fort</span>
+                <span style={{fontWeight:'lighter', fontSize:14}}>Très faible</span>
+                <span style={{fontWeight:'lighter', fontSize:14}}>Très fort</span>
             </div>
         </div>
     );

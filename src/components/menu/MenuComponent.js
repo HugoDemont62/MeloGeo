@@ -19,7 +19,7 @@ const MenuComponent = ({clickedElement, cityName, mapRef, setSelectedTree, selec
     },[mapRef])
 
     return (
-        <div style={{height:'100vh', backgroundColor:'white', padding: 20, borderRadius: 10 }}>
+        <div style={{height:'100vh', backgroundColor:'white', padding: 20, borderRadius: 10, overflowY:"scroll"}}>
             <SelectATreeComponent mapRef={mapRef} setSelectedTree={setSelectedTree} selectedTree={selectedTree}/>
         </div>
     )
