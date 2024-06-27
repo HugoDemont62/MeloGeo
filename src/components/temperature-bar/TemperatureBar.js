@@ -1,56 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from '../../components/temperature-bar/TemperatureBar.module.css';
-import { fontSize } from '@mui/system';
-import { Vazirmatn } from 'next/font/google';
 
 const TemperatureBar = ({ title, value, markers, heatPointId }) => {
-    // Regrouper les données par heatPointId
-    const groupedData = markers.reduce((acc, item) => {
-        const { heatPointId: id } = item;
-        if (!acc[id]) {
-            acc[id] = [];
+    const [totalTempreduced, setTotalTempreduced] = useState(0);
+    const [temperature, setTemperature] = useState(value);
+
+    useEffect(() => {
+        if (markers) {
+            let filteredMarkers = markers.filter(marker => marker.heatPointId === heatPointId);
+            let sumTempreduced = filteredMarkers.reduce((accumulator, marker) => {
+                return accumulator + parseFloat(marker.tempreduced);
+            }, 0);
+            setTotalTempreduced(sumTempreduced);
         }
-        acc[id].push(item);
-        return acc;
-    }, {});
+    }, [markers, heatPointId]);
 
-    console.log(groupedData);
-
-    // Calculer le total de tempreduced pour chaque heatPointId
-    const totals = Object.keys(groupedData).reduce((acc, id) => {
-        const totalTempreduced = groupedData[id].reduce((sum, item) => {
-            return sum + parseFloat(item.tempreduced);
-        }, 0);
-        acc[id] = totalTempreduced;
-        return acc;
-    }, {});
-
-    console.log(totals[heatPointId]);
+    useEffect(() => {
+        setTemperature(value - totalTempreduced);
+    }, [totalTempreduced, value]);
 
     const minTemp = 15;
     const maxTemp = 40;
-    let valueSubstract = value;
-
-    if (totals[heatPointId]) {
-        valueSubstract -= totals[heatPointId];
-    }
-
-    const percentageValue = ((valueSubstract - minTemp) / (maxTemp - minTemp)) * 100;
-    console.log(markers);
-    console.log(heatPointId);
-    console.log(percentageValue);
-
-
+    let percentageValue = ((temperature - minTemp) / (maxTemp - minTemp)) * 100;
 
     return (
-        <div style={{display: 'flex', alignItems: 'center', gap:26}}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 26 }}>
             <div className={styles.temperatureBarContainer}>
                 <h3 className={styles.title}>{title}</h3>
                 <div className={styles.temperatureBar}>
                     <div className={styles.progress} style={{ width: '100%' }}></div>
-                    <div className={styles.marker} style={{ left: `${percentageValue}%` }}>
-                        
-                    </div>
+                    <div className={styles.marker} style={{ left: `${percentageValue}%` }}></div>
                 </div>
                 <div className={styles.labels}>
                     <span style={{ fontWeight: 'lighter', fontSize: 14 }}>15°C</span>
@@ -59,11 +38,12 @@ const TemperatureBar = ({ title, value, markers, heatPointId }) => {
             </div>
             <div>
                 <div>
-                    <p style={{fontSize: '2rem'}}><strong>{valueSubstract}°C</strong></p>
+                    <p style={{ fontSize: '2rem' }}>
+                        <strong>{temperature}°C</strong>
+                    </p>
                 </div>
             </div>
         </div>
-
     );
 };
 

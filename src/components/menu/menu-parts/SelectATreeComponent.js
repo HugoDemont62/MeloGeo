@@ -76,9 +76,8 @@ export default function SelectATreeComponent({mapRef, setSelectedTree, selectedT
             <h2 style={{textAlign:'center', marginBottom:-50, fontSize:24}}>{treeName}</h2>
             <Slider ref={sliderRef} {...settings}>
                 {trees.trees.map((tree, index) => (
-                    <div key={index} data-name={tree.name} data-icon={tree.icon} data-limit={tree.limit} data-impacts={JSON.stringify(tree.impacts)} data-tempReduced={(tree.tempReduced)}>
+                    <div key={index} data-name={tree.name} data-icon={tree.icon} data-limit={tree.limit} data-impacts={JSON.stringify(tree.impacts)} data-tempreduced={(tree.tempReduced)}>
                         <Image src={`/images/${tree.img}.png`} alt={`icone ${tree.name}`} width={100} height={100} />
-                        console.log({treeReducedTemp})
                     </div>
                 ))}
             </Slider>

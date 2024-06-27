@@ -77,7 +77,7 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
                     longitude: event.lngLat.lng,
                     latitude: event.lngLat.lat,
                     icon: selectedTree.getAttribute('data-icon'),
-                    tempreduced: selectedTree.getAttribute('data-tempReduced'),
+                    tempreduced: selectedTree.getAttribute('data-tempreduced'),
                 heatPointId: heatPointId
                 };
                 setMarkers(prevMarkers => [...prevMarkers, newMarker]);
