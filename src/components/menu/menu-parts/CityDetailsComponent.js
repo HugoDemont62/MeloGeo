@@ -1,7 +1,24 @@
 'use client'
 import '../../../app/styles/menu-city.css';
-export default function CityDetailsComponent({cityName}) {
+import {useEffect, useState} from "react";
+export default function CityDetailsComponent({cityName, weatherData}) {
 
+    // Gestion des états des données du climat
+    const [currentTemp, setCurrentTemp] = useState(0)
+    const [maxTemp, setMaxTemp] = useState(0)
+    const [minTemp, setMinTemp] = useState(0)
+    const [humidityLevel, setHumidityLevel] = useState(0)
+
+    useEffect(() => {
+        if (weatherData.main) {
+            const { temp, temp_max, temp_min, humidity } = weatherData.main;
+            // Conversion des températures de Kelvin à Celsius
+            setCurrentTemp(temp);
+            setMaxTemp(temp_max);
+            setMinTemp(temp_min);
+            setHumidityLevel(humidity);
+        }
+    }, [weatherData]);
 
     return (
         <>
@@ -12,6 +29,26 @@ export default function CityDetailsComponent({cityName}) {
                     si on ne fait rien ça ne cessera pas d’augmenter !</p>
                 <span>Actuellement sur la ville :</span>
                 <div className="datas-container">
+                    <div className='item'>
+                        <p><strong>Aujourd'hui</strong></p><br/>
+                        <div className='current-temperatures'>
+                            <div></div>
+                            <div>
+                                <img src='/images/map-menu/rain.png' alt="icone humidité"/>
+                                <p>{humidityLevel} %</p>
+                            </div>
+                            <div>
+                                <img src='/images/map-menu/temp-max.png' alt="icone temperature maximun"/>
+                                <p>{maxTemp}°</p>
+                            </div>
+                            <div>
+                                <img src='/images/map-menu/temp-min.png' alt="icone temperature minimum"/>
+                                <p>{minTemp}°</p>
+                            </div>
+                        </div>
+
+
+                    </div>
                     <div className="item temp">
                         <p>Température max atteinte en été</p><br/>
                         <p className='indicator'>38°</p>

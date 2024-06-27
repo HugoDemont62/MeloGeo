@@ -9,6 +9,7 @@ import {trees} from '@/trees/trees'
 import {Button} from "@mui/material";
 import Slide from "@mui/material/Slide";
 import Progressbar from "@/components/progressbar/Progressbar";
+import CircularWithValueLabel from "@/components/circularprogressbar/CircularProgress";
 
 
 export default function SelectATreeComponent({mapRef, setSelectedTree, selectedTree}) {
@@ -50,7 +51,6 @@ export default function SelectATreeComponent({mapRef, setSelectedTree, selectedT
     }, [currentTree]);
 
     useEffect(() => {
-      console.log(treeImpacts)
     },[treeImpacts])
 
     const handleSelectedTree = () => {
@@ -64,7 +64,6 @@ export default function SelectATreeComponent({mapRef, setSelectedTree, selectedT
     }
 
     const handleClose = () => {
-        console.log('test')
         setSelectedTree(null)
     }
 

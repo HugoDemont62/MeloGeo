@@ -6,10 +6,11 @@
   <component name="ChangeListManager">
     <list default="true" id="e4b8663a-5597-4a27-85b0-571c43711fbf" name="Changes" comment="merge">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/menu/MenuComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/menu/MenuComponent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/menu/menu-parts/SelectATreeComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/menu/menu-parts/SelectATreeComponent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/progressbar/Progressbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/progressbar/Progressbar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/trees/trees.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/trees/trees.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/map/page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/map/page.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app/styles/menu-city.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/menu-city.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/mapbox/MapboxComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/mapbox/MapboxComponent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/menu/menu-parts/CityDetailsComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/menu/menu-parts/CityDetailsComponent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/api-manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/api-manager.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

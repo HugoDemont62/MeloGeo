@@ -1,4 +1,3 @@
-'use client';
 import "mapbox-gl/dist/mapbox-gl.css";
 import * as React from 'react';
 import Map, {GeolocateControl, Layer, Marker, NavigationControl, Source} from 'react-map-gl';
@@ -6,46 +5,39 @@ import {clusterLayer, clusterCountLayer, unclusteredPointLayer} from '../../laye
 import {useCallback, useEffect, useRef, useState} from "react";
 import dynamic from "next/dynamic";
 import apiManager from "../../services/api-manager";
-import {geojson} from '@/geojson/geojson'
+import {geojson} from '@/geojson/geojson';
 
-export default function MapboxComponent({setClickedElement, setCityName, setMapRef, selectedTree, setIsMarkerClicked}) {
+export default function MapboxComponent({setClickedElement, setCityName, setWeatherData, setMapRef, selectedTree, setMarkers, markers, heatPointId}) {
     const tokenMapbox = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     const tokenOWeather = process.env.NEXT_PUBLIC_OWEATHER_TOKEN;
     const mapRef = useRef();
     const [clickedLngLat, setClickedLngLat] = useState(null);
-    const [markers, setMarkers] = useState([]);
 
     // Gestion des états des données
-
-    useEffect(() =>  {
+    useEffect(() => {
         if(clickedLngLat) {
+            // Récupération du nom de ville selon ses coordonnees
             apiManager.getCityByLngLat(clickedLngLat.lng, clickedLngLat.lat, tokenMapbox)
                 .then(data => {
                     const cityName = data.features[0].properties.name;
-                    setCityName(cityName)
+                    setCityName(cityName);
                     return apiManager.getWeatherByCity(cityName, tokenOWeather);
                 })
                 .then(weatherData => {
-                    console.log(weatherData);
+                    setWeatherData(weatherData);
                 })
                 .catch(err => console.error(err));
         }
     }, [clickedLngLat]);
 
     useEffect(() => {
-        setMapRef(mapRef)
-    },[mapRef])
-
-    useEffect(() => {
-        console.log(selectedTree)
-    },[selectedTree])
-
+        setMapRef(mapRef);
+    }, [mapRef]);
 
     // Configuration de la carte
     const DynamicGeocoder = dynamic(() => import('@mapbox/search-js-react').then(mod => mod.Geocoder), {
         ssr: false
     });
-
 
     // Gestion des comportements de la carte
     const handleRetrieve = useCallback((retrieve) => {
@@ -62,41 +54,39 @@ export default function MapboxComponent({setClickedElement, setCityName, setMapR
         const features = mapRef.current.queryRenderedFeatures(event.point, {
             layers: ['unclustered-point']
         });
-        setClickedElement(features)
+        setClickedElement(features);
         setClickedLngLat(event.lngLat);
     }, []);
 
     const handleDoubleClick = useCallback((event) => {
         if (selectedTree) {
-
             const newMarker = {
                 id: Date.now(),
                 longitude: event.lngLat.lng,
                 latitude: event.lngLat.lat,
-                icon: selectedTree.getAttribute('data-icon')
+                icon: selectedTree.getAttribute('data-icon'),
+                heatPointId: heatPointId
             };
-            setMarkers([...markers, newMarker]);
+            setMarkers(prevMarkers => [...prevMarkers, newMarker]);
         }
-    });
+    }, [selectedTree, heatPointId]);
 
     const handleMouseMove = useCallback((event) => {
         const features = mapRef.current.queryRenderedFeatures(event.point, {
             layers: ['unclustered-point']
         });
-        if(!selectedTree) {
+        if (!selectedTree) {
             if (features.length > 0) {
-                mapRef.current.getCanvasContainer().style.cursor = 'pointer'
+                mapRef.current.getCanvasContainer().style.cursor = 'pointer';
             } else {
-                mapRef.current.getCanvasContainer().style.cursor = 'crosshair'
+                mapRef.current.getCanvasContainer().style.cursor = 'crosshair';
             }
         }
-    })
+    }, [selectedTree]);
 
     const handleClickMarker = useCallback((event) => {
-    console.log(event)
-    })
-
-
+        console.log(event);
+    }, []);
 
     return (
         <div style={{cursor:'crosshair'}}>
@@ -110,25 +100,13 @@ export default function MapboxComponent({setClickedElement, setCityName, setMapR
                 onMouseMove={handleMouseMove}
                 onClick={handleClick}
                 onDblClick={handleDoubleClick}
+                doubleClickZoom={false}
                 mapboxAccessToken={tokenMapbox}
                 style={{width: '100%', height: '100vh'}}
-                // projection='globe'
                 mapStyle="mapbox://styles/mapbox/dark-v11"
             >
                 <GeolocateControl position="bottom-left"/>
                 <NavigationControl position="bottom-left"/>
-                {/*<DynamicGeocoder*/}
-                {/*    accesstokenMapbox={tokenMapbox}*/}
-                {/*    options={{*/}
-                {/*        language: 'fr',*/}
-                {/*        country: 'FR'*/}
-                {/*    }}*/}
-                {/*    onRetrieve={handleRetrieve}*/}
-                {/*    value="Rechercher un endroit"*/}
-                {/*/>*/}
-                {/*{clickedLngLat && (*/}
-                {/*    <Marker longitude={clickedLngLat.lng} latitude={clickedLngLat.lat}/>*/}
-                {/*)}*/}
                 {markers.map(marker => (
                     <Marker
                         draggable
@@ -145,10 +123,7 @@ export default function MapboxComponent({setClickedElement, setCityName, setMapR
                         />
                     </Marker>
                 ))}
-
-
-                <Source id="trees" type="geojson" data={geojson} cluster={true} clusterMaxZoom={14}
-                        clusterRadius={50}>
+                <Source id="trees" type="geojson" data={geojson} cluster={true} clusterMaxZoom={14} clusterRadius={50}>
                     <Layer
                         id="trees-layer"
                         type="circle"
