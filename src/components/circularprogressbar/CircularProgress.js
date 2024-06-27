@@ -63,7 +63,7 @@ CircularProgressWithLabel.propTypes = {
   size: PropTypes.number,
 };
 
-export default function CircularWithValueLabel({treesNeeded, markers, heatPointId}) {
+export default function CircularWithValueLabel({treesNeeded, markers, heatPointId, setIsCured}) {
     const [current, setCurrent] = React.useState(0);
 
     useEffect(() => {
@@ -71,12 +71,20 @@ export default function CircularWithValueLabel({treesNeeded, markers, heatPointI
         const filteredMarkers = markers.filter(marker => marker.heatPointId === heatPointId);
         // Mettre à jour l'état current avec le nombre de markers filtrés
         setCurrent(filteredMarkers.length);
-
     }, [markers, heatPointId]);
 
-    // if(current.length === treesNeeded.length) {
-    //     console.log('bravo !')
-    // }
+
+
+    useEffect(() => {
+        if(current === treesNeeded) {
+            setIsCured(true)
+        }
+
+    }, [current]);
+
+    useEffect(() => {
+        setIsCured(false)
+    }, [heatPointId]);
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>

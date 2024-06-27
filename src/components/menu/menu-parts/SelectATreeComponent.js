@@ -93,7 +93,7 @@ export default function SelectATreeComponent({mapRef, setSelectedTree, selectedT
                 <p><strong>Impacts environnementaux :</strong></p>
                 {treeImpacts && treeImpacts.length > 0 ? (
                     treeImpacts.map((impact, index) => (
-                        <div style={{marginTop:12}}>
+                        <div key={index} style={{marginTop:12}}>
                         <Progressbar key={index} title={impact.title} value={impact.value} />
                             </div>
                     ))

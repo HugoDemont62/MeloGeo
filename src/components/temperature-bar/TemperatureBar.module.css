@@ -10,7 +10,7 @@
     flex-direction: row;
     align-items: center;
     background-color: white;
-    padding: 20px;
+    padding: 10px;
     border-radius: 1.25rem;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 700px;
@@ -21,18 +21,18 @@
     width: 100%;
 }
 
-.progressBarContainer {
+.temperatureBarContainer {
     border-radius: 5px;
     overflow: hidden;
     padding: 10px;
-    width: 400px;
+    width: 360px;
 }
 
-.progressBar {
+.temperatureBar {
     background-color: rgb(219, 212, 212); /* Background color for the progress bar */
     border-radius: 5px;
     overflow: hidden;
-    height: 20px;
+    height: 10px;
     position: relative;
     margin-bottom: 1rem;
 }

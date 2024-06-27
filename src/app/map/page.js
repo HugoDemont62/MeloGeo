@@ -20,6 +20,7 @@ const Map = () => {
     const [checked, setChecked] = useState(false);
     const [menuCity, setMenuCity] = useState(false)
     const [simularbrePopup, setSimularbrePopup] = useState(true);
+    const [isCured, setIsCured] = useState(false);
     // États et données de la carte
     const [mapRef, setMapRef] = useState(null);
     const [selectedTree, setSelectedTree] = useState(null);
@@ -75,10 +76,11 @@ const Map = () => {
                     setMarkers={setMarkers}
                     markers={markers}
                     heatPointId={heatPointId}
+                    isCured={isCured}
                 />
             </div>
             <Slide direction="left" in={checked} mountOnEnter unmountOnExit>
-                <div style={{position: 'absolute', right: '0', top: '0', width: '400px', height: '100%'}}>
+                <div style={{position: 'absolute', right: '0', top: '0', width: '400px', height: '100%', marginTop: 20, marginRight:20}}>
                     <MenuComponent
                         clickedElement={clickedElement}
                         cityName={cityName}
@@ -88,25 +90,26 @@ const Map = () => {
                         treesNeeded={treesNeeded}
                         markers={markers}
                         heatPointId={heatPointId}
+                        setIsCured={setIsCured}
+                        isCured={isCured}
                     />
                 </div>
             </Slide>
             <Slide direction="left" in={menuCity} mountOnEnter unmountOnExit>
-                <div style={{position: 'absolute', right: '0', top: '0', width: 'fit-content', height: '100%'}}>
+                <div style={{position: 'absolute', right: '0', top: '0', width: 'fit-content', height: '100%', marginTop: 20, marginRight:20}}>
                     <CityDetailsComponent cityName={cityName} weatherData={weatherData} airPollution={airPollution}/>
                 </div>
             </Slide>
             <Slide direction="left" in={simularbrePopup} mountOnEnter unmountOnExit>
-                <div style={{position: 'absolute', right: '0', top: '0', width: 'fit-content', height: '100%'}}>
+                <div style={{position: 'absolute', right: '0', top: '0', width: 'fit-content', height: '100%', marginTop: 20, marginRight:20}}>
                     <HowItWorksComponent/>
                 </div>
             </Slide>
             <Slide direction="right" in={checked} mountOnEnter unmountOnExit>
-                <div style={{position: 'absolute', left: '0', top: '0', width: 'fit-content', height: 'auto', backgroundColor: 'white', padding: 20, borderRadius: 10}}>
+                <div style={{position: 'absolute', left: '0', top: '0', width: 'fit-content', height: 'auto', backgroundColor: 'white', padding: 8, borderRadius: 10, marginTop: 20, marginLeft:20}}>
                     <TemperatureBar value={temperature} title="Évolution de la température estimée :"/>
                 </div>
             </Slide>
-
         </div>
     );
 };

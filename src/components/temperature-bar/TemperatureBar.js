@@ -10,9 +10,9 @@ const TemperatureBar = ({ title, value }) => {
 
     return (
         <div style={{display: 'flex', alignItems: 'center', gap:26}}>
-            <div className={styles.progressBarContainer}>
+            <div className={styles.temperatureBarContainer}>
                 <h3 className={styles.title}>{title}</h3>
-                <div className={styles.progressBar}>
+                <div className={styles.temperatureBar}>
                     <div className={styles.progress} style={{ width: '100%' }}></div>
                     <div className={styles.marker} style={{ left: `${percentageValue}%` }}>
                         

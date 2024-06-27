@@ -1,6 +1,7 @@
 'use client'
 import '../../../app/styles/menu-city.css';
 import {useEffect, useState} from "react";
+import TemperatureBar from "@/components/temperature-bar/TemperatureBar";
 export default function CityDetailsComponent({cityName, weatherData, airPollution}) {
 
     // Gestion des états des données du climat
@@ -74,6 +75,9 @@ export default function CityDetailsComponent({cityName, weatherData, airPollutio
                                 <p>Ressentie</p>
                                 <p>  {feltTemp}°</p>
                             </div>
+                        </div>
+                        <div style={{width:350}}>
+                            <TemperatureBar value={currentTemp}/>
                         </div>
 
 
