@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styles from './Section2.module.css';
 
 const Section2 = ({ title, description, imageUrl, reverse }) => (
-  <div className={`${styles.sectionContainer} ${reverse ? styles.flexRowReverse : ''}`}>
+  <div id="estimer" className={`${styles.sectionContainer} ${reverse ? styles.flexRowReverse : ''}`}>
     <div className={styles.image}>
       <img src={imageUrl} alt={`Image for ${title}`} className={styles.imageElement} />
     </div>
