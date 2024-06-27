@@ -4,7 +4,7 @@ import styles from '../../components/temperature-bar/TemperatureBar.module.css';
 
 export default function TestTemperatureBar() {
     const impacts = [
-        { label: "Évolution de la température estimée :", value: 60 + "°C" },
+        { label: "Évolution de la température estimée :", value: 30 }, // example value in percentage
     ];
 
     return (
@@ -19,14 +19,13 @@ export default function TestTemperatureBar() {
                     </div>
                 ))}
                 <div>
-                {impacts.map((impact, index) => (
-                    <div key={index} className={styles.valueitem}>
-                        {impact.value}
+                    {impacts.map((impact, index) => (
+                        <div key={index} className={styles.valueitem}>
+                            {impact.value}°C
+                        </div>
+                    ))}
                 </div>
-                ))}
-            </div>
             </section>
-
         </main>
     );
 }
