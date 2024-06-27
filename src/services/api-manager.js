@@ -36,8 +36,8 @@ class ApiManager {
             });
     }
 
-     getWeatherByCity(city, token) {
-        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${token}`;
+    getWeatherByCity(city, token) {
+        const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${token}&units=metric`;
         return axios.get(url)
             .then(res => {
                 return res.data;
@@ -46,6 +46,7 @@ class ApiManager {
                 throw new Error(`Failed to get city temperature: ${error.message}`);
             });
     }
+
 
     getWeatherByLngLat(long, lat, token) {
         const url = `https://api.openweathermap.org/data/3.0/onecall?lat=${lat}&lon=${long}&appid=${token}`;
@@ -58,6 +59,16 @@ class ApiManager {
             });
     }
 
+    getAirPollution(long,lag,token) {
+        const url = `https://api.openweathermap.org/data/2.5/air_pollution/forecast?lat=${lat}&lon=${long}&appid=${token}`;
+        return axios.get(url)
+            .then(res => {
+                return res.data;
+            })
+            .catch(error => {
+                throw new Error(`Failed to get air pollution: ${error.message}`);
+            });
+    }
 
 }
 const apiManager = new ApiManager();

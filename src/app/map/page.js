@@ -11,12 +11,16 @@ import HowItWorksComponent from "@/components/menu/menu-parts/HowItWorksComponen
 const Map = () => {
 
     const [clickedElement, setClickedElement] = useState([]);
+    // Appels API
     const [cityName, setCityName] = useState('');
+    const [weatherData, setWeatherData] = useState(0)
+    // Gestion des états des menus
     const [checked, setChecked] = useState(false);
     const [menuCity, setMenuCity] = useState(false)
+    const [simularbrePopup, setSimularbrePopup] = useState(true);
+    // États et données de la carte
     const [mapRef, setMapRef] = useState(null);
     const [selectedTree, setSelectedTree] = useState(null);
-    const [simularbrePopup, setSimularbrePopup] = useState(true);
     const [markers, setMarkers] = useState([]);
     // Propriétés point de chaleur
     const [currentHeatPoint, setCurrentHeatPoint] = useState(null)
@@ -62,6 +66,7 @@ const Map = () => {
                 <MapboxComponent
                     setClickedElement={setClickedElement}
                     setCityName={setCityName}
+                    setWeatherData={setWeatherData}
                     setMapRef={setMapRef}
                     selectedTree={selectedTree}
                     setMarkers={setMarkers}
@@ -85,7 +90,7 @@ const Map = () => {
             </Slide>
             <Slide direction="left" in={menuCity} mountOnEnter unmountOnExit>
                 <div style={{position: 'absolute', right: '0', top: '0', width: 'fit-content', height: '100%'}}>
-                    <CityDetailsComponent cityName={cityName}/>
+                    <CityDetailsComponent cityName={cityName} weatherData={weatherData}/>
                 </div>
             </Slide>
             <Slide direction="left" in={simularbrePopup} mountOnEnter unmountOnExit>

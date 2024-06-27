@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import apiManager from "../../services/api-manager";
 import {geojson} from '@/geojson/geojson';
 
-export default function MapboxComponent({setClickedElement, setCityName, setMapRef, selectedTree, setMarkers, markers, heatPointId}) {
+export default function MapboxComponent({setClickedElement, setCityName, setWeatherData, setMapRef, selectedTree, setMarkers, markers, heatPointId}) {
     const tokenMapbox = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     const tokenOWeather = process.env.NEXT_PUBLIC_OWEATHER_TOKEN;
     const mapRef = useRef();
@@ -16,6 +16,7 @@ export default function MapboxComponent({setClickedElement, setCityName, setMapR
     // Gestion des états des données
     useEffect(() => {
         if(clickedLngLat) {
+            // Récupération du nom de ville selon ses coordonnees
             apiManager.getCityByLngLat(clickedLngLat.lng, clickedLngLat.lat, tokenMapbox)
                 .then(data => {
                     const cityName = data.features[0].properties.name;
@@ -23,7 +24,7 @@ export default function MapboxComponent({setClickedElement, setCityName, setMapR
                     return apiManager.getWeatherByCity(cityName, tokenOWeather);
                 })
                 .then(weatherData => {
-                    console.log(weatherData);
+                    setWeatherData(weatherData);
                 })
                 .catch(err => console.error(err));
         }

@@ -8,11 +8,9 @@
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/map/page.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/map/page.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app/styles/menu-city.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/app/styles/menu-city.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/circularprogressbar/CircularProgress.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/circularprogressbar/CircularProgress.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/mapbox/MapboxComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/mapbox/MapboxComponent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/menu/MenuComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/menu/MenuComponent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/menu/menu-parts/SelectATreeComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/menu/menu-parts/SelectATreeComponent.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/geojson/geojson.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/geojson/geojson.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/menu/menu-parts/CityDetailsComponent.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/menu/menu-parts/CityDetailsComponent.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/api-manager.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/api-manager.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
