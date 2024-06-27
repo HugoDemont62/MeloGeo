@@ -20,6 +20,7 @@ export default function SelectATreeComponent({mapRef, setSelectedTree, selectedT
     const [treeName, setTreeName] = useState(null)
     const [treeImpacts, setTreeImpacts] = useState(null)
     const [treeLimit, setTreeLimit] = useState(null)
+    const [treeReducedTemp, setTreeReducedTemp] = useState(null)
 
     const settings = {
         dots: false,
@@ -43,10 +44,11 @@ export default function SelectATreeComponent({mapRef, setSelectedTree, selectedT
 
     useEffect(() => {
         if(currentTree){
-           let treeName = currentTree.querySelector('div');
+            let treeName = currentTree.querySelector('div');
             setTreeName(treeName.getAttribute('data-name'))
             setTreeLimit(treeName.getAttribute('data-limit'))
             setTreeImpacts(JSON.parse(treeName.getAttribute('data-impacts')))
+            console.log(setTreeReducedTemp(treeName.getAttribute('data-tempReduced')))
         }
     }, [currentTree]);
 
@@ -74,7 +76,7 @@ export default function SelectATreeComponent({mapRef, setSelectedTree, selectedT
             <h2 style={{textAlign:'center', marginBottom:-50, fontSize:24}}>{treeName}</h2>
             <Slider ref={sliderRef} {...settings}>
                 {trees.trees.map((tree, index) => (
-                    <div key={index} data-name={tree.name} data-icon={tree.icon} data-limit={tree.limit} data-impacts={JSON.stringify(tree.impacts)}>
+                    <div key={index} data-name={tree.name} data-icon={tree.icon} data-limit={tree.limit} data-impacts={JSON.stringify(tree.impacts)} data-tempreduced={(tree.tempReduced)}>
                         <Image src={`/images/${tree.img}.png`} alt={`icone ${tree.name}`} width={100} height={100} />
                     </div>
                 ))}

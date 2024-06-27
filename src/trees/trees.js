@@ -4,7 +4,7 @@ export const trees = {
     "trees": [
         {
             "name" : "Le chêne pédoncule",
-            "tempReduced" : 2,
+            "tempReduced" : 0.2,
             "img": "chene",
             "icon": "chene",
             "impacts": [
@@ -26,7 +26,7 @@ export const trees = {
         },
         {
             "name" : "Le tilleul à grande feuille",
-            "tempReduced" : 3,
+            "tempReduced" : 0.3,
             "img": "tileuil",
             "icon": "tileuil",
             "impacts": [
@@ -48,7 +48,7 @@ export const trees = {
         },
         {
             "name" : "Le sapin du Colorado",
-            "tempReduced" : 3,
+            "tempReduced" : 0.4,
             "img": "sapin",
             "icon": "sapin",
             "impacts": [
@@ -69,7 +69,7 @@ export const trees = {
         },
         {
             "name" : "L'érable champêtre",
-            "tempReduced" : 3,
+            "tempReduced" : 0.3,
             "img": "erableC",
             "icon": "erableC",
             "impacts": [
@@ -90,7 +90,7 @@ export const trees = {
         },
         {
             "name" : "L'érable plane",
-            "tempReduced" : 3,
+            "tempReduced" : 0.3,
             "img": "erableP",
             "icon": "erableP",
             "impacts": [
@@ -111,7 +111,7 @@ export const trees = {
         },
         {
             "name" : "Le marronnier d'Inde",
-            "tempReduced" : 3,
+            "tempReduced" : 0.2,
             "img": "marronier",
             "icon": "marronier",
             "impacts": [
@@ -132,7 +132,7 @@ export const trees = {
         },
         {
             "name" : "Le bouleau verruqueux",
-            "tempReduced" : 3,
+            "tempReduced" : 0.3,
             "img": "bouleau",
             "icon": "bouleau",
             "impacts": [

@@ -107,7 +107,7 @@ const Map = () => {
             </Slide>
             <Slide direction="right" in={checked} mountOnEnter unmountOnExit>
                 <div style={{position: 'absolute', left: '0', top: '0', width: 'fit-content', height: 'auto', backgroundColor: 'white', padding: 8, borderRadius: 10, marginTop: 20, marginLeft:20}}>
-                    <TemperatureBar value={temperature} title="Évolution de la température estimée :"/>
+                    <TemperatureBar value={temperature} title="Évolution de la température estimée :" markers={markers} heatPointId={heatPointId}/>
                 </div>
             </Slide>
         </div>
