@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import apiManager from "../../services/api-manager";
 import {geojson} from '@/geojson/geojson';
 
-export default function MapboxComponent({setClickedElement, setCityName, setWeatherData, setMapRef, selectedTree, setMarkers, markers, heatPointId}) {
+export default function MapboxComponent({setClickedElement, setCityName, setWeatherData, setAirPollution,  setMapRef, selectedTree, setMarkers, markers, heatPointId}) {
     const tokenMapbox = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     const tokenOWeather = process.env.NEXT_PUBLIC_OWEATHER_TOKEN;
     const mapRef = useRef();
@@ -27,6 +27,11 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
                     setWeatherData(weatherData);
                 })
                 .catch(err => console.error(err));
+
+            apiManager.getAirPollution(clickedLngLat.lng, clickedLngLat.lat, tokenOWeather)
+                .then(data => {
+                    setAirPollution(data)
+                }).catch(err => console.log(err))
         }
     }, [clickedLngLat]);
 

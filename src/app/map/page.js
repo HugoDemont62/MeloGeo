@@ -13,7 +13,8 @@ const Map = () => {
     const [clickedElement, setClickedElement] = useState([]);
     // Appels API
     const [cityName, setCityName] = useState('');
-    const [weatherData, setWeatherData] = useState(0)
+    const [weatherData, setWeatherData] = useState(0);
+    const [airPollution, setAirPollution] = useState(0)
     // Gestion des états des menus
     const [checked, setChecked] = useState(false);
     const [menuCity, setMenuCity] = useState(false)
@@ -67,6 +68,7 @@ const Map = () => {
                     setClickedElement={setClickedElement}
                     setCityName={setCityName}
                     setWeatherData={setWeatherData}
+                    setAirPollution={setAirPollution}
                     setMapRef={setMapRef}
                     selectedTree={selectedTree}
                     setMarkers={setMarkers}
@@ -90,7 +92,7 @@ const Map = () => {
             </Slide>
             <Slide direction="left" in={menuCity} mountOnEnter unmountOnExit>
                 <div style={{position: 'absolute', right: '0', top: '0', width: 'fit-content', height: '100%'}}>
-                    <CityDetailsComponent cityName={cityName} weatherData={weatherData}/>
+                    <CityDetailsComponent cityName={cityName} weatherData={weatherData} airPollution={airPollution}/>
                 </div>
             </Slide>
             <Slide direction="left" in={simularbrePopup} mountOnEnter unmountOnExit>

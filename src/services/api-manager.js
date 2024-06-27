@@ -59,8 +59,8 @@ class ApiManager {
             });
     }
 
-    getAirPollution(long,lag,token) {
-        const url = `https://api.openweathermap.org/data/2.5/air_pollution/forecast?lat=${lat}&lon=${long}&appid=${token}`;
+    getAirPollution(long,lat,token) {
+        const url = `http://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${long}&appid=${token}`;
         return axios.get(url)
             .then(res => {
                 return res.data;

@@ -58,7 +58,6 @@ span {
 
 .datas-container {
     display:flex;
-    justify-content: space-between;
     gap:8px
 }
 .item {
@@ -131,21 +130,24 @@ p {
     align-items: center;
     flex-direction: column;
     justify-content: center;
+    width:100%;
     gap:8px
 }
 
 .air img {
-    height:90px;
+    height:60px;
 }
 
 .current-temperatures {
     display:flex;
     justify-content: space-between;
+    gap:8px;
+    margin-top:12px
 }
 
 .current-temperatures div {
     display:flex;
-    gap:3px;
+    gap:2px;
     align-items: center;
 }
 

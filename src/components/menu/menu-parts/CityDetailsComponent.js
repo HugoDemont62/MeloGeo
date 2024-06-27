@@ -1,24 +1,49 @@
 'use client'
 import '../../../app/styles/menu-city.css';
 import {useEffect, useState} from "react";
-export default function CityDetailsComponent({cityName, weatherData}) {
+export default function CityDetailsComponent({cityName, weatherData, airPollution}) {
 
     // Gestion des états des données du climat
     const [currentTemp, setCurrentTemp] = useState(0)
     const [maxTemp, setMaxTemp] = useState(0)
     const [minTemp, setMinTemp] = useState(0)
     const [humidityLevel, setHumidityLevel] = useState(0)
+    const [feltTemp, setFeltTemp] = useState(0)
+    // Jauge qualité de l'air
+    const [jauge, setJauge] = useState('')
+    const [etatAir, setEtatAir] = useState('')
 
     useEffect(() => {
         if (weatherData.main) {
-            const { temp, temp_max, temp_min, humidity } = weatherData.main;
+            const { temp, temp_max, temp_min, humidity, feels_like  } = weatherData.main;
             // Conversion des températures de Kelvin à Celsius
             setCurrentTemp(temp);
             setMaxTemp(temp_max);
             setMinTemp(temp_min);
             setHumidityLevel(humidity);
+            setFeltTemp(feels_like)
         }
     }, [weatherData]);
+
+    useEffect(() => {
+       if(airPollution.list[0].main.aqi === 1 || airPollution.list[0].main.aqi === 2 ) {
+           setJauge('/images/map-menu/low.png')
+           setEtatAir('Bon')
+       }
+
+        if(airPollution.list[0].main.aqi === 3) {
+            setJauge('/images/map-menu/medium.png')
+            setEtatAir('Moyen')
+        }
+
+        if(airPollution.list[0].main.aqi >= 4) {
+            setJauge('/images/map-menu/hight.png')
+            setEtatAir('Mauvais')
+        }
+
+    }, [airPollution]);
+
+
 
     return (
         <>
@@ -30,12 +55,11 @@ export default function CityDetailsComponent({cityName, weatherData}) {
                 <span>Actuellement sur la ville :</span>
                 <div className="datas-container">
                     <div className='item'>
-                        <p><strong>Aujourd'hui</strong></p><br/>
+                        <p><strong>Aujourd'hui</strong></p>
                         <div className='current-temperatures'>
-                            <div></div>
                             <div>
                                 <img src='/images/map-menu/rain.png' alt="icone humidité"/>
-                                <p>{humidityLevel} %</p>
+                                <p>{humidityLevel}%</p>
                             </div>
                             <div>
                                 <img src='/images/map-menu/temp-max.png' alt="icone temperature maximun"/>
@@ -45,35 +69,39 @@ export default function CityDetailsComponent({cityName, weatherData}) {
                                 <img src='/images/map-menu/temp-min.png' alt="icone temperature minimum"/>
                                 <p>{minTemp}°</p>
                             </div>
+                            <div style={{gap: 8, fontWeight: 'lighter', fontSize: 13}}>
+                                <p>Ressentie</p>
+                                <p>  {feltTemp}°</p>
+                            </div>
                         </div>
 
 
                     </div>
                     <div className="item temp">
-                        <p>Température max atteinte en été</p><br/>
+                        <p>Maximum atteint</p><br/>
                         <p className='indicator'>38°</p>
                     </div>
-                    <div className="item" style={{display: "flex"}}>
-                        <div><img className='img-tree' src='/images/map-menu/tree.png' alt='tree'/></div>
+                </div>
+
+                <div className="datas-container">
+                    <div className="item">
                         <div style={{
-                            textAlign: 'left',
-                            display: "flex",
-                            flexDirection: 'column',
-                            justifyContent: 'space-between'
+                            textAlign: 'left'
                         }}>
                             <div>
                                 <p><strong>Couverture arboricole</strong></p>
                                 <p>du territoire en arbre</p>
                             </div>
-                            <p className="indicator">10%</p>
+                            <div style={{display:"flex", alignItems:"center", justifyContent:'center'}}><img className='img-tree' src='/images/map-menu/tree.png' alt='tree'/>
+                                <p className="indicator">10%</p></div>
                         </div>
                     </div>
+                    <div className="air item ">
+                        <p><strong>Qualité de l'air</strong></p>
+                        <img src={jauge} alt="jauge qualite air"/>
+                    <p>{etatAir}</p>
                 </div>
-                <div className="air item ">
-                    <p><strong>Qualité de l'air</strong></p>
-                    <img src="/images/map-menu/jauge.png" alt="jauge qualite air"/>
-                    <p>Moyen</p>
-                </div>
+            </div>
                 <br/>
                 <hr/>
                 <br/>
