@@ -37,7 +37,7 @@
 }
 
 .progress {
-    background: linear-gradient(to right, #eb133b 0%, #a08af1 45%, #0929e0 100%);
+    background: linear-gradient(to left, #eb133b 0%, #a08af1 45%, #0929e0 100%);
     height: 100%;
     border-radius: 5px 0 0 5px;
 }
