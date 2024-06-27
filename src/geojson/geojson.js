@@ -34,12 +34,12 @@ export const geojson =
     },
     {
         "type": "Feature",
-        "properties": { "id": 7, "temperature": 40, "treesNeeded": 14  },
+        "properties": { "id": 7, "temperature": 39, "treesNeeded": 14  },
         "geometry": { "type": "Point", "coordinates": [3.065656, 50.62725] }
     },
     {
         "type": "Feature",
-        "properties": { "id": 8, "temperature": 41, "treesNeeded": 5  },
+        "properties": { "id": 8, "temperature": 32, "treesNeeded": 5  },
         "geometry": { "type": "Point", "coordinates": [3.064256, 50.62955] }
     },
     {

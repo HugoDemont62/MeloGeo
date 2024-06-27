@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import {useEffect} from "react";
 
 function CircularProgressWithLabel(props) {
-  const { current, total, size = 40 } = props;
+  const { current, total, size = 20 } = props;
   const percentage = (current / total) * 100;
   return (
     <Box sx={{ position: 'relative', display: 'inline-flex', width: size, height: size }}>
@@ -36,10 +36,10 @@ function CircularProgressWithLabel(props) {
           justifyContent: 'center',
         }}
       >
-        <Typography variant="h2" component="div" color="text.secondary" sx={{ fontWeight: 'bold' }}>
+        <Typography variant="h4" component="div" color="text.secondary" sx={{ fontWeight: 'bold' }}>
           {`${current}/${total}`}
         </Typography>
-        <Typography variant="caption" component="div" color="text.secondary" sx={{ fontSize: '14px' }}>
+        <Typography variant="caption" component="div" color="text.secondary" sx={{ fontSize: '10px' }}>
           Arbres plantés
         </Typography>
       </Box>
@@ -63,7 +63,7 @@ CircularProgressWithLabel.propTypes = {
   size: PropTypes.number,
 };
 
-export default function CircularWithValueLabel({treesNeeded, markers, heatPointId}) {
+export default function CircularWithValueLabel({treesNeeded, markers, heatPointId, setIsCured}) {
     const [current, setCurrent] = React.useState(0);
 
     useEffect(() => {
@@ -73,9 +73,22 @@ export default function CircularWithValueLabel({treesNeeded, markers, heatPointI
         setCurrent(filteredMarkers.length);
     }, [markers, heatPointId]);
 
+
+
+    useEffect(() => {
+        if(current === treesNeeded) {
+            setIsCured(true)
+        }
+
+    }, [current]);
+
+    useEffect(() => {
+        setIsCured(false)
+    }, [heatPointId]);
+
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <CircularProgressWithLabel current={current} total={treesNeeded} size={200} />
+            <CircularProgressWithLabel current={current} total={treesNeeded} size={130} />
         </Box>
     );
 }

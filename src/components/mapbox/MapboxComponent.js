@@ -7,7 +7,7 @@ import dynamic from "next/dynamic";
 import apiManager from "../../services/api-manager";
 import {geojson} from '@/geojson/geojson';
 
-export default function MapboxComponent({setClickedElement, setCityName, setWeatherData, setAirPollution,  setMapRef, selectedTree, setMarkers, markers, heatPointId}) {
+export default function MapboxComponent({setClickedElement, setCityName, setWeatherData, setAirPollution,  setMapRef, selectedTree, setMarkers, markers, heatPointId, isCured}) {
     const tokenMapbox = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     const tokenOWeather = process.env.NEXT_PUBLIC_OWEATHER_TOKEN;
     const mapRef = useRef();
@@ -39,6 +39,10 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
         setMapRef(mapRef);
     }, [mapRef]);
 
+    useEffect(() => {
+        console.log(isCured)
+    }, [isCured]);
+
     // Configuration de la carte
     const DynamicGeocoder = dynamic(() => import('@mapbox/search-js-react').then(mod => mod.Geocoder), {
         ssr: false
@@ -56,35 +60,41 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
     }, []);
 
     const handleClick = useCallback((event) => {
-        const features = mapRef.current.queryRenderedFeatures(event.point, {
-            layers: ['unclustered-point']
-        });
-        setClickedElement(features);
-        setClickedLngLat(event.lngLat);
+        if(mapRef.current) {
+            const features = mapRef.current.queryRenderedFeatures(event.point, {
+                layers: ['unclustered-point']
+            });
+            setClickedElement(features);
+            setClickedLngLat(event.lngLat);
+        }
     }, []);
 
     const handleDoubleClick = useCallback((event) => {
-        if (selectedTree) {
-            const newMarker = {
-                id: Date.now(),
-                longitude: event.lngLat.lng,
-                latitude: event.lngLat.lat,
-                icon: selectedTree.getAttribute('data-icon'),
-                heatPointId: heatPointId
-            };
-            setMarkers(prevMarkers => [...prevMarkers, newMarker]);
+        if (!isCured) {
+            if (selectedTree) {
+                const newMarker = {
+                    id: Date.now(),
+                    longitude: event.lngLat.lng,
+                    latitude: event.lngLat.lat,
+                    icon: selectedTree.getAttribute('data-icon'),
+                    heatPointId: heatPointId
+                };
+                setMarkers(prevMarkers => [...prevMarkers, newMarker]);
+            }
         }
-    }, [selectedTree, heatPointId]);
+    }, [selectedTree, heatPointId, isCured]);
 
     const handleMouseMove = useCallback((event) => {
-        const features = mapRef.current.queryRenderedFeatures(event.point, {
-            layers: ['unclustered-point']
-        });
-        if (!selectedTree) {
-            if (features.length > 0) {
-                mapRef.current.getCanvasContainer().style.cursor = 'pointer';
-            } else {
-                mapRef.current.getCanvasContainer().style.cursor = 'crosshair';
+        if(mapRef.current) {
+            const features = mapRef.current.queryRenderedFeatures(event.point, {
+                layers: ['unclustered-point']
+            });
+            if (!selectedTree) {
+                if (features.length > 0) {
+                    mapRef.current.getCanvasContainer().style.cursor = 'pointer';
+                } else {
+                    mapRef.current.getCanvasContainer().style.cursor = 'crosshair';
+                }
             }
         }
     }, [selectedTree]);

@@ -1,6 +1,7 @@
 'use client'
 import '../../../app/styles/menu-city.css';
 import {useEffect, useState} from "react";
+import TemperatureBar from "@/components/temperature-bar/TemperatureBar";
 export default function CityDetailsComponent({cityName, weatherData, airPollution}) {
 
     // Gestion des états des données du climat
@@ -26,21 +27,22 @@ export default function CityDetailsComponent({cityName, weatherData, airPollutio
     }, [weatherData]);
 
     useEffect(() => {
-       if(airPollution.list[0].main.aqi === 1 || airPollution.list[0].main.aqi === 2 ) {
-           setJauge('/images/map-menu/low.png')
-           setEtatAir('Bon')
-       }
+        if(airPollution.list){
+           if(airPollution.list[0].main.aqi === 1 || airPollution.list[0].main.aqi === 2 ) {
+               setJauge('/images/map-menu/low.png')
+               setEtatAir('Bon')
+           }
 
-        if(airPollution.list[0].main.aqi === 3) {
-            setJauge('/images/map-menu/medium.png')
-            setEtatAir('Moyen')
+            if(airPollution.list[0].main.aqi === 3) {
+                setJauge('/images/map-menu/medium.png')
+                setEtatAir('Moyen')
+            }
+
+            if(airPollution.list[0].main.aqi >= 4) {
+                setJauge('/images/map-menu/hight.png')
+                setEtatAir('Mauvais')
+            }
         }
-
-        if(airPollution.list[0].main.aqi >= 4) {
-            setJauge('/images/map-menu/hight.png')
-            setEtatAir('Mauvais')
-        }
-
     }, [airPollution]);
 
 
@@ -73,6 +75,9 @@ export default function CityDetailsComponent({cityName, weatherData, airPollutio
                                 <p>Ressentie</p>
                                 <p>  {feltTemp}°</p>
                             </div>
+                        </div>
+                        <div style={{width:350}}>
+                            <TemperatureBar value={currentTemp}/>
                         </div>
 
 
