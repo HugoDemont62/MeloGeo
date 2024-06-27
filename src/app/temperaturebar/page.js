@@ -4,7 +4,7 @@ import styles from '../../components/temperature-bar/TemperatureBar.module.css';
 
 export default function TestTemperatureBar() {
     const impacts = [
-        { label: "Évolution de la température estimée :", value: 30 }, // example value in percentage
+        { label: "Évolution de la température estimée :", value: 25 }, // Example value in degrees
     ];
 
     return (
