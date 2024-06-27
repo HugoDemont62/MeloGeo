@@ -4,6 +4,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
+import {useEffect} from "react";
 
 function CircularProgressWithLabel(props) {
   const { current, total, size = 40 } = props;
@@ -62,28 +63,19 @@ CircularProgressWithLabel.propTypes = {
   size: PropTypes.number,
 };
 
-export default function CircularWithValueLabel() {
-  const [current, setCurrent] = React.useState(0);
-  const total = 7;
+export default function CircularWithValueLabel({treesNeeded, markers, heatPointId}) {
+    const [current, setCurrent] = React.useState(0);
 
-  const handleChange = (event) => {
-    const value = Number(event.target.value);
-    if (value >= 0 && value <= total) {
-      setCurrent(value);
-    }
-  };
+    useEffect(() => {
+        // Filtrer les markers par heatPointId
+        const filteredMarkers = markers.filter(marker => marker.heatPointId === heatPointId);
+        // Mettre à jour l'état current avec le nombre de markers filtrés
+        setCurrent(filteredMarkers.length);
+    }, [markers, heatPointId]);
 
-  return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <CircularProgressWithLabel current={current} total={total} size={200} />
-      <TextField
-        type="number"
-        label="Current"
-        value={current}
-        onChange={handleChange}
-        inputProps={{ min: 0, max: total }}
-        sx={{ mt: 2 }}
-      />
-    </Box>
-  );
+    return (
+        <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+            <CircularProgressWithLabel current={current} total={treesNeeded} size={200} />
+        </Box>
+    );
 }
