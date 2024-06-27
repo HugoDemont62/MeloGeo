@@ -28,7 +28,7 @@
 }
 
 .progressBar {
-    background-color: rgb(219, 212, 212); /* Couleur de fond pour la barre de progression */
+    background-color: rgb(219, 212, 212); /* Background color for the progress bar */
     border-radius: 5px;
     overflow: hidden;
     height: 20px;
@@ -40,6 +40,27 @@
     background: linear-gradient(to right, #eb133b 0%, #a08af1 45%, #0929e0 100%);
     height: 100%;
     border-radius: 5px 0 0 5px;
+}
+
+.marker {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 3px;
+    background-color: rgb(7, 7, 7);
+    transform: translateX(-50%);
+}
+
+.markerValue {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: white;
+    padding: 2px 4px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: bold;
 }
 
 .labels {
