@@ -12,7 +12,7 @@ const Header = () => {
                 <Link href="/" className={styles.link}>Sensibiliser</Link>
                 <Link href="/estimer" className={styles.link}>Estimer</Link>
                 <Link href="/anticiper" className={styles.link}>Anticiper</Link>
-                <Link href="/map" className={styles.link}>Démarrer une simulation</Link>
+                <Link href="/map" className={styles.links}>Démarrer une simulation</Link>
             </nav>
         </header>
     );

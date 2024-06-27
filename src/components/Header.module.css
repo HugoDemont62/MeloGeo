@@ -25,7 +25,7 @@
 
 .link {
     color: #fff;
-    font-weight: 500;
+    font-weight: 400;
     margin: 0 1rem;
     text-decoration: none;
     font-size: 1rem;
@@ -34,8 +34,25 @@
     transition: background-color 0.2s, color 0.3s;
 }
 
-.link:hover {
+.links {
+    color: #fff;
+    font-weight: 500;
+    margin: 0 1rem;
+    text-decoration: none;
+    font-size: 1rem;
+    padding: 1rem 2rem;
+    border-radius: 2rem;
+    transition: background-color 0.2s, color 0.3s;
     background-color: #a9e5ac;
     color: #0b0e14;
-    font-weight: 500;
 }
+
+/* .links:hover {
+    font-weight: 600;
+} */
+
+/* .link:hover { */
+    /* background-color: #a9e5ac; */
+    /* color: #fff;
+    font-weight: 600;
+} */
