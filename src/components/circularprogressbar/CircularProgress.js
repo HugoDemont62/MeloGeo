@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import {useEffect} from "react";
 
 function CircularProgressWithLabel(props) {
-  const { current, total, size = 40 } = props;
+  const { current, total, size = 20 } = props;
   const percentage = (current / total) * 100;
   return (
     <Box sx={{ position: 'relative', display: 'inline-flex', width: size, height: size }}>
@@ -36,10 +36,10 @@ function CircularProgressWithLabel(props) {
           justifyContent: 'center',
         }}
       >
-        <Typography variant="h2" component="div" color="text.secondary" sx={{ fontWeight: 'bold' }}>
+        <Typography variant="h4" component="div" color="text.secondary" sx={{ fontWeight: 'bold' }}>
           {`${current}/${total}`}
         </Typography>
-        <Typography variant="caption" component="div" color="text.secondary" sx={{ fontSize: '14px' }}>
+        <Typography variant="caption" component="div" color="text.secondary" sx={{ fontSize: '10px' }}>
           Arbres plantés
         </Typography>
       </Box>
@@ -71,11 +71,16 @@ export default function CircularWithValueLabel({treesNeeded, markers, heatPointI
         const filteredMarkers = markers.filter(marker => marker.heatPointId === heatPointId);
         // Mettre à jour l'état current avec le nombre de markers filtrés
         setCurrent(filteredMarkers.length);
+
     }, [markers, heatPointId]);
+
+    // if(current.length === treesNeeded.length) {
+    //     console.log('bravo !')
+    // }
 
     return (
         <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-            <CircularProgressWithLabel current={current} total={treesNeeded} size={200} />
+            <CircularProgressWithLabel current={current} total={treesNeeded} size={130} />
         </Box>
     );
 }

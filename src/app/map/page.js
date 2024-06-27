@@ -7,6 +7,7 @@ import MenuComponent from "@/components/menu/MenuComponent";
 import Slide from '@mui/material/Slide';
 import CityDetailsComponent from "@/components/menu/menu-parts/CityDetailsComponent";
 import HowItWorksComponent from "@/components/menu/menu-parts/HowItWorksComponent";
+import TemperatureBar from '@/components/temperature-bar/TemperatureBar';
 
 const Map = () => {
 
@@ -100,6 +101,12 @@ const Map = () => {
                     <HowItWorksComponent/>
                 </div>
             </Slide>
+            <Slide direction="right" in={checked} mountOnEnter unmountOnExit>
+                <div style={{position: 'absolute', left: '0', top: '0', width: 'fit-content', height: 'auto', backgroundColor: 'white', padding: 20, borderRadius: 10}}>
+                    <TemperatureBar value={temperature} title="Évolution de la température estimée :"/>
+                </div>
+            </Slide>
+
         </div>
     );
 };
