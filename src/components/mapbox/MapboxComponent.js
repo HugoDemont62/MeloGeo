@@ -56,11 +56,13 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
     }, []);
 
     const handleClick = useCallback((event) => {
-        const features = mapRef.current.queryRenderedFeatures(event.point, {
-            layers: ['unclustered-point']
-        });
-        setClickedElement(features);
-        setClickedLngLat(event.lngLat);
+        if(mapRef.current) {
+            const features = mapRef.current.queryRenderedFeatures(event.point, {
+                layers: ['unclustered-point']
+            });
+            setClickedElement(features);
+            setClickedLngLat(event.lngLat);
+        }
     }, []);
 
     const handleDoubleClick = useCallback((event) => {
