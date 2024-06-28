@@ -22,7 +22,7 @@ const MenuComponent = ({clickedElement, cityName, mapRef, setSelectedTree, selec
                 <div style={{width:200}}>
                 <Collapse in={!isCured}>
                     <div>
-                        <p style={{fontSize:20}}><strong>Zone sélectionneée</strong></p>
+                        <p style={{fontSize:20}}><strong>Zone sélectionnée</strong></p>
                         <p style={{fontSize:16}}>À toi de jouer !</p>
                     </div>
                 </Collapse>

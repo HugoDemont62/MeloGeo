@@ -45,6 +45,7 @@
     transition: background-color 0.2s, color 0.3s;
     background-color: #a9e5ac;
     color: #0b0e14;
+    width:260px
 }
 
 /* .links:hover {
