@@ -4,6 +4,8 @@ import Map, {GeolocateControl, Layer, Marker, NavigationControl, Source} from 'r
 import {useCallback, useEffect, useRef, useState} from "react";
 import dynamic from "next/dynamic";
 import apiManager from "../../services/api-manager";
+import * as Tone from 'tone';
+
 
 
 export default function MapboxComponent({setClickedElement, setCityName, setWeatherData, setAirPollution,  setMapRef, selectedTree, setMarkers, markers, heatPointId, isCured}) {
@@ -102,9 +104,63 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
     }, [selectedTree]);
 
 
-    const handleClickMarker = useCallback((event) => {
-        console.log(event);
+    const playSoundForWeatherMarkers = (weatherType) => {
+        switch (weatherType) {
+            case 'Clear':
+                // Son pour une météo ensoleillée : Synthé léger et brillant
+                const synth = new Tone.Synth().toDestination();
+                synth.triggerAttackRelease('C4', '8n');
+                break;
+            case 'Rain':
+                // Son pour la pluie : Percussion (hi-hat ou caisse claire)
+                const rainSampler = new Tone.MembraneSynth().toDestination();
+                rainSampler.triggerAttackRelease('C2', '8n');
+                break;
+            case 'Clouds':
+                // Son pour un ciel nuageux : Synthé léger
+                const cloudSynth = new Tone.FMSynth().toDestination();
+                cloudSynth.triggerAttackRelease('E3', '8n');
+                break;
+            case 'Snow':
+                // Son pour la neige : Sons scintillants, clochettes
+                const snowSynth = new Tone.Synth({
+                    oscillator: { type: 'triangle' }
+                }).toDestination();
+                snowSynth.triggerAttackRelease('G4', '8n');
+                break;
+            case 'Thunderstorm':
+                // Son pour l'orage : Bruit grave ou tonnerre
+                const thunderNoise = new Tone.Noise("pink").start();
+                const thunderFilter = new Tone.Filter(800, "lowpass").toDestination();
+                thunderNoise.connect(thunderFilter);
+                thunderNoise.stop("+0.5");
+                break;
+            case 'Drizzle':
+                // Son pour la bruine : Sons doux, très légers (cymbales)
+                const drizzleSynth = new Tone.NoiseSynth().toDestination();
+                drizzleSynth.triggerAttackRelease('8n');
+                break;
+            case 'Wind':
+                // Son pour le vent : Instruments à vent
+                const windSynth = new Tone.Synth({
+                    oscillator: { type: 'sine' }
+                }).toDestination();
+                windSynth.triggerAttackRelease('A3', '8n');
+                break;
+            default:
+                // Son par défaut
+                const defaultSynth = new Tone.Synth().toDestination();
+                defaultSynth.triggerAttackRelease('B4', '8n');
+                break;
+        }
+    };
+
+
+    const handleClickMarker = useCallback((weather) => {
+        const weatherType = weather.weather[0].main;
+        playSoundForWeatherMarkers(weatherType);
     }, []);
+
 
     return (
         <div style={{cursor:'crosshair'}}>
@@ -136,9 +192,10 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
                     >
                     </Marker>
                 ))}
-                {markersWeather.map(weather => (
+                {markersWeather.map((weather, index) => (
                     <Marker
-                        onClick={handleClickMarker}
+                        key={`${weather.coord.lat}-${weather.coord.lon}-${index}`}
+                        onClick={() => handleClickMarker(weather)}
                         longitude={weather.coord.lon}
                         latitude={weather.coord.lat}
                         anchor="bottom"
@@ -150,6 +207,7 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
                         />
                     </Marker>
                 ))}
+
             </Map>
         </div>
     );
