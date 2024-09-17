@@ -9,10 +9,7 @@ import Section3 from '../components/landingPage/Section3';
 import styles from './page.module.css'; // Styles spécifiques à la page, optionnel
 
 export default function Home() {
-  const handleButtonClick = () => {
-    alert('Button clicked!');
-  };
-
+    
   return (
     <>
       <Header />

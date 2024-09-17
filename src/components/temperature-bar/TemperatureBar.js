@@ -20,7 +20,7 @@ const TemperatureBar = ({ title, value, markers, heatPointId }) => {
         setTemperature(value - totalTempreduced);
     }, [totalTempreduced, value]);
 
-    const minTemp = 15;
+    const minTemp = 5;
     const maxTemp = 40;
     let percentageValue = ((temperature - minTemp) / (maxTemp - minTemp)) * 100;
 
@@ -33,7 +33,7 @@ const TemperatureBar = ({ title, value, markers, heatPointId }) => {
                     <div className={styles.marker} style={{ left: `${percentageValue}%` }}></div>
                 </div>
                 <div className={styles.labels}>
-                    <span style={{ fontWeight: 'lighter', fontSize: 14 }}>15°C</span>
+                    <span style={{ fontWeight: 'lighter', fontSize: 14 }}>5°C</span>
                     <span style={{ fontWeight: 'lighter', fontSize: 14 }}>40°C</span>
                 </div>
             </div>

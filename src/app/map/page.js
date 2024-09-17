@@ -16,7 +16,7 @@ const Map = () => {
     const [airPollution, setAirPollution] = useState(0)
     // Gestion des états des menus
     const [menuCity, setMenuCity] = useState(false)
-    const [simularbrePopup, setSimularbrePopup] = useState(true);
+    const [introPopup, setIntroPopup] = useState(true);
     // États et données de la carte
     const [mapRef, setMapRef] = useState(null);
     const [markers, setMarkers] = useState([]);
@@ -28,12 +28,12 @@ const Map = () => {
                 } else {
                     setMenuCity(false)
                 }
-            setSimularbrePopup(false)
+            setIntroPopup(false)
     },[clickedElement, cityName]);
 
     useEffect(() => {
         if(mapRef) {
-            setSimularbrePopup(true)
+            setIntroPopup(true)
         }
     }, [mapRef])
 
@@ -56,7 +56,7 @@ const Map = () => {
                     <CityDetailsComponent cityName={cityName} weatherData={weatherData} airPollution={airPollution}/>
                 </div>
             </Slide>
-            <Slide direction="left" in={simularbrePopup} mountOnEnter unmountOnExit>
+            <Slide direction="left" in={introPopup} mountOnEnter unmountOnExit>
                 <div style={{position: 'absolute', right: '0', top: '0', width: 'fit-content', height: '100%', marginTop: 20, marginRight:20}}>
                     <HowItWorksComponent/>
                 </div>

@@ -62,22 +62,8 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
                     latitude: event.lngLat.lat,
                 };
                 setMarkers(prevMarkers => [...prevMarkers, newMarker]);
-        //     }
-        // }
     }, [selectedTree]);
-    //
-    // const handleMouseMove = useCallback((event) => {
-    //     if(mapRef.current) {
-    //         const features = mapRef.current.queryRenderedFeatures(event.point);
-    //         if (!selectedTree) {
-    //             if (features.length > 0) {
-    //                 mapRef.current.getCanvasContainer().style.cursor = 'pointer';
-    //             } else {
-    //                 mapRef.current.getCanvasContainer().style.cursor = 'crosshair';
-    //             }
-    //         }
-    //     }
-    // }, [selectedTree]);
+
 
     const handleClickMarker = useCallback((event) => {
         console.log(event);
@@ -98,7 +84,7 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
                 doubleClickZoom={false}
                 mapboxAccessToken={tokenMapbox}
                 style={{width: '100%', height: '100vh'}}
-                mapStyle="mapbox://styles/mapbox/outdoors-v12"
+                mapStyle="mapbox://styles/mapbox/navigation-day-v1"
             >
                 <GeolocateControl position="bottom-left"/>
                 <NavigationControl position="bottom-left"/>

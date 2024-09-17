@@ -61,11 +61,15 @@ span {
     gap:8px
 }
 .item {
-    background-color: #F9FAFB;
-    border-radius: 10px;
-    /*display: flex;*/
+
+
+        border-radius: 5px;
     padding: 12px 16px;
     margin-top:12px;
+    background-color: rgba(255,255,255,0.5); /* Fond noir semi-transparent derrière le texte */
+
+    color: black; /* Couleur du texte blanc */
+    z-index: 2;
 
 
 }
@@ -155,3 +159,32 @@ p {
     height:16px;
 
 }
+
+.rainy-background {
+    background:
+            url('/images/weather/rain.gif'),
+            linear-gradient(to bottom, #87CEEB, #B0E0E6);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+
+.cloudy-background {
+    background:
+            url('/images/weather/cloud.gif'),
+            linear-gradient(to bottom, #87CEEB, #B0E0E6);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.sunny-background {
+    background:
+            url('/images/weather/sun.png'),
+            linear-gradient(to bottom, #87CEEB, #B0E0E6);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
