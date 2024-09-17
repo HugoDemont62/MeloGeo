@@ -11,6 +11,43 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
     const tokenOWeather = process.env.NEXT_PUBLIC_OWEATHER_TOKEN;
     const mapRef = useRef();
     const [clickedLngLat, setClickedLngLat] = useState(null);
+    const [markersWeather, setMarkersWeather] = useState([]);
+
+    const cities = [
+        { name: "Paris", region: "Île-de-France" },
+        { name: "Marseille", region: "Provence-Alpes-Côte d'Azur" },
+        { name: "Lyon", region: "Auvergne-Rhône-Alpes" },
+        { name: "Toulouse", region: "Occitanie" },
+        { name: "Nice", region: "Provence-Alpes-Côte d'Azur" },
+        { name: "Nantes", region: "Pays de la Loire" },
+        { name: "Montpellier", region: "Occitanie" },
+        { name: "Strasbourg", region: "Grand Est" },
+        { name: "Bordeaux", region: "Nouvelle-Aquitaine" },
+        { name: "Lille", region: "Hauts-de-France" },
+        { name: "Rennes", region: "Bretagne" },
+        { name: "Reims", region: "Grand Est" },
+        { name: "Saint-Étienne", region: "Auvergne-Rhône-Alpes" },
+        { name: "Le Havre", region: "Normandie" },
+        { name: "Toulon", region: "Provence-Alpes-Côte d'Azur" },
+        { name: "Grenoble", region: "Auvergne-Rhône-Alpes" },
+        { name: "Dijon", region: "Bourgogne-Franche-Comté" },
+        { name: "Angers", region: "Pays de la Loire" },
+        { name: "Nîmes", region: "Occitanie" },
+        { name: "Aix-en-Provence", region: "Provence-Alpes-Côte d'Azur" }
+    ];
+
+    const getWeatherByCities = () => {
+        cities.forEach((city) => {
+            apiManager.getWeatherByCity(city.name, tokenOWeather).then(data => {
+                console.log(data);
+                markersWeather.push(data);
+            });
+        })
+    }
+
+    useEffect(() => {
+        getWeatherByCities()
+    }, [])
 
     // Gestion des états des données
     useEffect(() => {
@@ -97,6 +134,20 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
                         latitude={marker.latitude}
                         anchor="bottom"
                     >
+                    </Marker>
+                ))}
+                {markersWeather.map(weather => (
+                    <Marker
+                        onClick={handleClickMarker}
+                        longitude={weather.coord.lon}
+                        latitude={weather.coord.lat}
+                        anchor="bottom"
+                    >
+                        <img
+                            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}.png`}
+                            alt="weather icon"
+                            style={{width: '40px', height: '40px'}}
+                        />
                     </Marker>
                 ))}
             </Map>
