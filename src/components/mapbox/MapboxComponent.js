@@ -8,12 +8,13 @@ import * as Tone from 'tone';
 
 
 
-export default function MapboxComponent({setClickedElement, setCityName, setWeatherData, setAirPollution,  setMapRef, selectedTree, setMarkers, markers, heatPointId, isCured}) {
+export default function MapboxComponent({setClickedElement, weatherData, setCityName, setWeatherData, setAirPollution,  setMapRef, selectedTree, setMarkers, markers, isCured}) {
     const tokenMapbox = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     const tokenOWeather = process.env.NEXT_PUBLIC_OWEATHER_TOKEN;
     const mapRef = useRef();
     const [clickedLngLat, setClickedLngLat] = useState(null);
     const [markersWeather, setMarkersWeather] = useState([]);
+    const [activeSoundPlayer, setActiveSoundPlayer] = useState(null);
 
     const cities = [
         { name: "Paris", region: "Île-de-France" },
@@ -41,15 +42,21 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
     const getWeatherByCities = () => {
         cities.forEach((city) => {
             apiManager.getWeatherByCity(city.name, tokenOWeather).then(data => {
-                console.log(data);
-                markersWeather.push(data);
+                setMarkersWeather(prevMarkersWeather => [...prevMarkersWeather, data]);
             });
-        })
+        });
     }
+
 
     useEffect(() => {
         getWeatherByCities()
     }, [])
+
+    useEffect(() => {
+        if(weatherData) {
+            playSoundForWeather(weatherData.weather[0].main)
+        }
+    }, [weatherData]);
 
     // Gestion des états des données
     useEffect(() => {
@@ -77,9 +84,6 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
         setMapRef(mapRef);
     }, [mapRef]);
 
-    useEffect(() => {
-        console.log(isCured)
-    }, [isCured]);
 
     // Configuration de la carte
     const DynamicGeocoder = dynamic(() => import('@mapbox/search-js-react').then(mod => mod.Geocoder), {
@@ -87,12 +91,17 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
     });
 
     const handleClick = useCallback((event) => {
-        if(mapRef.current) {
+        if (mapRef.current) {
+            if (activeSoundPlayer) {
+                stopActiveSound();
+
+            }
             const features = mapRef.current.queryRenderedFeatures(event.point);
             setClickedElement(features);
             setClickedLngLat(event.lngLat);
         }
-    }, []);
+    }, [activeSoundPlayer]);
+
 
     const handleDoubleClick = useCallback((event) => {
                 const newMarker = {
@@ -104,12 +113,31 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
     }, [selectedTree]);
 
 
-    const playSoundForWeatherMarkers = (weatherType) => {
+    const playSunnyAmbience = () => {
+        setActiveSoundPlayer(new Tone.Player({
+            url: "/sons/sunny-ambiance.mp3",
+            loop: true,
+            autostart: true,
+            volume: -10,
+        }).toDestination());
+
+    };
+
+    const stopActiveSound = () => {
+        if (activeSoundPlayer) {
+            activeSoundPlayer.stop();
+            activeSoundPlayer.dispose();
+        }
+    };
+
+
+    const playSoundForWeather = (weatherType) => {
         switch (weatherType) {
             case 'Clear':
                 // Son pour une météo ensoleillée : Synthé léger et brillant
                 const synth = new Tone.Synth().toDestination();
                 synth.triggerAttackRelease('C4', '8n');
+                playSunnyAmbience();
                 break;
             case 'Rain':
                 // Son pour la pluie : Percussion (hi-hat ou caisse claire)
@@ -156,10 +184,7 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
     };
 
 
-    const handleClickMarker = useCallback((weather) => {
-        const weatherType = weather.weather[0].main;
-        playSoundForWeatherMarkers(weatherType);
-    }, []);
+
 
 
     return (
@@ -171,7 +196,6 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
                     latitude: 45.7640,
                     zoom: 11
                 }}
-                // onMouseMove={handleMouseMove}
                 onClick={handleClick}
                 onDblClick={handleDoubleClick}
                 doubleClickZoom={false}
@@ -184,7 +208,7 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
                 {markers.map(marker => (
                     <Marker
                         draggable
-                        onClick={handleClickMarker}
+                        // onClick={handleClickMarker}
                         key={marker.id}
                         longitude={marker.longitude}
                         latitude={marker.latitude}
@@ -195,10 +219,9 @@ export default function MapboxComponent({setClickedElement, setCityName, setWeat
                 {markersWeather.map((weather, index) => (
                     <Marker
                         key={`${weather.coord.lat}-${weather.coord.lon}-${index}`}
-                        onClick={() => handleClickMarker(weather)}
                         longitude={weather.coord.lon}
                         latitude={weather.coord.lat}
-                        anchor="bottom"
+                        anchor="center"
                     >
                         <img
                             src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}.png`}

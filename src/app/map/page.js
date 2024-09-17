@@ -43,6 +43,8 @@ const Map = () => {
             <div style={{width: '100%', height: '100%'}}>
                 <MapboxComponent
                     setClickedElement={setClickedElement}
+                    weatherData={weatherData}
+                    setMenuCity={setMenuCity}
                     setCityName={setCityName}
                     setWeatherData={setWeatherData}
                     setAirPollution={setAirPollution}
