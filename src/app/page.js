@@ -1,11 +1,11 @@
 import React from 'react';
 import Image from 'next/image';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import Banner from '../components/Banner';
-import Section from '../components/Section';
-import Section2 from '../components/Section2';
-import Section3 from '../components/Section3';
+import Header from '../components/landingPage/Header';
+import Footer from '../components/landingPage/Footer';
+import Banner from '../components/landingPage/Banner';
+import Section from '../components/landingPage/Section';
+import Section2 from '../components/landingPage/Section2';
+import Section3 from '../components/landingPage/Section3';
 import styles from './page.module.css'; // Styles spécifiques à la page, optionnel
 
 export default function Home() {

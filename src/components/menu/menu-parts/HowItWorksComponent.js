@@ -10,7 +10,7 @@ export default function HowItWorksComponent() {
                     <img src="/images/Simularbrehowitworkslogo.png" alt="Simularbre Logo"/>
                 </div>
                 <div className={styles.desc}>
-                    <p>Simulateur de régulation arboricole des températures dans les villes</p>
+                    <p>Symphonie cosmique</p>
                 </div>
                 <hr className={styles.separator}/>
             </header>
