@@ -3,7 +3,9 @@ import { useEffect, useState, useRef } from "react";
 import TemperatureBar from "@/components/temperature-bar/TemperatureBar";
 import * as Tone from 'tone';
 import apiManager from "@/services/api-manager";
-import * as React from "react"; // Import Tone.js
+import * as React from "react";
+import {GaugeComponent} from "react-gauge-component";
+import AirQualityGauge from "@/components/gauge/AirQualityGauge"; // Import Tone.js
 
 export default function CityDetailsComponent({ cityName, weatherData, airPollution }) {
 
@@ -178,17 +180,11 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
 
             <div className="datas-container">
                 <div className="air item">
-                    <p><strong>Qualité de l'air</strong></p>
-                    <img src={jauge} alt="jauge qualite air"/>
-                    <p>{etatAir}</p>
+                    <AirQualityGauge airPollution={airPollution}/>
                 </div>
+                <div>
             </div>
-
-            {/*{isRainWeather && (*/}
-            {/*    <button onClick={toggleRainSound}>*/}
-            {/*        {isRainSoundPlaying ? 'Stop Rain Sound' : 'Play Rain Sound'}*/}
-            {/*    </button>*/}
-            {/*)}*/}
+            </div>
         </div>
     );
 }
