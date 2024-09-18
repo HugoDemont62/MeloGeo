@@ -200,3 +200,40 @@ p {
     background-size: cover;
 }
 
+.drizzly-background {
+    background:
+            url('/images/weather/rain.gif'),
+            linear-gradient(to bottom, #87CEEB, #B0E0E6);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.thunderstorm-background {
+    background:
+            url('/images/weather/thunderstorm.gif'),
+            linear-gradient(to bottom, #87CEEB, #B0E0E6);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.snowy-background {
+    background:
+            url('/images/weather/snow.gif'),
+            linear-gradient(to bottom, #87CEEB, #B0E0E6);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+.atmospheric-background {
+    background:
+            url('/images/weather/fog.gif'), /* Tu peux changer cela si tu as une autre image pour l'atmosphère */
+            linear-gradient(to bottom, #87CEEB, #B0E0E6);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: cover;
+}
+
+

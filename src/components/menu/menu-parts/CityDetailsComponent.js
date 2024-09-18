@@ -126,7 +126,7 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
     }, [backgroundVideo]);
 
     return (
-        <div className="container">
+        <div className={`container ${backgroundClass}`}>
             {backgroundVideo && (
                 <video
                     autoPlay
@@ -154,13 +154,13 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                             <img src='/images/map-menu/temp-min.png' alt="icone temperature minimum"/>
                             <p>{minTemp}°</p>
                         </div>
-                        <div style={{ gap: 8, fontWeight: 'lighter', fontSize: 13 }}>
+                        <div style={{gap: 8, fontWeight: 'lighter', fontSize: 13}}>
                             <p>Ressentie</p>
                             <p>{feltTemp}°</p>
                         </div>
                     </div>
-                    <div style={{ width: 350 }}>
-                        <TemperatureBar value={currentTemp} />
+                    <div style={{width: 350}}>
+                        <TemperatureBar value={currentTemp}/>
                     </div>
                 </div>
                 <div className="item temp">
