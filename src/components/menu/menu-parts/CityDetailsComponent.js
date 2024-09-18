@@ -13,6 +13,7 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
     const [feltTemp, setFeltTemp] = useState(0);
     const [weatherType, setWeatherType] = useState([]);
     const [backgroundClass, setBackgroundClass] = useState('');
+    
 
     // Air quality state
     const [jauge, setJauge] = useState('');
