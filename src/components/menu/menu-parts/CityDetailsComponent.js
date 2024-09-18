@@ -1,16 +1,17 @@
 import '../../../app/styles/menu-city.css';
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import TemperatureBar from "@/components/temperature-bar/TemperatureBar";
 import * as Tone from 'tone';
 import apiManager from "@/services/api-manager";
 import * as React from "react";
-import {GaugeComponent} from "react-gauge-component";
-import AirQualityGauge from "@/components/gauge/AirQualityGauge"; // Import Tone.js
+import { GaugeComponent } from "react-gauge-component";
+import AirQualityGauge from "@/components/gauge/AirQualityGauge";
 
 export default function CityDetailsComponent({ cityName, weatherData, airPollution }) {
-
+    const tokenOWeather = process.env.NEXT_PUBLIC_OWEATHER_TOKEN;
     const tokenPexels = process.env.NEXT_PUBLIC_PEXELS_TOKEN;
     const tokenGIPHY = process.env.NEXT_PUBLIC_GHIFY_TOKEN;
+
     // States for weather and air quality
     const [currentTemp, setCurrentTemp] = useState(0);
     const [maxTemp, setMaxTemp] = useState(0);
@@ -22,12 +23,11 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
     const [backgroundVideo, setBackgroundVideo] = useState('');
     const [backgroundGif, setBackgroundGif] = useState('');
     const [currentWeatherIcon, setCurrentWeatherIcon] = useState('');
-
+    const [dailyForecasts, setDailyForecasts] = useState([]);
 
     // Air quality state
     const [jauge, setJauge] = useState('');
     const [etatAir, setEtatAir] = useState('');
-
 
     useEffect(() => {
         // Initialize the Tone.js context
@@ -36,10 +36,20 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
         }
     }, []);
 
+    useEffect(() => {
+        apiManager.get5DayForecast(cityName, tokenOWeather).then(data => {
+            const dailyData = processDailyForecasts(data.list);
+            console.log(dailyData);
+            setDailyForecasts(dailyData);
+        }).catch(error => {
+            console.error('Erreur lors de la récupération des prévisions :', error);
+        });
+    }, [cityName]);
+
     const fetchAndSetGif = (query, token) => {
         apiManager.getGiphyGif(query, token).then(data => {
             if (data.data.length) {
-                setBackgroundVideo('')
+                setBackgroundVideo('');
                 setBackgroundGif(data.data[0].images.original.url);
             } else {
                 setBackgroundVideo('');
@@ -50,11 +60,9 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
         });
     };
 
-
     const fetchAndSetBackgroundVideo = (query, token) => {
         apiManager.getPexelsVideos(query, token).then(data => {
             if (data.videos.length && data.videos[0]['video_files'].length) {
-                console.log(data.videos);
                 const videos = data.videos;
                 setBackgroundVideo(videos[0]['video_files'][0].link);
             } else {
@@ -68,21 +76,19 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
         });
     };
 
-
-
     useEffect(() => {
         if (weatherData.main) {
             const { temp, temp_max, temp_min, humidity, feels_like } = weatherData.main;
             const { weather } = weatherData;
 
             // Conversion des températures de Kelvin à Celsius
-            setCurrentTemp(temp);
-            setMaxTemp(temp_max);
-            setMinTemp(temp_min);
-            setHumidityLevel(humidity);
-            setFeltTemp(feels_like);
+            setCurrentTemp(Math.round(temp));
+            setMaxTemp(Math.round(temp_max));
+            setMinTemp(Math.round(temp_min));
+            setHumidityLevel(Math.round(humidity));
+            setFeltTemp(Math.round(feels_like));
             setWeatherType(weather);
-            setCurrentWeatherIcon(`https://openweathermap.org/img/wn/${weather[0].icon}.png`)
+            setCurrentWeatherIcon(`https://openweathermap.org/img/wn/${weather[0].icon}.png`);
 
             switch (weather[0].main) {
                 case 'Rain':
@@ -118,8 +124,6 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                     setBackgroundVideo('');
                     break;
             }
-
-
         }
     }, [weatherData]);
 
@@ -142,9 +146,24 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
         }
     }, [airPollution]);
 
-    useEffect(() => {
-        console.log(backgroundVideo)
-    }, [backgroundVideo]);
+    const processDailyForecasts = (hourlyForecasts) => {
+        const dailyMap = {};
+
+        hourlyForecasts.forEach(forecast => {
+            const date = new Date(forecast.dt * 1000).toISOString().split('T')[0];
+            if (!dailyMap[date]) {
+                dailyMap[date] = {
+                    date,
+                    temp: Math.round(forecast.main.temp),
+                    icon: `https://openweathermap.org/img/wn/${forecast.weather[0].icon}.png`,
+                    humidity: forecast.main.humidity,
+                    windSpeed: forecast.wind.speed,
+                };
+            }
+        });
+
+        return Object.values(dailyMap);
+    };
 
     return (
         <div className={`container ${backgroundClass}`}>
@@ -201,13 +220,29 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                 </div>
             </div>
 
+            <div className="forecast-container item">
+                <h3>Prévisions à venir</h3>
+                {dailyForecasts.length > 0 ? (
+                    <div className="forecast-scroll">
+                        {dailyForecasts.map((forecast, index) => (
+                            <div className="prevision" key={index}>
+                                <p><strong>{new Date(forecast.date).toLocaleDateString()}</strong></p>
+                                <img src={forecast.icon} alt="icone climat"/>
+                                <p>{forecast.temp}°C</p>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p>Aucune prévision disponible.</p>
+                )}
+            </div>
             <div className="datas-container">
                 <div className="air item">
                     <AirQualityGauge airPollution={airPollution}/>
                 </div>
-                <div>
             </div>
-            </div>
+
+
         </div>
     );
 }

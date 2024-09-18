@@ -97,6 +97,18 @@ class ApiManager {
             });
     }
 
+    get5DayForecast = async (city, token) => {
+        const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${token}&units=metric`;
+        return await axios.get(url)
+            .then(res => {
+                return res.data;
+            })
+            .catch(error => {
+                throw new Error(`Failed to get 5 day forecast: ${error.message}`);
+            });
+    }
+
+
 
 }
 const apiManager = new ApiManager();
