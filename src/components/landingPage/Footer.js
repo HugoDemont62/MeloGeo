@@ -4,7 +4,7 @@ const Footer = () => {
     return (
         <footer className={styles.footer}>
             <div className={styles.content}>
-            <p>&copy; Fait avec 💚 par Agathe, Baptiste, Philippe, Tom et Mathilde</p>
+            <p>&copy; Fait avec Philippe, Tom et Hugo</p>
             </div>
             <div className={styles.content}>
             <p>&copy;  2024. Touts droits réservé</p>
