@@ -2,7 +2,8 @@ import '../../../app/styles/menu-city.css';
 import { useEffect, useState, useRef } from "react";
 import TemperatureBar from "@/components/temperature-bar/TemperatureBar";
 import * as Tone from 'tone';
-import apiManager from "@/services/api-manager"; // Import Tone.js
+import apiManager from "@/services/api-manager";
+import * as React from "react"; // Import Tone.js
 
 export default function CityDetailsComponent({ cityName, weatherData, airPollution }) {
 
@@ -16,6 +17,7 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
     const [weatherType, setWeatherType] = useState([]);
     const [backgroundClass, setBackgroundClass] = useState('');
     const [backgroundVideo, setBackgroundVideo] = useState('');
+    const [currentWeatherIcon, setCurrentWeatherIcon] = useState('');
     
 
     // Air quality state
@@ -62,6 +64,7 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
             setHumidityLevel(humidity);
             setFeltTemp(feels_like);
             setWeatherType(weather);
+            setCurrentWeatherIcon(`https://openweathermap.org/img/wn/${weather[0].icon}.png`)
 
             switch (weather[0].main) {
                 case 'Rain':
@@ -164,8 +167,12 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                     </div>
                 </div>
                 <div className="item temp">
-                    <p>Maximum atteint</p><br/>
-                    <p className='indicator'>38°</p>
+                    <p>Climat actuel</p><br/>
+                    <img
+                        src={currentWeatherIcon}
+                        alt="weather icon"
+                        style={{width: '60px', height: '60px'}}
+                    />
                 </div>
             </div>
 
