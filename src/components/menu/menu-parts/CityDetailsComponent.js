@@ -166,7 +166,7 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
     };
 
     return (
-        <div className={`container ${backgroundClass}`}>
+        <div className={`container`}>
             {backgroundVideo && (
                 <video
                     autoPlay
@@ -183,6 +183,7 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                     alt="background GIF"
                 />
             )}
+            <div className='sub-container'>
             <h2 className='item'>{cityName}</h2>
             <span className='item'>Actuellement sur la ville :</span>
             <div className="datas-container">
@@ -211,7 +212,7 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                     </div>
                 </div>
                 <div className="item temp">
-                    <p>Climat actuel</p><br/>
+                    <p><strong>Climat actuel</strong></p><br/>
                     <img
                         src={currentWeatherIcon}
                         alt="weather icon"
@@ -221,7 +222,7 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
             </div>
 
             <div className="forecast-container item">
-                <h3>Prévisions à venir</h3>
+                <p><strong>Prévisions à venir</strong></p>
                 {dailyForecasts.length > 0 ? (
                     <div className="forecast-scroll">
                         {dailyForecasts.map((forecast, index) => (
@@ -240,6 +241,7 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                 <div className="air item">
                     <AirQualityGauge airPollution={airPollution}/>
                 </div>
+            </div>
             </div>
 
 
