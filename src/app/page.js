@@ -16,30 +16,30 @@ export default function Home() {
       <main className={styles.main}>
         {/* Bannière */}
         <Banner
-          title="Simularbre"
-          description="Simulateur de régulation arboricole des températures dans les villes"
-          buttonText="Démarrer une simulation"
+          title="Melody Quest"
+          description="Explorez la planète à travers une symphonie de paysages et de climats"
+          buttonText="Commencer une exploration"
         />
 
-        {/* Intégration de vos sections */}
-        <Section
-          title="Sensibiliser"
-          description="La plantation d’arbres en milieu urbain est une solution naturelle pour relever les défis du changement climatique. Elle offre de nombreux avantages, notamment la réduction des îlots de chaleur urbains grâce à l’évapotranspiration, le soutien à la biodiversité, l’amélioration du cadre de vie et la santé physique et mentale des citadins."
-          imageUrl="/images/planete.png"
-          reverse={false} // ou true selon vos besoins
-        />
-        <Section2
-          title="Estimer"
-          description="Au delà de sa dimension éducative, Simularbre permet d’observer en temps réel l’impact de la plantation d’arbres sur la température des ilots de chaleur identifiés et éventuellement déceler des zones où l’amélioration des conditions aurait le plus de bénéfices, en fonction des emplacements préférentiels identifiés pour la ville de votre choix par notre système."
-          imageUrl="/images/temperature.png"
-          reverse={false} // ou true selon vos besoins
-        />
-        <Section3
-          title="Anticiper"
-          description="Afin de garantir un avenir sain et juste pour les générations futures, le temps presse, il est plus que temps de prendre au sérieux les risques encourus dû au réchauffement climatique et de celui de nos villes : la volonté de Simularbre est également de permettre au plus grand nombre d’observer qu’avec peu, on pourrait déjà faire beaucoup."
-          imageUrl="/images/vue-face-arbre-3d-feuilles-tronc 2.png"
-          reverse={false} // ou true selon vos besoins
-        />
+      {/* Intégration de vos sections */}
+      <Section
+        title="Exploration Musicale"
+        description="Découvrez comment les données géographiques et météorologiques se transforment en une symphonie immersive. Explorez les paysages du monde à travers des compositions musicales uniques, où chaque région offre une expérience sonore distincte, révélant la beauté cachée de notre planète."
+        imageUrl="/images/planete.png"
+        reverse={false} // ou true selon vos besoins
+      />
+      <Section2
+        title="Analyse Climatique"
+        description="Visualisez en temps réel comment les conditions météorologiques influencent la musique générée par votre voyage. Simulatez l'impact des variations climatiques sur les compositions musicales, et identifiez les régions où le climat crée les mélodies les plus fascinantes."
+        imageUrl="/images/temperature.png"
+        reverse={false} // ou true selon vos besoins
+      />
+      <Section3
+        title="Voyage Sonore"
+        description="Embarquez pour un voyage sonore à travers le monde avec 'Symphonie Géographique'. En utilisant les données climatiques et géographiques, cette expérience vous permet de comprendre comment le climat façonne la musique et comment chaque région peut contribuer à une symphonie globale, soulignant l'interconnexion entre notre environnement et les arts."
+        imageUrl="/images/vue-face-arbre-3d-feuilles-tronc 2.png"
+        reverse={false} // ou true selon vos besoins
+      />
       </main>
       <Footer />
     </>
