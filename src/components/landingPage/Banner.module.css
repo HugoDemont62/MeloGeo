@@ -27,7 +27,7 @@
 }
 
 .button {
-    background-color: #a9e5ac;
+    background-color: #a08af1;
     color: black;
     border: none;
     padding: 1rem 3rem;
@@ -37,3 +37,4 @@
     transition: background-color 0.3s ease;
     border-radius: 2rem;
 }
+

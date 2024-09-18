@@ -25,19 +25,19 @@ export default function Home() {
       <Section
         title="Exploration Musicale"
         description="Découvrez comment les données géographiques et météorologiques se transforment en une symphonie immersive. Explorez les paysages du monde à travers des compositions musicales uniques, où chaque région offre une expérience sonore distincte, révélant la beauté cachée de notre planète."
-        imageUrl="/images/planete.png"
+        imageUrl="/images/landingPage/soleil.png"
         reverse={false} // ou true selon vos besoins
       />
       <Section2
         title="Analyse Climatique"
         description="Visualisez en temps réel comment les conditions météorologiques influencent la musique générée par votre voyage. Simulatez l'impact des variations climatiques sur les compositions musicales, et identifiez les régions où le climat crée les mélodies les plus fascinantes."
-        imageUrl="/images/temperature.png"
+        imageUrl="/images/landingPage/flat-black-speaker-background.png"
         reverse={false} // ou true selon vos besoins
       />
       <Section3
         title="Voyage Sonore"
         description="Embarquez pour un voyage sonore à travers le monde avec 'Symphonie Géographique'. En utilisant les données climatiques et géographiques, cette expérience vous permet de comprendre comment le climat façonne la musique et comment chaque région peut contribuer à une symphonie globale, soulignant l'interconnexion entre notre environnement et les arts."
-        imageUrl="/images/vue-face-arbre-3d-feuilles-tronc 2.png"
+        imageUrl="/images/landingPage/soleil.png"
         reverse={false} // ou true selon vos besoins
       />
       </main>

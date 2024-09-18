@@ -2,7 +2,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #d0f1d2;
+    background-color: #a08af1;
     overflow: hidden;
 }
 
@@ -36,10 +36,11 @@
     left: 0;
     bottom: 0;
     transform: translate(-10%, 25%);
+    width: 50%;
 }
 
 .imageElement {
-    max-width: 100%;
+    max-width: 50%;
     height: auto;
     border-radius: 8px;
 }

@@ -35,7 +35,6 @@
 }
 
 .links {
-    color: #fff;
     font-weight: 500;
     margin: 0 1rem;
     text-decoration: none;
@@ -43,10 +42,18 @@
     padding: 1rem 2rem;
     border-radius: 2rem;
     transition: background-color 0.2s, color 0.3s;
-    background-color: #a9e5ac;
+    background-color: #a08af1;
     color: #0b0e14;
-    width:300px;
+    width: 300px;
     text-align: center;
+}
+
+.title {
+    font-weight: 700;
+    letter-spacing: 0.02em;
+    text-align: left;
+    color: white;
+    font-size: 1.5rem;
 }
 
 /* .links:hover {
@@ -54,7 +61,7 @@
 } */
 
 /* .link:hover { */
-    /* background-color: #a9e5ac; */
-    /* color: #fff;
-    font-weight: 600;
+/* background-color: #a9e5ac; */
+/* color: #fff;
+font-weight: 600;
 } */
