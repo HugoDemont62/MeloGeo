@@ -160,25 +160,26 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
         if (markersList.length === 0) return;
     
         Tone.start().then(() => {
-            let localIndex = 0; // Utiliser une variable locale pour suivre l'index
+            let localIndex = 0;
+    
+            playPercussionLoop(); // Démarrer la boucle de percussions ici
     
             const intervalId = setInterval(async () => {
                 if (localIndex >= markersList.length) {
                     clearInterval(intervalId);
                     setVoyageInterval(null);
+                    stopActiveSound(); // Arrêter la boucle de percussions
                     return;
                 }
     
-                const marker = markersList[localIndex]; // Utiliser localIndex pour les marqueurs
+                const marker = markersList[localIndex];
                 console.log('Fetching weather data for marker:', marker);
     
                 try {
-                    // Récupérer le nom de la ville en utilisant les coordonnées du marqueur
                     const cityResponse = await apiManager.getCityByLngLat(marker.longitude, marker.latitude, tokenMapbox);
                     const cityName = cityResponse.features[0].properties.name;
                     console.log('City Name:', cityName);
     
-                    // Appeler l'API pour obtenir les données météo de cette ville
                     const weatherData = await apiManager.getWeatherByCity(cityName, tokenOWeather);
                     console.log('Weather Data:', weatherData);
     
@@ -193,25 +194,60 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
                         zoom: 10,
                     });
     
-                    // Mettre à jour l'index local pour passer au marqueur suivant
                     localIndex++;
-                    setVoyageIndex(localIndex); // Met à jour aussi l'état si vous en avez besoin
+                    setVoyageIndex(localIndex);
                 } catch (error) {
                     console.error('Error fetching weather data:', error);
                 }
-            }, 2000); // Ajustez le temps selon vos besoins
+            }, 2000);
             setVoyageInterval(intervalId);
         });
     };
     
     
-
+    
+    const playPercussionLoop = () => {
+        const kick = new Tone.MembraneSynth().toDestination();
+        const snare = new Tone.NoiseSynth({
+            noise: { type: 'white' },
+            envelope: { attack: 0.005, decay: 0.1, sustain: 0 }
+        }).toDestination();
+        const hiHat = new Tone.MetalSynth({
+            frequency: 400,
+            envelope: {
+                attack: 0.001,
+                decay: 0.1,
+                release: 0.01,
+            },
+            harmonicity: 5.1,
+            modulationIndex: 32,
+            resonance: 8000,
+            octaves: 1.5,
+        }).toDestination();
+    
+        const pattern = new Tone.Pattern((time, note) => {
+            if (note === 'kick') {
+                kick.triggerAttackRelease('C2', '8n', time);
+            } else if (note === 'snare') {
+                snare.triggerAttackRelease('8n', time);
+            } else if (note === 'hihat') {
+                hiHat.triggerAttackRelease('16n', time);
+            }
+        }, ['kick', 'hihat', 'snare', 'hihat'], 'up').start(0);
+    
+        Tone.Transport.bpm.value = 120; // Vitesse du rythme (BPM)
+        Tone.Transport.start();
+        setActiveSoundPlayer(pattern); // Pour arrêter plus tard
+    };
+    
     const stopVoyage = () => {
         if (voyageInterval) {
             clearInterval(voyageInterval);
             setVoyageInterval(null);
         }
+        stopActiveSound(); // Arrêter la boucle de percussions ici aussi
     };
+    
 
     return (
         <div style={{ position: 'relative', height: '100vh' }}>
