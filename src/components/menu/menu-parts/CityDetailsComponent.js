@@ -10,6 +10,7 @@ import AirQualityGauge from "@/components/gauge/AirQualityGauge"; // Import Tone
 export default function CityDetailsComponent({ cityName, weatherData, airPollution }) {
 
     const tokenPexels = process.env.NEXT_PUBLIC_PEXELS_TOKEN;
+    const tokenGIPHY = process.env.NEXT_PUBLIC_GHIFY_TOKEN;
     // States for weather and air quality
     const [currentTemp, setCurrentTemp] = useState(0);
     const [maxTemp, setMaxTemp] = useState(0);
@@ -19,16 +20,14 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
     const [weatherType, setWeatherType] = useState([]);
     const [backgroundClass, setBackgroundClass] = useState('');
     const [backgroundVideo, setBackgroundVideo] = useState('');
+    const [backgroundGif, setBackgroundGif] = useState('');
     const [currentWeatherIcon, setCurrentWeatherIcon] = useState('');
-    
+
 
     // Air quality state
     const [jauge, setJauge] = useState('');
     const [etatAir, setEtatAir] = useState('');
 
-
-    // Ref to track the noise generator
-    const noise = useRef(new Tone.Noise('brown').toDestination()).current;
 
     useEffect(() => {
         // Initialize the Tone.js context
@@ -37,6 +36,21 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
         }
     }, []);
 
+    const fetchAndSetGif = (query, token) => {
+        apiManager.getGiphyGif(query, token).then(data => {
+            if (data.data.length) {
+                setBackgroundVideo('')
+                setBackgroundGif(data.data[0].images.original.url);
+            } else {
+                setBackgroundVideo('');
+            }
+        }).catch(error => {
+            console.error(`Erreur lors de la récupération des GIFs pour ${query} : `, error);
+            setBackgroundVideo('');
+        });
+    };
+
+
     const fetchAndSetBackgroundVideo = (query, token) => {
         apiManager.getPexelsVideos(query, token).then(data => {
             if (data.videos.length && data.videos[0]['video_files'].length) {
@@ -44,11 +58,13 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                 const videos = data.videos;
                 setBackgroundVideo(videos[0]['video_files'][0].link);
             } else {
-                setBackgroundVideo('');
+                // Si aucune vidéo n'a été trouvée, tente de récupérer un GIF
+                fetchAndSetGif(query, tokenGIPHY);
             }
         }).catch(error => {
             console.error(`Erreur lors de la récupération des vidéos pour ${query} : `, error);
-            setBackgroundVideo('');
+            // En cas d'erreur, tente de récupérer un GIF
+            fetchAndSetGif(query, tokenGIPHY);
         });
     };
 
@@ -79,7 +95,7 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                     break;
                 case 'Clear':
                     setBackgroundClass('sunny-background');
-                    fetchAndSetBackgroundVideo('blue sky', tokenPexels);
+                    fetchAndSetBackgroundVideo('blue sky', tokenGIPHY);
                     break;
                 case 'Drizzle':
                     setBackgroundClass('drizzly-background');
@@ -139,6 +155,13 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                     muted
                     className="background-video"
                     src={backgroundVideo}
+                />
+            )}
+            {!backgroundVideo && backgroundGif && (
+                <img
+                    className="background-video"
+                    src={backgroundGif}
+                    alt="background GIF"
                 />
             )}
             <h2 className='item'>{cityName}</h2>

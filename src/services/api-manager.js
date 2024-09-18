@@ -86,6 +86,17 @@ class ApiManager {
             });
     }
 
+    getGiphyGif = async (query, token) => {
+        const url = `https://api.giphy.com/v1/gifs/search?api_key=${token}&q=${encodeURIComponent(query)}&limit=1&rating=g&lang=en`;
+        return await axios.get(url)
+            .then(res => {
+                return res.data;
+            })
+            .catch(error => {
+                throw new Error(`Failed to fetch Giphy GIFs: ${error.message}`);
+            });
+    }
+
 
 }
 const apiManager = new ApiManager();
