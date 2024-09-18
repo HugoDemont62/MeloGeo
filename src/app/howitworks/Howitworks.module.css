@@ -3,7 +3,6 @@
 .container {
     font-family: Arial, sans-serif;
     padding: 20px;
-    margin-top: 2rem;
     max-width: 600px;
     height: 95vh;
     overflow-y: scroll;
@@ -73,8 +72,6 @@
 }
 
 .desc {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -86,4 +83,12 @@
     background-color: #ccc;
     border: none;
     margin: 0 auto; /* Espacement vertical autour de la ligne */
+}
+
+.title {
+    font-size: 2rem;
+    color: #333;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-weight: bold;
 }

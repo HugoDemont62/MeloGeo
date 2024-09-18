@@ -7,7 +7,7 @@ export default function HowItWorksComponent() {
         <div className={styles.container}>
             <header className={styles.header}>
                 <div className={styles.logo}>
-                    <img src="/images/Simularbrehowitworkslogo.png" alt="Simularbre Logo"/>
+                    <div className={styles.title}>MeloGéo</div>
                 </div>
                 <div className={styles.desc}>
                     <p>Symphonie cosmique</p>
@@ -21,17 +21,16 @@ export default function HowItWorksComponent() {
                     <p>C’est dans celle-ci que vous réaliserez la simulation.</p>
                 </div>
                 <div className={styles.step}>
-                    <h3>Identifiez les zones de chaleur</h3>
-                    <p>Trouvez les zones à problèmes sur la carte et remédiez-y.</p>
+                    <h3>Observez la météo local</h3>
+                    <p>Visualisez la météo locale de la ville en temps réel.</p>
                 </div>
                 <div className={styles.step}>
-                    <h3>Sélectionnez, et cliquez</h3>
-                    <p>Plantez des arbres sur les emplacements recommandés.</p>
+                    <h3>Sélectionnez, cliquez et écoutez</h3>
+                    <p>Choisissez une villes et écoutez la musique générée par les données météorologiques de la ville</p>
                 </div>
                 <div className={styles.step}>
-                    <h3>Réalisez l’impact positif en direct</h3>
-                    <p>Observez simultanément la chaleur locale se réduire, et comprenez les impacts des arbres plantés
-                        en ville !</p>
+                    <h3>Explorez la planète</h3>
+                    <p>Explorez la planète à travers une symphonie de paysages et de climats</p>
                 </div>
             </main>
         </div>
