@@ -16,7 +16,7 @@ export default function Home() {
       <main className={styles.main}>
         {/* Bannière */}
         <Banner
-          title="Melody Quest"
+          title="MeloGéo"
           description="Explorez la planète à travers une symphonie de paysages et de climats"
           buttonText="Commencer une exploration"
         />
@@ -37,7 +37,7 @@ export default function Home() {
       <Section3
         title="Voyage Sonore"
         description="Embarquez pour un voyage sonore à travers le monde avec 'Symphonie Géographique'. En utilisant les données climatiques et géographiques, cette expérience vous permet de comprendre comment le climat façonne la musique et comment chaque région peut contribuer à une symphonie globale, soulignant l'interconnexion entre notre environnement et les arts."
-        imageUrl="/images/landingPage/soleil.png"
+        imageUrl="/images/landingPage/nuit.png"
         reverse={false} // ou true selon vos besoins
       />
       </main>
