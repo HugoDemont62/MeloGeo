@@ -47,7 +47,6 @@ export default function MapboxComponent({setClickedElement, weatherData, setCity
         });
     }
 
-
     useEffect(() => {
         getWeatherByCities()
     }, [])
@@ -123,6 +122,15 @@ export default function MapboxComponent({setClickedElement, weatherData, setCity
 
     };
 
+    const playRainyAmbience = () => {
+        setActiveSoundPlayer(new Tone.Player({
+            url: "/sons/rain-ambiance.mp3",
+            loop: true,
+            autostart: true,
+            volume: -10,
+        }).toDestination());
+    }
+
     const stopActiveSound = () => {
         if (activeSoundPlayer) {
             activeSoundPlayer.stop();
@@ -143,6 +151,7 @@ export default function MapboxComponent({setClickedElement, weatherData, setCity
                 // Son pour la pluie : Percussion (hi-hat ou caisse claire)
                 const rainSampler = new Tone.MembraneSynth().toDestination();
                 rainSampler.triggerAttackRelease('C2', '8n');
+                playRainyAmbience()
                 break;
             case 'Clouds':
                 // Son pour un ciel nuageux : Synthé léger
@@ -182,8 +191,6 @@ export default function MapboxComponent({setClickedElement, weatherData, setCity
                 break;
         }
     };
-
-
 
 
 

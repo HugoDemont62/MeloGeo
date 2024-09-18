@@ -70,6 +70,23 @@ class ApiManager {
             });
     }
 
+    getPexelsVideos = async (query, token) => {
+
+        const url = `https://api.pexels.com/videos/search?query=${encodeURIComponent(query)}`;
+        return await axios.get(url, {
+            headers: {
+                Authorization: token
+            }
+        })
+            .then(res => {
+                return res.data;
+            })
+            .catch(error => {
+                throw new Error(`Failed to fetch Pexels videos: ${error.message}`);
+            });
+    }
+
+
 }
 const apiManager = new ApiManager();
 export default apiManager;

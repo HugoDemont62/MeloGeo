@@ -1,10 +1,12 @@
 import '../../../app/styles/menu-city.css';
 import { useEffect, useState, useRef } from "react";
 import TemperatureBar from "@/components/temperature-bar/TemperatureBar";
-import * as Tone from 'tone'; // Import Tone.js
+import * as Tone from 'tone';
+import apiManager from "@/services/api-manager"; // Import Tone.js
 
 export default function CityDetailsComponent({ cityName, weatherData, airPollution }) {
 
+    const tokenPexels = process.env.NEXT_PUBLIC_PEXELS_TOKEN;
     // States for weather and air quality
     const [currentTemp, setCurrentTemp] = useState(0);
     const [maxTemp, setMaxTemp] = useState(0);
@@ -13,15 +15,13 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
     const [feltTemp, setFeltTemp] = useState(0);
     const [weatherType, setWeatherType] = useState([]);
     const [backgroundClass, setBackgroundClass] = useState('');
+    const [backgroundVideo, setBackgroundVideo] = useState('');
     
 
     // Air quality state
     const [jauge, setJauge] = useState('');
     const [etatAir, setEtatAir] = useState('');
 
-    // State to manage rain sound
-    const [isRainSoundPlaying, setIsRainSoundPlaying] = useState(false);
-    const [isRainWeather, setIsRainWeather] = useState(false);
 
     // Ref to track the noise generator
     const noise = useRef(new Tone.Noise('brown').toDestination()).current;
@@ -33,30 +33,22 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
         }
     }, []);
 
-    // Function to start rain sound
-    const playRainSound = () => {
-        if (!isRainSoundPlaying) {
-            noise.start();
-            setIsRainSoundPlaying(true);
-        }
+    const fetchAndSetBackgroundVideo = (query, token) => {
+        apiManager.getPexelsVideos(query, token).then(data => {
+            if (data.videos.length && data.videos[0]['video_files'].length) {
+                console.log(data.videos);
+                const videos = data.videos;
+                setBackgroundVideo(videos[0]['video_files'][0].link);
+            } else {
+                setBackgroundVideo('');
+            }
+        }).catch(error => {
+            console.error(`Erreur lors de la récupération des vidéos pour ${query} : `, error);
+            setBackgroundVideo('');
+        });
     };
 
-    // Function to stop rain sound
-    const stopRainSound = () => {
-        if (isRainSoundPlaying) {
-            noise.stop();
-            setIsRainSoundPlaying(false);
-        }
-    };
 
-    // Function to toggle rain sound
-    const toggleRainSound = () => {
-        if (isRainSoundPlaying) {
-            stopRainSound();
-        } else {
-            playRainSound();
-        }
-    };
 
     useEffect(() => {
         if (weatherData.main) {
@@ -71,28 +63,42 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
             setFeltTemp(feels_like);
             setWeatherType(weather);
 
-            // Met à jour le background selon la météo principale
             switch (weather[0].main) {
                 case 'Rain':
                     setBackgroundClass('rainy-background');
-                    setIsRainWeather(true);  // Indicate that it's raining
+                    fetchAndSetBackgroundVideo('rain', tokenPexels);
                     break;
                 case 'Clouds':
                     setBackgroundClass('cloudy-background');
-                    setIsRainWeather(false);  // Indicate that it's not raining
-                    stopRainSound();  // Ensure rain sound is stopped
+                    fetchAndSetBackgroundVideo('cloud sky', tokenPexels);
                     break;
                 case 'Clear':
                     setBackgroundClass('sunny-background');
-                    setIsRainWeather(false);  // Indicate that it's not raining
-                    stopRainSound();  // Ensure rain sound is stopped
+                    fetchAndSetBackgroundVideo('blue sky', tokenPexels);
+                    break;
+                case 'Drizzle':
+                    setBackgroundClass('drizzly-background');
+                    fetchAndSetBackgroundVideo('rain', tokenPexels);
+                    break;
+                case 'Thunderstorm':
+                    setBackgroundClass('thunderstorm-background');
+                    fetchAndSetBackgroundVideo('orages', tokenPexels);
+                    break;
+                case 'Snow':
+                    setBackgroundClass('snowy-background');
+                    fetchAndSetBackgroundVideo('snow', tokenPexels);
+                    break;
+                case 'Atmosphere':
+                    setBackgroundClass('atmospheric-background');
+                    fetchAndSetBackgroundVideo('fog', tokenPexels);
                     break;
                 default:
                     setBackgroundClass('');
-                    setIsRainWeather(false);  // Indicate that it's not raining
-                    stopRainSound();  // Ensure rain sound is stopped
+                    setBackgroundVideo('');
                     break;
             }
+
+
         }
     }, [weatherData]);
 
@@ -115,8 +121,21 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
         }
     }, [airPollution]);
 
+    useEffect(() => {
+        console.log(backgroundVideo)
+    }, [backgroundVideo]);
+
     return (
-        <div className={`container ${backgroundClass}`}>
+        <div className="container">
+            {backgroundVideo && (
+                <video
+                    autoPlay
+                    loop
+                    muted
+                    className="background-video"
+                    src={backgroundVideo}
+                />
+            )}
             <h2 className='item'>{cityName}</h2>
             <span className='item'>Actuellement sur la ville :</span>
             <div className="datas-container">
@@ -158,11 +177,11 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                 </div>
             </div>
 
-            {isRainWeather && (
-                <button onClick={toggleRainSound}>
-                    {isRainSoundPlaying ? 'Stop Rain Sound' : 'Play Rain Sound'}
-                </button>
-            )}
+            {/*{isRainWeather && (*/}
+            {/*    <button onClick={toggleRainSound}>*/}
+            {/*        {isRainSoundPlaying ? 'Stop Rain Sound' : 'Play Rain Sound'}*/}
+            {/*    </button>*/}
+            {/*)}*/}
         </div>
     );
 }

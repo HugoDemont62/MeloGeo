@@ -22,7 +22,6 @@ const Map = () => {
     const [markers, setMarkers] = useState([]);
 
     useEffect(() => {
-        console.log(clickedElement)
                 if (cityName !== '') {
                     setMenuCity(true)
                 } else {
