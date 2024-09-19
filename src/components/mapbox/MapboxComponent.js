@@ -280,10 +280,13 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
         const pattern = new Tone.Pattern((time, note) => {
             if (note === 'kick') {
                 kick.triggerAttackRelease('C2', '8n', time);
+                setSynth(kick);
             } else if (note === 'snare') {
                 snare.triggerAttackRelease('8n', time);
+                setSynth(snare);
             } else if (note === 'hihat') {
                 hiHat.triggerAttackRelease('16n', time);
+                setSynth(hiHat);
             }
         }, ['kick', 'hihat', 'snare', 'hihat'], 'up').start(0);
     
