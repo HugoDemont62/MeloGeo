@@ -296,12 +296,21 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
     };
     
     const stopVoyage = () => {
-            stopVoyagePlayer();
-            setVoyageInterval(null);
-            setIsVoyageStarted(false);
-            setMarkersList([])
-
+        // Arrêter le player de voyage
+        stopVoyagePlayer();
+        
+        // Si un intervalle est en cours, l'arrêter
+        if (voyageInterval) {
+            clearInterval(voyageInterval);
+            setVoyageInterval(null); // Réinitialiser la référence de l'intervalle
+        }
+    
+        // Réinitialiser les états du voyage
+        setIsVoyageStarted(false);
+        isVoyageStartedRef.current = false; // Mettre à jour la référence du voyage
+        setMarkersList([]); // Optionnel : Réinitialiser la liste des marqueurs
     };
+    
 
     const stopAmbiancePlayer = () => {
         if (ambiancePlayer) {
@@ -346,7 +355,6 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
                 <NavigationControl position="bottom-left" />
                 {markers.map(marker => (
                     <Marker
-                        draggable
                         key={marker.id}
                         longitude={marker.longitude}
                         latitude={marker.latitude}
