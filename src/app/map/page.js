@@ -54,7 +54,7 @@ const Map = () => {
             </div>
             <Slide direction="left" in={menuCity} mountOnEnter unmountOnExit>
                 <div style={{position: 'absolute', right: '0', top: '0', width: 'fit-content', height: '100%', marginTop: 20, marginRight:20}}>
-                    <CityDetailsComponent cityName={cityName} weatherData={weatherData} airPollution={airPollution}/>
+                    <CityDetailsComponent cityName={cityName} weatherData={weatherData} airPollution={airPollution} />
                 </div>
             </Slide>
             <Slide direction="left" in={introPopup} mountOnEnter unmountOnExit>

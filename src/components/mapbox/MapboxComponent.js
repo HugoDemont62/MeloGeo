@@ -7,16 +7,20 @@ import dynamic from "next/dynamic";
 import apiManager from "../../services/api-manager";
 import * as Tone from 'tone';
 import WaveBarComponent from '@/components/wave-bar/WaveBarComponent';
+import Slide from "@mui/material/Slide";
 
-// export default function MapboxComponent({setClickedElement, weatherData, setCityName, setWeatherData, setAirPollution,  setMapRef, selectedTree, setMarkers, markers, isCured}) {
-// =======
-// import Map, { GeolocateControl, Marker, NavigationControl } from 'react-map-gl';
-// import { useCallback, useEffect, useRef, useState } from "react";
-// import dynamic from "next/dynamic";
-// import apiManager from "../../services/api-manager";
-// import * as Tone from 'tone';
-
-export default function MapboxComponent({ setClickedElement, weatherData, setCityName, setWeatherData, setAirPollution, setMapRef, selectedTree, setMarkers, markers, isCured }) {
+export default function MapboxComponent({
+                                            setClickedElement,
+                                            weatherData,
+                                            setMenuCity,
+                                            setCityName,
+                                            setWeatherData,
+                                            setAirPollution,
+                                            setMapRef,
+                                            selectedTree,
+                                            setMarkers,
+                                            markers
+                                        }) {
 
     const tokenMapbox = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     const tokenOWeather = process.env.NEXT_PUBLIC_OWEATHER_TOKEN;
@@ -29,33 +33,38 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
     const [voyageInterval, setVoyageInterval] = useState(null);
     const [markersList, setMarkersList] = useState([]);
     const [isVoyageStarted, setIsVoyageStarted] = useState(false);
-    const isVoyageStartedRef = useRef(isVoyageStarted);
+    let isVoyageStartedRef = useRef(isVoyageStarted);
     const cities = [
-        { name: "Paris", region: "Île-de-France" },
-        { name: "Marseille", region: "Provence-Alpes-Côte d'Azur" },
-        { name: "Lyon", region: "Auvergne-Rhône-Alpes" },
-        { name: "Toulouse", region: "Occitanie" },
-        { name: "Nice", region: "Provence-Alpes-Côte d'Azur" },
-        { name: "Nantes", region: "Pays de la Loire" },
-        { name: "Montpellier", region: "Occitanie" },
-        { name: "Strasbourg", region: "Grand Est" },
-        { name: "Bordeaux", region: "Nouvelle-Aquitaine" },
-        { name: "Lille", region: "Hauts-de-France" },
-        { name: "Rennes", region: "Bretagne" },
-        { name: "Reims", region: "Grand Est" },
-        { name: "Saint-Étienne", region: "Auvergne-Rhône-Alpes" },
-        { name: "Le Havre", region: "Normandie" },
-        { name: "Toulon", region: "Provence-Alpes-Côte d'Azur" },
-        { name: "Grenoble", region: "Auvergne-Rhône-Alpes" },
-        { name: "Dijon", region: "Bourgogne-Franche-Comté" },
-        { name: "Angers", region: "Pays de la Loire" },
-        { name: "Nîmes", region: "Occitanie" },
-        { name: "Aix-en-Provence", region: "Provence-Alpes-Côte d'Azur" }
+        {name: "Paris", region: "Île-de-France"},
+        {name: "Marseille", region: "Provence-Alpes-Côte d'Azur"},
+        {name: "Lyon", region: "Auvergne-Rhône-Alpes"},
+        {name: "Toulouse", region: "Occitanie"},
+        {name: "Nice", region: "Provence-Alpes-Côte d'Azur"},
+        {name: "Nantes", region: "Pays de la Loire"},
+        {name: "Montpellier", region: "Occitanie"},
+        {name: "Strasbourg", region: "Grand Est"},
+        {name: "Bordeaux", region: "Nouvelle-Aquitaine"},
+        {name: "Lille", region: "Hauts-de-France"},
+        {name: "Rennes", region: "Bretagne"},
+        {name: "Reims", region: "Grand Est"},
+        {name: "Saint-Étienne", region: "Auvergne-Rhône-Alpes"},
+        {name: "Le Havre", region: "Normandie"},
+        {name: "Toulon", region: "Provence-Alpes-Côte d'Azur"},
+        {name: "Grenoble", region: "Auvergne-Rhône-Alpes"},
+        {name: "Dijon", region: "Bourgogne-Franche-Comté"},
+        {name: "Angers", region: "Pays de la Loire"},
+        {name: "Nîmes", region: "Occitanie"},
+        {name: "Aix-en-Provence", region: "Provence-Alpes-Côte d'Azur"}
+    ];
+    const noteImages = [
+        './images/icons-music/note1.png',
+        './images/icons-music/note2.png',
+        './images/icons-music/note3.png'
     ];
 
     // Fonction pour supprimer ou réinitialiser markersList
     const clearMarkersList = () => {
-        setMarkersList([]); // Réinitialise l'état à une liste vide
+        setMarkersList([]);
     };
 
     const getWeatherByCities = () => {
@@ -120,6 +129,7 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
             id: Date.now(),
             longitude: event.lngLat.lng,
             latitude: event.lngLat.lat,
+            image: noteImages[Math.floor(Math.random() * noteImages.length)] // Choisir une image au hasard
         };
         setMarkers(prevMarkers => [...prevMarkers, newMarker]);
         setMarkersList(prevMarkersList => [...prevMarkersList, newMarker]);
@@ -146,69 +156,70 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
     const playSoundForWeather = (weatherType) => {
         stopAmbiancePlayer();
 
-            switch (weatherType) {
-                case 'Clear':
-                    const sunnySynth = new Tone.Synth().toDestination();
-                    sunnySynth.triggerAttackRelease('C4', '8n');
-                    setSynth(sunnySynth);
-                    if (!isVoyageStartedRef.current) {
-                        playSunnyAmbience(); // Only play ambiance if voyage is not started
-                    }
-                    break;
-                case 'Rain':
-                    const rainSampler = new Tone.MembraneSynth().toDestination();
-                    rainSampler.triggerAttackRelease('C2', '8n');
-                    setSynth(rainSampler);
-                    break;
-                case 'Clouds':
-                    const cloudSynth = new Tone.FMSynth().toDestination();
-                    cloudSynth.triggerAttackRelease('E3', '8n');
-                    setSynth(cloudSynth);
-                    break;
-                case 'Snow':
-                    const snowSynth = new Tone.Synth({
-                        oscillator: { type: 'triangle' }
-                    }).toDestination();
-                    snowSynth.triggerAttackRelease('G4', '8n');
-                    setSynth(snowSynth);
-                    break;
-                case 'Thunderstorm':
-                    const thunderNoise = new Tone.Noise("pink").start();
-                    const thunderFilter = new Tone.Filter(800, "lowpass").toDestination();
-                    thunderNoise.connect(thunderFilter);
-                    thunderNoise.stop("+0.5");
-                    setSynth(thunderNoise);
-                    break;
-                case 'Drizzle':
-                    const drizzleSynth = new Tone.NoiseSynth().toDestination();
-                    drizzleSynth.triggerAttackRelease('8n');
-                    break;
-                case 'Wind':
-                    const windSynth = new Tone.Synth({
-                        oscillator: { type: 'sine' }
-                    }).toDestination();
-                    windSynth.triggerAttackRelease('A3', '8n');
-                    break;
-                default:
-                    const defaultSynth = new Tone.Synth().toDestination();
-                    defaultSynth.triggerAttackRelease('B4', '8n');
-                    break;
-            }
+        switch (weatherType) {
+            case 'Clear':
+                const sunnySynth = new Tone.Synth().toDestination();
+                sunnySynth.triggerAttackRelease('C4', '8n');
+                setSynth(sunnySynth);
+                if (!isVoyageStartedRef.current) {
+                    playSunnyAmbience(); // Only play ambiance if voyage is not started
+                }
+                break;
+            case 'Rain':
+                const rainSampler = new Tone.MembraneSynth().toDestination();
+                rainSampler.triggerAttackRelease('C2', '8n');
+                setSynth(rainSampler);
+                break;
+            case 'Clouds':
+                const cloudSynth = new Tone.FMSynth().toDestination();
+                cloudSynth.triggerAttackRelease('E3', '8n');
+                setSynth(cloudSynth);
+                break;
+            case 'Snow':
+                const snowSynth = new Tone.Synth({
+                    oscillator: {type: 'triangle'}
+                }).toDestination();
+                snowSynth.triggerAttackRelease('G4', '8n');
+                setSynth(snowSynth);
+                break;
+            case 'Thunderstorm':
+                const thunderNoise = new Tone.Noise("pink").start();
+                const thunderFilter = new Tone.Filter(800, "lowpass").toDestination();
+                thunderNoise.connect(thunderFilter);
+                thunderNoise.stop("+0.5");
+                setSynth(thunderNoise);
+                break;
+            case 'Drizzle':
+                const drizzleSynth = new Tone.NoiseSynth().toDestination();
+                drizzleSynth.triggerAttackRelease('8n');
+                break;
+            case 'Wind':
+                const windSynth = new Tone.Synth({
+                    oscillator: {type: 'sine'}
+                }).toDestination();
+                windSynth.triggerAttackRelease('A3', '8n');
+                break;
+            default:
+                const defaultSynth = new Tone.Synth().toDestination();
+                defaultSynth.triggerAttackRelease('B4', '8n');
+                break;
+        }
     };
 
     useEffect(() => {
         console.log("État de markersList:", markersList);
     }, [markersList]);
-    
+
 
     useEffect(() => {
         if (isVoyageStarted) {
-           stopAmbiancePlayer();
+            stopAmbiancePlayer();
         }
     }, [isVoyageStarted]);
 
     const startVoyage = () => {
         // Vérifie si le voyage est déjà commencé avant d'exécuter le reste
+        setMenuCity(false)
         playPercussionLoop()
         if (isVoyageStartedRef.current) return;
 
@@ -231,7 +242,7 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
                 if (localIndex >= markersList.length) {
                     clearInterval(intervalId);
                     setVoyageInterval(null);
-                    stopVoyagePlayer();  // Arrêter la boucle de percussions
+                    stopVoyage();  // Arrêter la boucle de percussions
                     setIsVoyageStarted(false);  // Voyage terminé
                     isVoyageStartedRef.current = false; // Met à jour la référence
                     return;
@@ -264,14 +275,15 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
             }, 2000);  // Intervalle de 2 secondes entre chaque marker
 
             setVoyageInterval(intervalId);
+
         });
     };
 
     const playPercussionLoop = () => {
         const kick = new Tone.MembraneSynth().toDestination();
         const snare = new Tone.NoiseSynth({
-            noise: { type: 'white' },
-            envelope: { attack: 0.005, decay: 0.1, sustain: 0 }
+            noise: {type: 'white'},
+            envelope: {attack: 0.005, decay: 0.1, sustain: 0}
         }).toDestination();
         const hiHat = new Tone.MetalSynth({
             frequency: 400,
@@ -305,24 +317,17 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
     };
 
     const stopVoyage = () => {
-        // Arrêter le player de voyage
         stopVoyagePlayer();
 
-        // Si un intervalle est en cours, l'arrêter
-        if (voyageInterval) {
-            clearInterval(voyageInterval);
-            setVoyageInterval(null); // Réinitialiser la référence de l'intervalle
+        if (Tone.Transport.state === "started") {
+            Tone.Transport.stop(); // Arrête le transport de Tone.js
         }
-
-        // Réinitialiser les états du voyage
+        setVoyageInterval(null);
         setIsVoyageStarted(false);
-        isVoyageStartedRef.current = false; // Mettre à jour la référence du voyage
-        // setMarkersList([]); // Optionnel : Réinitialiser la liste des marqueurs
+        isVoyageStartedRef.current = false;
+
     };
 
-    const supprimerVoyage = () => {
-        markersList.delete();
-    }
 
     const stopAmbiancePlayer = () => {
         if (ambiancePlayer) {
@@ -339,73 +344,95 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
     };
 
 
-
     return (
 
-        <div style={{ cursor: 'crosshair' }}>
-        <div style={{ position: 'relative', height: '100vh' }}>
-            <div style={{
-                position: 'absolute',
-                top: 10,
-                left: 10,
-                zIndex: 1,
-                backgroundColor: 'white',
-                padding: '10px',
-                borderRadius: '5px',
-                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            }}>
-                <button onClick={startVoyage}>Démarrer le voyage</button>
-                <button onClick={stopVoyage}>Arrêter le voyage</button>
-                <button onClick={clearMarkersList}>Supprimer les marqueurs</button>
-                <input type="range" min="20" max="1000" step="1"
-                       value={Tone.Transport.bpm.value}
-                       onChange={(e) => Tone.Transport.bpm.value = e.target.value}/>
+        <div style={{cursor: 'crosshair'}}>
+            <div style={{position: 'relative', height: '100vh'}}>
+                <div style={{
+                    position: 'absolute',
+                    top: 10,
+                    left: 10,
+                    zIndex: 1,
+                    backgroundColor: 'white',
+                    padding: '10px',
+                    borderRadius: '5px',
+                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: 4
+                }}>
+                    <div>
+                        <button className="button-icon" onClick={startVoyage}><img height={24}
+                                                                                   src="./images/weather-markers/play.png"
+                                                                                   title="play icons"/></button>
+                    </div>
+                    <hr/>
+                    <Slide in={isVoyageStartedRef.current} direction="right" mountOnEnter unmountOnExit>
+                        <div>
+                            <button className="button-icon" onClick={stopVoyage}><img height={28}
+                                                                                      src="./images/weather-markers/pause-button.png"/>
+                            </button>
+                        </div>
+                    </Slide>
+                    <button className="button-icon" onClick={clearMarkersList}><img height={28}
+                                                            src="./images/weather-markers/location.png"/></button>
+                    <input type="range" min="20" max="1000" step="1"
+                           value={Tone.Transport.bpm.value}
+                           onChange={(e) => Tone.Transport.bpm.value = e.target.value}/>
+
+                </div>
+
+                <Map
+                    ref={mapRef}
+                    initialViewState={{
+                        longitude: 4.8357,
+                        latitude: 45.7640,
+                        zoom: 11
+                    }}
+                    onClick={handleClick}
+                    onDblClick={handleDoubleClick}
+                    doubleClickZoom={false}
+                    mapboxAccessToken={tokenMapbox}
+                    style={{width: '100%', height: '100%'}}
+                    mapStyle="mapbox://styles/mapbox/navigation-day-v1"
+                >
+                    <GeolocateControl position="bottom-left"/>
+                    <NavigationControl position="bottom-left"/>
+                    {markersList.map(marker => (
+                        <Marker
+                            key={marker.id}
+                            longitude={marker.longitude}
+                            latitude={marker.latitude}
+                            anchor="bottom">
+
+                            <img
+                                src={marker.image}
+                                alt="weather icon"
+                                style={{width: '24px', height: '24px'}}
+                            />
+
+                        </Marker>
+                    ))}
+
+                    {markersWeather.map((weather, index) => (
+                        <Marker
+                            key={`${weather.coord.lat}-${weather.coord.lon}-${index}`}
+                            longitude={weather.coord.lon}
+                            latitude={weather.coord.lat}
+                            anchor="center"
+                        >
+                            <img
+                                src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}.png`}
+                                alt="weather icon"
+                                style={{width: '34px', height: '34px'}}
+                            />
+                        </Marker>
+                    ))}
+
+                    <WaveBarComponent synth={synth}/>
+
+                </Map>
             </div>
-
-            <Map
-                ref={mapRef}
-                initialViewState={{
-                    longitude: 4.8357,
-                    latitude: 45.7640,
-                    zoom: 11
-                }}
-                onClick={handleClick}
-                onDblClick={handleDoubleClick}
-                doubleClickZoom={false}
-                mapboxAccessToken={tokenMapbox}
-                style={{ width: '100%', height: '100%' }}
-                mapStyle="mapbox://styles/mapbox/navigation-day-v1"
-            >
-                <GeolocateControl position="bottom-left" />
-                <NavigationControl position="bottom-left" />
-                {markersList.map(marker => (
-                    <Marker
-                        key={marker.id}
-                        longitude={marker.longitude}
-                        latitude={marker.latitude}
-                        anchor="bottom"
-                    />
-                ))}
-
-                {markersWeather.map((weather, index) => (
-                    <Marker
-                        key={`${weather.coord.lat}-${weather.coord.lon}-${index}`}
-                        longitude={weather.coord.lon}
-                        latitude={weather.coord.lat}
-                        anchor="center"
-                    >
-                        <img
-                            src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}.png`}
-                            alt="weather icon"
-                            style={{ width: '24px', height: '24px' }}
-                        />
-                    </Marker>
-                ))}
-
-                <WaveBarComponent synth={synth} />
-
-            </Map>
-        </div>
         </div>
     );
 }
