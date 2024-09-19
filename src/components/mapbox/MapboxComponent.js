@@ -276,7 +276,7 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
             resonance: 8000,
             octaves: 1.5,
         }).toDestination();
-    
+
         const pattern = new Tone.Pattern((time, note) => {
             if (note === 'kick') {
                 kick.triggerAttackRelease('C2', '8n', time);
@@ -289,28 +289,28 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
                 setSynth(hiHat);
             }
         }, ['kick', 'hihat', 'snare', 'hihat'], 'up').start(0);
-    
+
         Tone.Transport.bpm.value = 120;
         Tone.Transport.start();
         setVoyagePlayer(pattern);
     };
-    
+
     const stopVoyage = () => {
         // Arrêter le player de voyage
         stopVoyagePlayer();
-        
+
         // Si un intervalle est en cours, l'arrêter
         if (voyageInterval) {
             clearInterval(voyageInterval);
             setVoyageInterval(null); // Réinitialiser la référence de l'intervalle
         }
-    
+
         // Réinitialiser les états du voyage
         setIsVoyageStarted(false);
         isVoyageStartedRef.current = false; // Mettre à jour la référence du voyage
         setMarkersList([]); // Optionnel : Réinitialiser la liste des marqueurs
     };
-    
+
 
     const stopAmbiancePlayer = () => {
         if (ambiancePlayer) {
@@ -332,9 +332,21 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
 
         <div style={{ cursor: 'crosshair' }}>
         <div style={{ position: 'relative', height: '100vh' }}>
-            <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 1, backgroundColor: 'white', padding: '10px', borderRadius: '5px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
+            <div style={{
+                position: 'absolute',
+                top: 10,
+                left: 10,
+                zIndex: 1,
+                backgroundColor: 'white',
+                padding: '10px',
+                borderRadius: '5px',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            }}>
                 <button onClick={startVoyage}>Démarrer le voyage</button>
                 <button onClick={stopVoyage}>Arrêter le voyage</button>
+                <input type="range" min="20" max="1000" step="1"
+                       value={Tone.Transport.bpm.value}
+                       onChange={(e) => Tone.Transport.bpm.value = e.target.value}/>
             </div>
 
             <Map
