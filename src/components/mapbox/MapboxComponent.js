@@ -195,7 +195,7 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
                     break;
             }
     };
-    
+
     useEffect(() => {
         console.log("État de markersList:", markersList);
     }, [markersList]);
@@ -317,7 +317,7 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
         // Réinitialiser les états du voyage
         setIsVoyageStarted(false);
         isVoyageStartedRef.current = false; // Mettre à jour la référence du voyage
-        setMarkersList([]); // Optionnel : Réinitialiser la liste des marqueurs
+        // setMarkersList([]); // Optionnel : Réinitialiser la liste des marqueurs
     };
 
     const supprimerVoyage = () => {
