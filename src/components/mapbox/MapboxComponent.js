@@ -1,12 +1,11 @@
 import "mapbox-gl/dist/mapbox-gl.css";
 import * as React from 'react';
-import Map, {GeolocateControl, Layer, Marker, NavigationControl, Source} from 'react-map-gl';
+import Map, {GeolocateControl, Marker, NavigationControl} from 'react-map-gl';
 import {useCallback, useEffect, useRef, useState} from "react";
 import dynamic from "next/dynamic";
 import apiManager from "../../services/api-manager";
 import * as Tone from 'tone';
-
-
+import WaveBarComponent from '@/components/wave-bar/WaveBarComponent';
 
 export default function MapboxComponent({setClickedElement, weatherData, setCityName, setWeatherData, setAirPollution,  setMapRef, selectedTree, setMarkers, markers, isCured}) {
     const tokenMapbox = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
@@ -15,6 +14,7 @@ export default function MapboxComponent({setClickedElement, weatherData, setCity
     const [clickedLngLat, setClickedLngLat] = useState(null);
     const [markersWeather, setMarkersWeather] = useState([]);
     const [activeSoundPlayer, setActiveSoundPlayer] = useState(null);
+    const [synth, setSynth] = useState(null);
 
     const cities = [
         { name: "Paris", region: "Île-de-France" },
@@ -111,7 +111,6 @@ export default function MapboxComponent({setClickedElement, weatherData, setCity
                 setMarkers(prevMarkers => [...prevMarkers, newMarker]);
     }, [selectedTree]);
 
-
     const playSunnyAmbience = () => {
         setActiveSoundPlayer(new Tone.Player({
             url: "/sons/sunny-ambiance.mp3",
@@ -119,7 +118,6 @@ export default function MapboxComponent({setClickedElement, weatherData, setCity
             autostart: true,
             volume: -10,
         }).toDestination());
-
     };
 
     const playRainyAmbience = () => {
@@ -138,7 +136,6 @@ export default function MapboxComponent({setClickedElement, weatherData, setCity
         }
     };
 
-
     const playSoundForWeather = (weatherType) => {
         switch (weatherType) {
             case 'Clear':
@@ -146,17 +143,20 @@ export default function MapboxComponent({setClickedElement, weatherData, setCity
                 const synth = new Tone.Synth().toDestination();
                 synth.triggerAttackRelease('C4', '8n');
                 playSunnyAmbience();
+                setSynth(synth);
                 break;
             case 'Rain':
                 // Son pour la pluie : Percussion (hi-hat ou caisse claire)
                 const rainSampler = new Tone.MembraneSynth().toDestination();
                 rainSampler.triggerAttackRelease('C2', '8n');
                 playRainyAmbience()
+                setSynth(rainSampler);
                 break;
             case 'Clouds':
                 // Son pour un ciel nuageux : Synthé léger
                 const cloudSynth = new Tone.FMSynth().toDestination();
                 cloudSynth.triggerAttackRelease('E3', '8n');
+                setSynth(cloudSynth);
                 break;
             case 'Snow':
                 // Son pour la neige : Sons scintillants, clochettes
@@ -164,6 +164,7 @@ export default function MapboxComponent({setClickedElement, weatherData, setCity
                     oscillator: { type: 'triangle' }
                 }).toDestination();
                 snowSynth.triggerAttackRelease('G4', '8n');
+                setSynth(snowSynth);
                 break;
             case 'Thunderstorm':
                 // Son pour l'orage : Bruit grave ou tonnerre
@@ -171,11 +172,13 @@ export default function MapboxComponent({setClickedElement, weatherData, setCity
                 const thunderFilter = new Tone.Filter(800, "lowpass").toDestination();
                 thunderNoise.connect(thunderFilter);
                 thunderNoise.stop("+0.5");
+                setSynth(thunderNoise);
                 break;
             case 'Drizzle':
                 // Son pour la bruine : Sons doux, très légers (cymbales)
                 const drizzleSynth = new Tone.NoiseSynth().toDestination();
                 drizzleSynth.triggerAttackRelease('8n');
+                setSynth(drizzleSynth);
                 break;
             case 'Wind':
                 // Son pour le vent : Instruments à vent
@@ -183,11 +186,13 @@ export default function MapboxComponent({setClickedElement, weatherData, setCity
                     oscillator: { type: 'sine' }
                 }).toDestination();
                 windSynth.triggerAttackRelease('A3', '8n');
+                setSynth(windSynth);
                 break;
             default:
                 // Son par défaut
                 const defaultSynth = new Tone.Synth().toDestination();
                 defaultSynth.triggerAttackRelease('B4', '8n');
+                setSynth(defaultSynth);
                 break;
         }
     };
@@ -195,7 +200,7 @@ export default function MapboxComponent({setClickedElement, weatherData, setCity
 
 
     return (
-        <div style={{cursor:'crosshair'}}>
+        <div style={{ cursor: 'crosshair' }}>
             <Map
                 ref={mapRef}
                 initialViewState={{
@@ -237,8 +242,9 @@ export default function MapboxComponent({setClickedElement, weatherData, setCity
                         />
                     </Marker>
                 ))}
-
+                <WaveBarComponent synth={synth} />
             </Map>
+
         </div>
     );
 }
