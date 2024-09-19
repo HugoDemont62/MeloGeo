@@ -39,7 +39,6 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
     useEffect(() => {
         apiManager.get5DayForecast(cityName, tokenOWeather).then(data => {
             const dailyData = processDailyForecasts(data.list);
-            console.log(dailyData);
             setDailyForecasts(dailyData);
         }).catch(error => {
             console.error('Erreur lors de la récupération des prévisions :', error);
@@ -78,6 +77,7 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
 
     useEffect(() => {
         if (weatherData.main) {
+            console.log(weatherData)
             const { temp, temp_max, temp_min, humidity, feels_like } = weatherData.main;
             const { weather } = weatherData;
 
@@ -118,6 +118,9 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                 case 'Atmosphere':
                     setBackgroundClass('atmospheric-background');
                     fetchAndSetBackgroundVideo('fog', tokenPexels);
+                    break;
+                case 'Mist':
+                    fetchAndSetBackgroundVideo('mist', tokenPexels);
                     break;
                 default:
                     setBackgroundClass('');
