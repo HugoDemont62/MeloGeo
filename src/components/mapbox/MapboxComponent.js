@@ -53,6 +53,11 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
         { name: "Aix-en-Provence", region: "Provence-Alpes-Côte d'Azur" }
     ];
 
+    // Fonction pour supprimer ou réinitialiser markersList
+    const clearMarkersList = () => {
+        setMarkersList([]); // Réinitialise l'état à une liste vide
+    };
+
     const getWeatherByCities = () => {
         cities.forEach((city) => {
             apiManager.getWeatherByCity(city.name, tokenOWeather).then(data => {
@@ -190,7 +195,11 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
                     break;
             }
     };
-
+    
+    useEffect(() => {
+        console.log("État de markersList:", markersList);
+    }, [markersList]);
+    
 
     useEffect(() => {
         if (isVoyageStarted) {
@@ -311,6 +320,9 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
         setMarkersList([]); // Optionnel : Réinitialiser la liste des marqueurs
     };
 
+    const supprimerVoyage = () => {
+        markersList.delete();
+    }
 
     const stopAmbiancePlayer = () => {
         if (ambiancePlayer) {
@@ -344,6 +356,7 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
             }}>
                 <button onClick={startVoyage}>Démarrer le voyage</button>
                 <button onClick={stopVoyage}>Arrêter le voyage</button>
+                <button onClick={clearMarkersList}>Supprimer les marqueurs</button>
                 <input type="range" min="20" max="1000" step="1"
                        value={Tone.Transport.bpm.value}
                        onChange={(e) => Tone.Transport.bpm.value = e.target.value}/>
@@ -365,7 +378,7 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
             >
                 <GeolocateControl position="bottom-left" />
                 <NavigationControl position="bottom-left" />
-                {markers.map(marker => (
+                {markersList.map(marker => (
                     <Marker
                         key={marker.id}
                         longitude={marker.longitude}
@@ -373,6 +386,7 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
                         anchor="bottom"
                     />
                 ))}
+
                 {markersWeather.map((weather, index) => (
                     <Marker
                         key={`${weather.coord.lat}-${weather.coord.lon}-${index}`}
