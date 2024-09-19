@@ -11,7 +11,6 @@ const WaveBarComponent = ({ synth }) => {
 
     if (synth) {
       synth.connect(waveForm);
-      console.log('Synth connected to waveform');
     }
 
     const canvas = canvasRef.current;
@@ -41,7 +40,6 @@ const WaveBarComponent = ({ synth }) => {
     return () => {
       if (synth) {
         synth.disconnect(waveForm);
-        console.log('Synth disconnected from waveform');
       }
     };
   }, [synth]);

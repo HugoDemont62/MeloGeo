@@ -77,7 +77,6 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
 
     useEffect(() => {
         if (weatherData.main) {
-            console.log(weatherData)
             const { temp, temp_max, temp_min, humidity, feels_like } = weatherData.main;
             const { weather } = weatherData;
 
@@ -101,7 +100,7 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                     break;
                 case 'Clear':
                     setBackgroundClass('sunny-background');
-                    fetchAndSetBackgroundVideo('blue sky', tokenGIPHY);
+                    fetchAndSetBackgroundVideo('sky', tokenGIPHY);
                     break;
                 case 'Drizzle':
                     setBackgroundClass('drizzly-background');

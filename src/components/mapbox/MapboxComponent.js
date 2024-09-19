@@ -7,16 +7,9 @@ import dynamic from "next/dynamic";
 import apiManager from "../../services/api-manager";
 import * as Tone from 'tone';
 import WaveBarComponent from '@/components/wave-bar/WaveBarComponent';
+import Slide from "@mui/material/Slide";
 
-// export default function MapboxComponent({setClickedElement, weatherData, setCityName, setWeatherData, setAirPollution,  setMapRef, selectedTree, setMarkers, markers, isCured}) {
-// =======
-// import Map, { GeolocateControl, Marker, NavigationControl } from 'react-map-gl';
-// import { useCallback, useEffect, useRef, useState } from "react";
-// import dynamic from "next/dynamic";
-// import apiManager from "../../services/api-manager";
-// import * as Tone from 'tone';
-
-export default function MapboxComponent({ setClickedElement, weatherData, setCityName, setWeatherData, setAirPollution, setMapRef, selectedTree, setMarkers, markers, isCured }) {
+export default function MapboxComponent({ setClickedElement, weatherData, setCityName, setWeatherData, setAirPollution, setMapRef, selectedTree, setMarkers, markers}) {
 
     const tokenMapbox = process.env.NEXT_PUBLIC_MAPBOX_TOKEN;
     const tokenOWeather = process.env.NEXT_PUBLIC_OWEATHER_TOKEN;
@@ -29,7 +22,7 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
     const [voyageInterval, setVoyageInterval] = useState(null);
     const [markersList, setMarkersList] = useState([]);
     const [isVoyageStarted, setIsVoyageStarted] = useState(false);
-    const isVoyageStartedRef = useRef(isVoyageStarted);
+    let isVoyageStartedRef = useRef(isVoyageStarted);
     const cities = [
         { name: "Paris", region: "Île-de-France" },
         { name: "Marseille", region: "Provence-Alpes-Côte d'Azur" },
@@ -222,7 +215,7 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
                 if (localIndex >= markersList.length) {
                     clearInterval(intervalId);
                     setVoyageInterval(null);
-                    stopVoyagePlayer();  // Arrêter la boucle de percussions
+                    stopVoyage();  // Arrêter la boucle de percussions
                     setIsVoyageStarted(false);  // Voyage terminé
                     isVoyageStartedRef.current = false; // Met à jour la référence
                     return;
@@ -255,6 +248,7 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
             }, 2000);  // Intervalle de 2 secondes entre chaque marker
 
             setVoyageInterval(intervalId);
+
         });
     };
 
@@ -294,14 +288,19 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
         Tone.Transport.start();
         setVoyagePlayer(pattern);
     };
-    
-    const stopVoyage = () => {
-            stopVoyagePlayer();
-            setVoyageInterval(null);
-            setIsVoyageStarted(false);
-            setMarkersList([])
 
+    const stopVoyage = () => {
+        stopVoyagePlayer();
+        if (Tone.Transport.state === "started") {
+            Tone.Transport.stop(); // Arrête le transport de Tone.js
+        }
+        setVoyageInterval(null);
+        setIsVoyageStarted(false);
+        isVoyageStartedRef.current = false;
+        setMarkersList([]);
     };
+
+
 
     const stopAmbiancePlayer = () => {
         if (ambiancePlayer) {
@@ -323,9 +322,17 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
 
         <div style={{ cursor: 'crosshair' }}>
         <div style={{ position: 'relative', height: '100vh' }}>
-            <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 1, backgroundColor: 'white', padding: '10px', borderRadius: '5px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-                <button onClick={startVoyage}>Démarrer le voyage</button>
-                <button onClick={stopVoyage}>Arrêter le voyage</button>
+            <div style={{ position: 'absolute', top: 10, left: 10, zIndex: 1, backgroundColor: 'white', padding: '10px', borderRadius: '5px', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)', display:'flex', alignItems:'center', gap:4 }}>
+                <div>
+                <button className="button-icon" onClick={startVoyage}><img height={44} src="./images/weather-markers/travel.png" title="travel icons"/></button>
+                </div>
+                <hr/>
+                <Slide in={isVoyageStartedRef.current} direction="right" mountOnEnter unmountOnExit>
+                <div>
+                <button className="button-icon" onClick={stopVoyage}><img height={34} src="./images/weather-markers/pause-button.png"/></button>
+                </div>
+                </Slide>
+
             </div>
 
             <Map
@@ -350,8 +357,15 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
                         key={marker.id}
                         longitude={marker.longitude}
                         latitude={marker.latitude}
-                        anchor="bottom"
-                    />
+                        anchor="bottom">
+
+                        <img
+                            src={'./images/weather-markers/travel-marker.png'}
+                            alt="weather icon"
+                            style={{width: '44px', height: '44px'}}
+                        />
+
+                    </Marker>
                 ))}
                 {markersWeather.map((weather, index) => (
                     <Marker
@@ -363,7 +377,7 @@ export default function MapboxComponent({ setClickedElement, weatherData, setCit
                         <img
                             src={`https://openweathermap.org/img/wn/${weather.weather[0].icon}.png`}
                             alt="weather icon"
-                            style={{ width: '24px', height: '24px' }}
+                            style={{ width: '34px', height: '34px' }}
                         />
                     </Marker>
                 ))}

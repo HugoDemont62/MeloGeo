@@ -274,8 +274,15 @@ p {
     text-align: center;
     color: black; /* Couleur du texte blanc */
     z-index: 2;
+}
 
+.button-icon {
+    background:none;
+    border:none;
+}
 
+.button-icon:hover {
+    cursor:pointer;
 }
 
 
