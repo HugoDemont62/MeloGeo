@@ -7,14 +7,13 @@
     height: 95vh;
     overflow-y: scroll;
     margin: 0 auto;
-    background-color: #ffffff;
+    background-color: #e0dbf3;
     border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px white;
 }
 
 .header {
     text-align: center;
-    margin-bottom: 20px;
 }
 
 .logo {
@@ -23,19 +22,19 @@
     justify-content: center;
 }
 
-.img {
-    width: 50px;
-    margin-right: 10px;
+.logo img {
+    object-fit: fill;
+    width: 24rem;
+    padding: 2rem;
 }
 
 .logo h1 {
-    font-size: 2rem;
-    color: #4caf50;
+    font-size: 1rem;
 }
 
 .header p {
     font-size: 1rem;
-    color: #666;
+    color: black;
 }
 
 .main {
@@ -48,16 +47,18 @@
 
 .main h2 {
     font-size: 1.5rem;
-    margin-bottom: 20px;
+    margin-top: 1rem;
+    color: black;
 }
 
 .step {
-    background-color: #eff3fb;
+    background-color: white;
     padding: 1rem;
     border-radius: 5px;
     margin-bottom: 20px;
     max-width: 70%;
     margin-top: 1rem;
+    border: 1px solid rgba(0, 0, 0, 0.14);
 }
 
 .step h3 {
@@ -72,6 +73,7 @@
 }
 
 .desc {
+    padding-bottom: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -80,15 +82,7 @@
 .separator {
     width: 80%;
     height: 1px;
-    background-color: #ccc;
+    background-color: white;
     border: none;
-    margin: 0 auto; /* Espacement vertical autour de la ligne */
-}
-
-.title {
-    font-size: 2rem;
-    color: #333;
-    margin-left: 10px;
-    margin-right: 10px;
-    font-weight: bold;
+    margin: 0 auto;
 }

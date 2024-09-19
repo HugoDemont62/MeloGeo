@@ -7,10 +7,10 @@ export default function HowItWorksComponent() {
         <div className={styles.container}>
             <header className={styles.header}>
                 <div className={styles.logo}>
-                    <div className={styles.title}>MeloGéo</div>
+                    <img src="/images/landingPage/logoMeloGéoBlack.png" alt="logo"/>
                 </div>
                 <div className={styles.desc}>
-                    <p>Symphonie cosmique</p>
+                    <p>Voyage symphonique à travers la planète</p>
                 </div>
                 <hr className={styles.separator}/>
             </header>
