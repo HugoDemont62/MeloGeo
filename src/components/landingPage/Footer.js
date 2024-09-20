@@ -4,7 +4,7 @@ const Footer = () => {
     return (
         <footer className={styles.footer}>
             <div className={styles.content}>
-            <p>&copy; Fait par Philippe Plaïa, Tom Engélibert et Hugo Dumont</p>
+            <p>&copy; Fait par Philippe Plaïa, Tom Engélibert et Hugo Demont</p>
             <p>Basé sur un design réalisé par Agathe Moreau, Mathilde Fenart et Baptiste Blicq</p>
             </div>
             <div className={styles.content}>
