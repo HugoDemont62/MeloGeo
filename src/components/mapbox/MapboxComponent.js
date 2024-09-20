@@ -377,8 +377,13 @@ export default function MapboxComponent({
                     <button className="button-icon" onClick={clearMarkersList}><img height={28}
                                                             src="./images/weather-markers/location.png"/></button>
                     <input type="range" min="20" max="1000" step="1"
-                           value={Tone.Transport.bpm.value}
-                           onChange={(e) => Tone.Transport.bpm.value = e.target.value}/>
+                           value={Tone.Transport?.bpm?.value || 120}  // Valeur par défaut si undefined
+                           onChange={(e) => {
+                               if (Tone.Transport?.bpm) {
+                                   Tone.Transport.bpm.value = e.target.value;
+                               }
+                           }}/>
+
 
                 </div>
 
