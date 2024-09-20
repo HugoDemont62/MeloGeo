@@ -100,7 +100,7 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                     break;
                 case 'Clear':
                     setBackgroundClass('sunny-background');
-                    fetchAndSetBackgroundVideo('sky', tokenGIPHY);
+                    fetchAndSetBackgroundVideo('blue sky', tokenPexels);
                     break;
                 case 'Drizzle':
                     setBackgroundClass('drizzly-background');
