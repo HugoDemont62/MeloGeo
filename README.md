@@ -11,11 +11,11 @@ Site héberger à cette adresse : https://epreuve-rentree-d6dp.vercel.app/
 Dans votre terminal, executez une de ces commandes
 
 npm run dev
-# or
+# ou
 yarn dev
-# or
+# ou
 pnpm dev
-# or
+# ou
 bun dev
 
 
