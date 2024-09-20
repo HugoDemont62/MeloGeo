@@ -4,7 +4,7 @@ Notre projet consiste à créer une carte interactive qui permet de récupérer 
 
 ## Lien du site
 
-Site héberger à cette adresse : https://epreuve-rentree-d6dp.vercel.app/
+Site hébergé à cette adresse : https://epreuve-rentree-d6dp.vercel.app/
 
 ## Pour lancer le projet en local 
 
