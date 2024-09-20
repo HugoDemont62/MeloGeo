@@ -9,7 +9,7 @@ const Header = () => {
                 <img src="/images/landingPage/logoMeloGéo.png" alt="Logo" className={styles.image} />
             </div>
             <nav className={styles.nav}>
-                <Link href="/map" className={styles.links}>Démarrer une simulation</Link>
+                <Link href="/map" className={styles.links}>Commencer une exploration</Link>
             </nav>
         </header>
     );
