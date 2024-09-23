@@ -40,6 +40,10 @@
 
 /* Mobile */
 @media (max-width: 700px) {
+    .banner {
+        padding-inline: 5rem;
+        height: 100%;
+    }
     .title {
         font-size: 4rem;
         line-height: 80px;
@@ -54,6 +58,8 @@
         padding: 0.8rem 2rem;
         font-size: 0.9rem;
     }
+
+
 }
 
 /* Tablet and Smaller Desktop */

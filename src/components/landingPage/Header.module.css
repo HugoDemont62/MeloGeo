@@ -62,6 +62,10 @@
 
 /* Mobile */
 @media (max-width: 700px) {
+    .header {
+        padding: .1rem;
+    }
+
     .nav {
         display: none;
     }
