@@ -1,9 +1,7 @@
 .main {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   align-items: center;
-  /* padding: 6rem; */
   min-height: 100vh;
 }
 
@@ -15,7 +13,7 @@
   max-width: var(--max-width);
   width: 100%;
   z-index: 2;
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), serif;
 }
 
 .description a {
@@ -36,7 +34,7 @@
 
 .code {
   font-weight: 700;
-  font-family: var(--font-mono);
+  font-family: var(--font-mono), serif;
 }
 
 .grid {
@@ -108,6 +106,7 @@
 .logo {
   position: relative;
 }
+
 /* Enable hover only on non-touch devices */
 @media (hover: hover) and (pointer: fine) {
   .card:hover {

@@ -8,7 +8,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: center; 
+    align-items: center;
 }
 
 .title {
@@ -38,3 +38,39 @@
     border-radius: 2rem;
 }
 
+/* Mobile */
+@media (max-width: 700px) {
+    .title {
+        font-size: 4rem;
+        line-height: 80px;
+        text-align: center;
+    }
+
+    .description {
+        font-size: 1rem;
+    }
+
+    .button {
+        padding: 0.8rem 2rem;
+        font-size: 0.9rem;
+    }
+}
+
+/* Tablet and Smaller Desktop */
+@media (min-width: 701px) and (max-width: 1120px) {
+    .title {
+        font-size: 6rem;
+        line-height: 100px;
+        text-align: center;
+    }
+
+    .description {
+        font-size: 1.1rem;
+    }
+
+    .button {
+        padding: 0.9rem 2.5rem;
+        font-size: 1.5rem;
+    }
+
+}
