@@ -41,3 +41,58 @@
     margin-left: 16rem;
     margin-top: -48rem;
 }
+
+@media (max-width: 1200px) {
+    .content {
+        padding-right: 5rem;
+        margin: 3rem;
+    }
+
+    .imageElement {
+        max-width: 50%;
+    }
+}
+
+@media (max-width: 768px) {
+    .sectionContainer {
+        position: relative;
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+    }
+
+    .content {
+        padding-right: 0;
+        margin: 2rem 0;
+        text-align: center;
+    }
+
+    .image {
+        display: flex;
+        justify-content: center;
+        flex: 0;
+        height: 50px;
+    }
+
+    .imageElement {
+        max-width: 40%;
+        object-fit: contain;
+        margin-left: 16rem;
+        margin-top: -64rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .title {
+        font-size: 28px;
+    }
+
+    .description {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .imageElement {
+        max-width: 90%;
+    }
+}
