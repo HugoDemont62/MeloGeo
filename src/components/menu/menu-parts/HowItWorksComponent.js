@@ -28,10 +28,6 @@ export default function HowItWorksComponent() {
                     <h3>Sélectionnez, cliquez et écoutez</h3>
                     <p>Choisissez une villes et écoutez la musique générée par les données météorologiques de la ville</p>
                 </div>
-                <div className={styles.step}>
-                    <h3>Explorez la planète</h3>
-                    <p>Explorez la planète à travers une symphonie de paysages et de climats</p>
-                </div>
             </main>
         </div>
     )

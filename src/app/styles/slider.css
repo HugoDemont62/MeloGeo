@@ -4,33 +4,44 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 0 10px;
-    margin:0 auto
-
+    padding: 0; /* Retirer tout padding qui pourrait causer un débordement */
+    margin: 0; /* Retirer les marges supplémentaires */
+    overflow: hidden; /* Couper tout débordement dans le slider */
 }
+
+/* Liste : éviter padding inutile */
 .slick-list {
     position: relative;
     display: block !important;
-    overflow: hidden;
-    padding: 100px !important;
-    width: 90%;
+    overflow: hidden; /* Assure que rien ne déborde */
+    padding: 0 !important; /* Supprimer le padding excessif */
+    width: 100%; /* Optimiser l'espace disponible */
+    height: 100%; /* S'assurer que la hauteur est fixe */
+    box-sizing: border-box; /* Inclure padding et bordures dans la largeur/hauteur */
 }
+
+/* Track : alignement propre */
 .slick-track {
     position: relative;
     top: 0;
     left: 0;
     display: flex;
+    height: 100%; /* S'assurer qu'il prend seulement l'espace nécessaire */
 }
+
+/* Slides : éviter le débordement interne */
 .slick-slide div {
     display: flex !important;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     width: 100px;
-    height:100px;
-    border-radius:50%;
+    height: 100px;
+    overflow: hidden; /* Évite les débordements dans les slides */
+    border-radius: 50%;
     background-color: white;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    margin: 0; /* Assure qu'aucune marge ne force le débordement */
 }
 
 .slick-current div {

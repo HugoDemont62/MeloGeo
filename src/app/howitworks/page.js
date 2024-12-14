@@ -1,6 +1,3 @@
-
-// pages/Simularbre.js
-
 import React from 'react';
 import styles from './Howitworks.module.css';
 import HowItWorksComponent from "@/components/menu/menu-parts/HowItWorksComponent";
