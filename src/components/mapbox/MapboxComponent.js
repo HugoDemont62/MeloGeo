@@ -182,40 +182,37 @@ export default function MapboxComponent({
     const playSoundForWeather = (weatherType, airQualityIndex, longitude, latitude) => {
         stopAmbiancePlayer();
 
-        let baseFrequency = 440; // Fréquence de base
-        let effectIntensity = 0; // Intensité des effets
-        let synth; // Synthétiseur
+        let baseFrequency = 440;
+        let effectIntensity = 0;
+        let synth;
 
-        // Modifier la fréquence selon des écarts géographiques
         if (longitude !== null && latitude !== null) {
-            const normalizedLongitude = (longitude + 180) / 360; // Normalisation [0, 1]
-            const normalizedLatitude = (latitude + 90) / 180; // Normalisation [0, 1]
-            baseFrequency = 200 + Math.abs(normalizedLongitude - normalizedLatitude) * 1000; // Écarter les fréquences par rapport aux coordonnées
+            const normalizedLongitude = (longitude + 180) / 360;
+            const normalizedLatitude = (latitude + 90) / 180;
+            baseFrequency = 200 + Math.abs(normalizedLongitude - normalizedLatitude) * 1000;
         }
 
-        // Donner une gamme plus étendue et marquée pour l'effet de la qualité de l'air
         if (airQualityIndex <= 50) {
-            effectIntensity = 0.1; // Bon air
+            effectIntensity = 0.1;
         } else if (airQualityIndex <= 100) {
-            effectIntensity = 0.3; // Qualité moyenne
+            effectIntensity = 0.3;
         } else if (airQualityIndex <= 150) {
-            effectIntensity = 0.5; // Mauvais pour les sensibles
+            effectIntensity = 0.5;
         } else if (airQualityIndex <= 200) {
-            effectIntensity = 0.7; // Mauvais pour tous
+            effectIntensity = 0.7;
         } else if (airQualityIndex <= 300) {
-            effectIntensity = 0.85; // Très mauvais
+            effectIntensity = 0.85;
         } else {
-            effectIntensity = 1.0; // Dangereux
+            effectIntensity = 1.0;
         }
 
-        // Modifier les sons en fonction de la météo
         switch (weatherType) {
             case "Clear":
                 synth = new Tone.Synth({
                     oscillator: { type: "sine" },
-                    envelope: { attack: effectIntensity * 0.5, release: 0.5 + effectIntensity },
+                    envelope: { attack: 0.2, decay: 0.1, release: 1 + effectIntensity },
                 }).toDestination();
-                synth.triggerAttackRelease(`${baseFrequency}Hz`, "8n");
+                synth.triggerAttackRelease("C4", "2n"); // Tonalité douce
                 setSynth(synth);
 
                 if (!isVoyageStartedRef.current) {
@@ -225,72 +222,73 @@ export default function MapboxComponent({
 
             case "Rain":
                 synth = new Tone.MembraneSynth({
-                    pitchDecay: 0.1 + effectIntensity / 5,
-                    octaves: 3 + effectIntensity * 2, // Pluie influencée par AQI
+                    pitchDecay: 0.05 + effectIntensity / 4,
+                    octaves: 1 + effectIntensity,
                     envelope: {
-                        attack: 0.02,
+                        attack: 0.01,
                         sustain: effectIntensity / 2,
-                        decay: 0.3,
+                        decay: 0.2,
                         release: 0.1,
                     },
                 }).toDestination();
-                synth.triggerAttackRelease(`${baseFrequency / 1.5}Hz`, "8n");
+
+                const rainDelay = new Tone.FeedbackDelay("8n", 0.5).toDestination();
+                synth.connect(rainDelay); // Ajout du délai pour simuler des gouttes
+                synth.triggerAttackRelease("D3", "8n");
                 setSynth(synth);
                 break;
 
             case "Clouds":
                 synth = new Tone.FMSynth({
-                    harmonicity: 2,
-                    modulationIndex: 15 + effectIntensity * 25,
-                    envelope: { attack: 0.05, decay: 0.3, sustain: 0.5, release: 1.2 },
+                    harmonicity: 3,
+                    modulationIndex: 20 + effectIntensity * 30,
+                    envelope: { attack: 0.1, decay: 0.25, sustain: 0.4, release: 1 },
                     modulationEnvelope: {
-                        attack: 0.25 + effectIntensity * 0.05,
-                        decay: 0.3,
-                        sustain: 0.2,
-                        release: 0.3,
+                        attack: 0.3 + effectIntensity * 0.1,
+                        decay: 0.2,
+                        sustain: 0.3,
+                        release: 0.4,
                     },
                 }).toDestination();
-                synth.triggerAttackRelease(`${baseFrequency * 1.4}Hz`, "8n");
+                synth.triggerAttackRelease("A3", "8n");
                 setSynth(synth);
                 break;
 
             case "Snow":
                 synth = new Tone.Synth({
                     oscillator: { type: "triangle" },
-                    envelope: { attack: 0.3, decay: 0.15, sustain: effectIntensity * 0.8, release: 2 },
+                    envelope: { attack: 0.5, decay: 0.3, sustain: effectIntensity * 0.9, release: 1.5 },
                 }).toDestination();
-                synth.triggerAttackRelease(`${baseFrequency}Hz`, "4n");
+                synth.triggerAttackRelease("E5", "4n"); // Tonalités brillantes
                 setSynth(synth);
                 break;
 
             case "Thunderstorm":
-                const thunderNoise = new Tone.Noise("pink").start();
-                const thunderFilter = new Tone.Filter(
-                  200 + (longitude % 100),
-                  "lowpass"
-                ).toDestination();
+                const thunderNoise = new Tone.Noise("brown").start();
+                const thunderFilter = new Tone.Filter(150 + effectIntensity * 50, "lowpass").toDestination();
                 const thunderDistortion = new Tone.Distortion(effectIntensity * 2).toDestination();
 
                 thunderNoise.connect(thunderFilter);
                 thunderFilter.connect(thunderDistortion);
-                thunderNoise.stop("+1");
+                thunderNoise.stop("+1.5");
                 setSynth(thunderNoise);
                 break;
 
             case "Drizzle":
                 synth = new Tone.NoiseSynth({
                     noise: { type: "white" },
-                    envelope: { attack: 0.01, decay: 0.1, sustain: 0 },
+                    envelope: { attack: 0.02, decay: 0.1, sustain: 0.1 },
                 }).toDestination();
-                synth.triggerAttackRelease("16n");
+                synth.triggerAttackRelease("4n");
                 break;
 
             case "Wind":
                 synth = new Tone.AMSynth({
-                    oscillator: { type: "sine" },
-                    envelope: { attack: 0.15, decay: 0.3, sustain: 0.25, release: effectIntensity * 0.7 },
+                    oscillator: { type: "square" },
+                    harmonicity: 1.5,
+                    envelope: { attack: 0.2, decay: 0.5, sustain: 0.3, release: effectIntensity },
                 }).toDestination();
-                synth.triggerAttackRelease(`${baseFrequency + effectIntensity * 150}Hz`, "8n");
+                synth.triggerAttackRelease(`${baseFrequency + 150}Hz`, "2n");
                 break;
 
             default:
@@ -299,18 +297,15 @@ export default function MapboxComponent({
                 break;
         }
 
-        // Ajout d'un effet de réverbération et d'un délai pour rendre le son plus spatial
         const reverb = new Tone.Reverb({
-            decay: 3 + effectIntensity * 6, // Réverb dépendant de l'AQI
-            wet: 0.4 + effectIntensity / 2,
+            decay: 2 + effectIntensity * 5,
+            wet: 0.3 + effectIntensity / 2,
         }).toDestination();
 
-        const delay = new Tone.FeedbackDelay("8n", 0.3).toDestination();
-
+        const delay = new Tone.FeedbackDelay("16n", 0.2).toDestination();
         synth.connect(reverb);
         synth.connect(delay);
 
-        // Stocker le synthétiseur actuel
         setSynth(synth);
     };
 
@@ -472,7 +467,6 @@ export default function MapboxComponent({
 
 
     return (
-
         <div style={{cursor: 'crosshair'}}>
             <div style={{position: 'relative', height: '100vh'}}>
                 <div style={{
