@@ -15,43 +15,46 @@ const Banner = ({ description, buttonText, onButtonClick }) => {
   const arrowRef = useRef(); // Pour la flèche de scroll
 
   useEffect(() => {
-    const tl = gsap.timeline({ defaults: { duration: 1, ease: "power2.out" } });
+    // Vérifier si la largeur de la fenêtre est supérieure à 768 pixels
+    if (window.innerWidth > 768) {
+      const tl = gsap.timeline({ defaults: { duration: 1, ease: "power2.out" } });
 
-    // Animation pour le conteneur global (fade-in)
-    tl.fromTo(bannerRef.current, { opacity: 0 }, { opacity: 1, duration: 1.5 });
+      // Animation pour le conteneur global (fade-in)
+      tl.fromTo(bannerRef.current, { opacity: 0 }, { opacity: 1, duration: 1.5 });
 
-    // Animation pour le logo (scale avec effet élastique)
-    tl.fromTo(
-      logoRef.current,
-      { scale: 0, opacity: 0 },
-      { scale: 1, opacity: 1, duration: 1.2, ease: "elastic.out(1, 0.5)" },
-    );
+      // Animation pour le logo (scale avec effet élastique)
+      tl.fromTo(
+        logoRef.current,
+        { scale: 0, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 1.2, ease: "elastic.out(1, 0.5)" },
+      );
 
-    // Animation pour la description (slide-up)
-    tl.fromTo(
-      descriptionRef.current,
-      { y: "100%", opacity: 0 },
-      { y: "0%", opacity: 1 },
-    );
+      // Animation pour la description (slide-up)
+      tl.fromTo(
+        descriptionRef.current,
+        { y: "100%", opacity: 0 },
+        { y: "0%", opacity: 1 },
+      );
 
-    // Animation pour le bouton (pop-up)
-    tl.fromTo(
-      buttonRef.current,
-      { scale: 0 },
-      { scale: 1, duration: 0.5, ease: "bounce.out" },
-    );
+      // Animation pour le bouton (pop-up)
+      tl.fromTo(
+        buttonRef.current,
+        { scale: 0 },
+        { scale: 1, duration: 0.5, ease: "bounce.out" },
+      );
 
-    // Animation pour la flèche (fade-in et rebond continu)
-    tl.fromTo(arrowRef.current, { opacity: 0 }, { opacity: 1, duration: 0.8 });
+      // Animation pour la flèche (fade-in et rebond continu)
+      tl.fromTo(arrowRef.current, { opacity: 0 }, { opacity: 1, duration: 0.8 });
 
-    // Bouncing effect on the arrow
-    gsap.to(arrowRef.current, {
-      y: 15,
-      repeat: -1,
-      yoyo: true,
-      duration: 1,
-      ease: "power1.inOut",
-    });
+      // Bouncing effect on the arrow
+      gsap.to(arrowRef.current, {
+        y: 15,
+        repeat: -1,
+        yoyo: true,
+        duration: 1,
+        ease: "power1.inOut",
+      });
+    }
   }, []);
 
   return (

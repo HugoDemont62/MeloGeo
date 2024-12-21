@@ -1,31 +1,9 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import styles from './Section.module.css';
-import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 const Section = ({ title, description, imageUrl, reverse }) => {
   const sectionRef = useRef();
-
-  useEffect(() => {
-    gsap.registerPlugin(ScrollTrigger);
-
-    // Animation lors de l'apparition de la section
-    gsap.fromTo(
-      sectionRef.current,
-      { opacity: 0, y: 100 }, // Initial : masqué et légèrement décalé en bas
-      {
-        opacity: 1,
-        y: 0, // Final : complètement visible à sa position d'origine
-        duration: 1, // Durée de l'animation
-        ease: "power3.out", // Transition fluide
-        scrollTrigger: {
-          trigger: sectionRef.current, // Déclencheur : La section elle-même
-          start: "top 80%", // Début de l'animation : lorsque le haut de la section entre dans le viewport
-        },
-      }
-    );
-  }, []);
 
   return (
     <div
