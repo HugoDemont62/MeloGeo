@@ -6,6 +6,13 @@
     background-color: #e0dbf3;
 }
 
+@media (max-width: 768px) {
+    .container {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
 .header {
     text-align: center;
 }

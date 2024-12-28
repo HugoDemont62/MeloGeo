@@ -204,7 +204,7 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                             <img src='/images/map-menu/temp-min.png' alt="icone temperature minimum"/>
                             <p>{minTemp}°</p>
                         </div>
-                        <div style={{gap: 8, fontWeight: 'lighter', fontSize: 13}}>
+                        <div>
                             <p>Ressentie</p>
                             <p>{feltTemp}°</p>
                         </div>

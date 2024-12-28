@@ -8,6 +8,7 @@ import CityDetailsComponent
   from '@/components/menu/menu-parts/CityDetailsComponent';
 import HowItWorksComponent
   from '@/components/menu/menu-parts/HowItWorksComponent';
+import './page.css';
 
 const Map = () => {
 
@@ -63,23 +64,23 @@ const Map = () => {
       </div>
 
       {/* Section des panneaux : prend 25% de la largeur */}
-        {/* Composant CityDetailsComponent */}
-        {menuCity && (
-          <div>
-            <CityDetailsComponent
-              cityName={cityName}
-              weatherData={weatherData}
-              airPollution={airPollution}
-            />
-          </div>
-        )}
+      {/* Composant CityDetailsComponent */}
+      {menuCity && (
+        <div className="panel city-details">
+          <CityDetailsComponent
+            cityName={cityName}
+            weatherData={weatherData}
+            airPollution={airPollution}
+          />
+        </div>
+      )}
 
-        {/* Composant HowItWorksComponent */}
-        {introPopup && (
-          <div>
-            <HowItWorksComponent />
-          </div>
-        )}
+      {/* Composant HowItWorksComponent */}
+      {introPopup && (
+        <div className="panel how-it-works">
+          <HowItWorksComponent />
+        </div>
+      )}
     </div>
   );
 };

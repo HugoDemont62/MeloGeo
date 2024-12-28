@@ -469,7 +469,7 @@ export default function MapboxComponent({
     return (
         <div style={{cursor: 'crosshair'}}>
             <div style={{position: 'relative', height: '100vh'}}>
-                <div style={{
+                <div className="travel-element" style={{
                     position: 'absolute',
                     top: 10,
                     left: 10,
