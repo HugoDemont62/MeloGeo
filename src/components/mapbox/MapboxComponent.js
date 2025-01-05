@@ -453,23 +453,39 @@ export default function MapboxComponent({
         }
     };
 
-    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+    
+    const [isMobile, setIsMobile] = useState(false);
 
-    const stylesTravel = isMobile
-    ? { display: 'none' } // Style pour mobile
-    : { // Style pour desktop
-        position: 'absolute',
-        top: 10,
-        left: 100,
-        zIndex: 1,
-        backgroundColor: 'white',
-        padding: '10px',
-        borderRadius: '5px',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        display: 'flex',
-        alignItems: 'center',
-        gap: 4,
+    useEffect(() => {
+      // Détecte la largeur d'écran au chargement
+      const handleResize = () => setIsMobile(window.innerWidth <= 768);
+      handleResize(); // Vérifie une première fois
+  
+      // Ajoute un listener pour gérer les changements de taille de l'écran
+      window.addEventListener('resize', handleResize);
+  
+      return () => {
+        // Nettoyage du listener
+        window.removeEventListener('resize', handleResize);
       };
+    }, []);
+  
+    const stylesTravel = isMobile
+      ? { display: 'none' } // Style pour mobile
+      : { // Style pour desktop
+          position: 'absolute',
+          top: 10,
+          left: 100,
+          zIndex: 1,
+          backgroundColor: 'white',
+          padding: '10px',
+          borderRadius: '5px',
+          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 4,
+        };
+    
 
     return (
         <div style={{cursor: 'crosshair'}}>
