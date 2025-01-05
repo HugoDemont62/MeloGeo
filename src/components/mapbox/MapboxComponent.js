@@ -456,16 +456,19 @@ export default function MapboxComponent({
 
     const [isMobile, setIsMobile] = useState(false);
 
-  useEffect(() => {
-    // Vérifie si on est côté client avant d'utiliser `window`
-      const handleResize = () => setIsMobile(window.innerWidth <= 768);
-      handleResize(); // Vérification initiale
-
-      window.addEventListener('resize', handleResize);
-      return () => {
-        window.removeEventListener('resize', handleResize);
-      };
-  }, []);
+    useEffect(() => {
+        // Vérifie si on est côté client avant d'utiliser `window`
+        const handleResize = () => {
+          setIsMobile(window.innerWidth <= 768); // Détecte la taille de l'écran
+        };
+    
+        if (typeof window !== 'undefined') {
+          handleResize(); // Exécute au montage du composant
+          window.addEventListener('resize', handleResize); // Ajoute un listener d'événement
+    
+          return () => window.removeEventListener('resize', handleResize); // Nettoyage à la destruction
+        }
+      }, []);
   
     const stylesTravel = isMobile
       ? { display: 'none' } // Style pour mobile
