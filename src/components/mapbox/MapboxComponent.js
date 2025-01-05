@@ -453,22 +453,21 @@ export default function MapboxComponent({
         }
     };
 
-    
+
     const [isMobile, setIsMobile] = useState(false);
 
-    useEffect(() => {
-      // Détecte la largeur d'écran au chargement
+  useEffect(() => {
+    // Vérifie si on est côté client avant d'utiliser `window`
+    if (typeof window !== 'undefined') {
       const handleResize = () => setIsMobile(window.innerWidth <= 768);
-      handleResize(); // Vérifie une première fois
-  
-      // Ajoute un listener pour gérer les changements de taille de l'écran
+      handleResize(); // Vérification initiale
+
       window.addEventListener('resize', handleResize);
-  
       return () => {
-        // Nettoyage du listener
         window.removeEventListener('resize', handleResize);
       };
-    }, []);
+    }
+  }, []);
   
     const stylesTravel = isMobile
       ? { display: 'none' } // Style pour mobile
