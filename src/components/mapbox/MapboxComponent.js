@@ -8,6 +8,7 @@ import apiManager from "../../services/api-manager";
 import * as Tone from 'tone';
 import WaveBarComponent from '@/components/wave-bar/WaveBarComponent';
 import Slide from "@mui/material/Slide";
+import MaintenanceBanner from "@/app/MaintenanceBanner";
 
 export default function MapboxComponent({
                                             setClickedElement,
@@ -452,23 +453,29 @@ export default function MapboxComponent({
         }
     };
 
+    const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+
+    const stylesTravel = isMobile
+    ? { display: 'none' } // Style pour mobile
+    : { // Style pour desktop
+        position: 'absolute',
+        top: 10,
+        left: 100,
+        zIndex: 1,
+        backgroundColor: 'white',
+        padding: '10px',
+        borderRadius: '5px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 4,
+      };
 
     return (
         <div style={{cursor: 'crosshair'}}>
+            <MaintenanceBanner />  
             <div style={{position: 'relative', height: '100vh'}}>
-                <div className="travel-element" style={{
-                    position: 'absolute',
-                    top: 10,
-                    left: 10,
-                    zIndex: 1,
-                    backgroundColor: 'white',
-                    padding: '10px',
-                    borderRadius: '5px',
-                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 4
-                }}>
+                <div className="travel-element" style={stylesTravel}>
                     <div>
                         <button className="button-icon" onClick={startVoyage}><img height={24}
                                                                                    src="./images/weather-markers/play.png"

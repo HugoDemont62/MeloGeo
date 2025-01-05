@@ -10,6 +10,7 @@ import Section2 from '../components/landingPage/Section2';
 import Section3 from '../components/landingPage/Section3';
 import Preloader from '@/components/landingPage/Preloader';
 import styles from './page.module.css'; // Styles spécifiques à la page, optionnel
+import MaintenanceBanner from './MaintenanceBanner';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true); // État pour gérer le Preloader
@@ -30,6 +31,7 @@ export default function Home() {
               description="Explorez la planète à travers une symphonie de paysages et de climats"
               buttonText="Commencer une exploration"
             />
+            <MaintenanceBanner />
 
             {/* Intégration des sections */}
             <Section
