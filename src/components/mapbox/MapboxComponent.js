@@ -161,24 +161,6 @@ export default function MapboxComponent({
         setMarkersList(prevMarkersList => [...prevMarkersList, newMarker]);
     }, [selectedTree]);
 
-    const playSunnyAmbience = () => {
-        setAmbiancePlayer(new Tone.Player({
-            url: "/sons/sunny-ambiance.mp3",
-            loop: true,
-            autostart: true,
-            volume: -10,
-        }).toDestination());
-    };
-
-    const playRainyAmbience = () => {
-        setAmbiancePlayer(new Tone.Player({
-            url: "/sons/rain-ambiance.mp3",
-            loop: true,
-            autostart: true,
-            volume: -10,
-        }).toDestination());
-    };
-
     const playSoundForWeather = (weatherType, airQualityIndex, longitude, latitude) => {
         stopAmbiancePlayer();
 
@@ -197,16 +179,13 @@ export default function MapboxComponent({
             case "Clear":
                 synth = new Tone.Synth({
                     oscillator: { type: "sine" },
-                    envelope: { attack: 0.2 + effectIntensity * (longitude % 1), decay: 0.1 + effectIntensity * (latitude / 100) , release: 1 },
+                    envelope: { attack: 0.02 + effectIntensity * (longitude % 1), decay: 0.01 + effectIntensity * (latitude / 100) , release: 0.1 },
                     harmonicity: Math.max(0, 4 + effectIntensity * longitude),
 
                 }).toDestination();
                 synth.triggerAttackRelease("C4", "2n");
                 setSynth(synth);
 
-                if (!isVoyageStartedRef.current) {
-                    playSunnyAmbience();
-                }
                 break;
 
             case "Rain":
@@ -233,15 +212,15 @@ export default function MapboxComponent({
                     harmonicity: Math.max(0, 2 + effectIntensity * longitude),
                     modulationIndex: Math.max(0, longitude + effectIntensity * longitude),
                     envelope: {
-                        attack: 0.1 + effectIntensity * (longitude % 1),
-                        decay: 0.2 + effectIntensity * (longitude / 100),
-                        sustain: 0.4,
+                        attack: 0.01 + effectIntensity * (longitude % 1),
+                        decay: 0.02 + effectIntensity * (longitude / 100),
+                        sustain: 0.04,
                         release: 1 + effectIntensity * (longitude / 10),
                     },
                     modulationEnvelope: {
-                        attack: 0.3 + effectIntensity * 0.1,
-                        decay: 0.2,
-                        sustain: 0.3,
+                        attack: 0.03 + effectIntensity * 0.1,
+                        decay: 0.02,
+                        sustain: 0.03,
                         release: 0.4,
                     },
                 }).toDestination();
@@ -253,12 +232,12 @@ export default function MapboxComponent({
                 synth = new Tone.Synth({
                     oscillator: { type: "triangle" },
                     envelope: {
-                        attack: 0.5 + effectIntensity * (longitude % 1),
-                        decay: 0.3 + effectIntensity * (longitude / 100),
-                        sustain: effectIntensity * 0.9,
-                        release: 1.5 + effectIntensity * (longitude / 10),
+                        attack: 0.05 + effectIntensity * (longitude % 1),
+                        decay: 0.03 + effectIntensity * (longitude / 100),
+                        sustain: effectIntensity * 0.09,
+                        release: 0.05 + effectIntensity * (longitude / 10),
                     },
-                    harmonicity: Math.max(0, 2 + effectIntensity * longitude),
+                    harmonicity: Math.max(0, 0.2 + effectIntensity * longitude),
                 }).toDestination();
                 synth.triggerAttackRelease("E5", "4n");
                 setSynth(synth);
@@ -278,7 +257,7 @@ export default function MapboxComponent({
             case "Drizzle":
                 synth = new Tone.NoiseSynth({
                     noise: { type: "white" },
-                    envelope: { attack: 0.02, decay: 0.1, sustain: 0.1 },
+                    envelope: { attack: 0.02, decay: 0.01, sustain: 0.01 },
                     harmonicity: Math.max(0, 2 + effectIntensity * longitude),
                 }).toDestination();
                 synth.triggerAttackRelease("4n");
@@ -289,9 +268,9 @@ export default function MapboxComponent({
                     oscillator: { type: "square" },
                     harmonicity: Math.max(0, 1.5 + effectIntensity * longitude),
                     envelope: {
-                        attack: 0.2,
-                        decay: 0.5,
-                        sustain: 0.3,
+                        attack: 0.02,
+                        decay: 0.05,
+                        sustain: 0.03,
                         release: effectIntensity,
                     },
                 }).toDestination();
@@ -367,7 +346,8 @@ export default function MapboxComponent({
                     })
                     .then(weatherData => {
                         if (weatherData && weatherData.weather && weatherData.weather.length > 0) {
-                            playSoundForWeather(weatherData.weather[0].main, airQualityIndex, longitude, latitude);                        } else {
+                            playSoundForWeather(weatherData.weather[0].main, airQualityIndex, longitude, latitude);                        
+                        } else {
                             console.error('Weather data is not in the expected format:', weatherData);
                         }
 
