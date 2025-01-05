@@ -458,7 +458,6 @@ export default function MapboxComponent({
 
   useEffect(() => {
     // Vérifie si on est côté client avant d'utiliser `window`
-    if (typeof window !== 'undefined') {
       const handleResize = () => setIsMobile(window.innerWidth <= 768);
       handleResize(); // Vérification initiale
 
@@ -466,7 +465,6 @@ export default function MapboxComponent({
       return () => {
         window.removeEventListener('resize', handleResize);
       };
-    }
   }, []);
   
     const stylesTravel = isMobile
