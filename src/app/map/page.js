@@ -9,6 +9,7 @@ import CityDetailsComponent
 import HowItWorksComponent
   from '@/components/menu/menu-parts/HowItWorksComponent';
 import './page.css';
+import MaintenanceBanner from "@/app/MaintenanceBanner";
 
 const Map = () => {
 
@@ -48,6 +49,7 @@ const Map = () => {
         overflow: 'hidden',
       }}
     >
+      <MaintenanceBanner />
       {/* Section carte : prend 75% de la largeur */}
       <div style={{ flex: 3, position: 'relative', height: '100%' }}>
         <MapboxComponent

@@ -1,10 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 const MaintenanceBanner = () => {
+  const [isMobile, setIsMobile] = useState(false);
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const bannerStyles = {
+    ...styles.banner,
+    ...(isMobile && {
+      width: '100%',
+      height: '50px'
+    })
+  };
+
+  const textStyles = {
+    ...styles.text,
+    ...(isMobile && {
+      writingMode: 'horizontal-tb',
+      fontSize: '12px'
+    })
+  };
+
+  if (!isClient) return null;
+
   return (
-    <div style={styles.banner} id="maintenance-banner">
-      <p style={styles.text} className="banner-text">⚠️ Site en cours de travail ⚠️</p>
-    </div>
+      <>
+        <div style={bannerStyles} id="maintenance-banner">
+          <p style={textStyles} className="banner-text">⚠️ Site en cours de travail ⚠️</p>
+        </div>
+        <style jsx global>{`
+        .travel-element {
+          display: ${isMobile ? 'none' : 'flex'} !important;
+        }
+      `}</style>
+      </>
   );
 };
 
@@ -32,28 +71,5 @@ const styles = {
     margin: 0,
   },
 };
-
-// Media queries for responsiveness
-const applyMobileStyles = () => {
-  const banner = document.getElementById('maintenance-banner');
-  const text = document.querySelector('.banner-text');
-  const isMobile = window.innerWidth <= 768;
-
-  if (isMobile) {
-    banner.style.width = '100%';
-    banner.style.height = '50px';
-    text.style.writingMode = 'horizontal-tb';
-    text.style.fontSize = '12px';
-  } else {
-    banner.style.width = '50px';
-    banner.style.height = '100%';
-    text.style.writingMode = 'vertical-rl';
-    text.style.fontSize = '14px';
-  }
-};
-
-// Attach the event listener for window resizing
-window.addEventListener('resize', applyMobileStyles);
-window.addEventListener('load', applyMobileStyles);
 
 export default MaintenanceBanner;
