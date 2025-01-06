@@ -13,25 +13,33 @@ const IntroPopup = () => {
                         left: '50%',
                         transform: 'translate(-50%, -50%)',
                         background: 'white',
-                        padding: '20px',
-                        border: '1px solid black',
+                        padding: '30px',
+                        border: '1px solid #ddd',
                         zIndex: 1000,
-                        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
-                        borderRadius: '10px',
+                        boxShadow: '0 8px 16px rgba(0, 0, 0, 0.3)',
+                        borderRadius: '12px',
                         textAlign: 'center',
+                        maxWidth: '400px',
+                        width: '90%',
                     }}
                 >
-                    <p>Bienvenue ! Cliquez sur la carte pour interagir.</p>
+                    <p style={{ color: '#333', fontSize: '18px', lineHeight: '1.6', marginBottom: '20px' }}>
+                        <strong>Bienvenue !</strong> <br/>
+                        <i>Cliquez sur la carte pour interagir.</i> <br/><br/>
+                        <span>Double cliquez pour poser un marqueur.</span> <br/>
+                        <span>Cliquez simplement pour voir la météo associée à l'endroit du clic.</span>
+                    </p>
                     <button
                         onClick={() => setShowPopup(false)} // Masquer la popup au clic
                         style={{
                             marginTop: '10px',
-                            padding: '10px 20px',
+                            padding: '12px 24px',
                             backgroundColor: '#007bff',
                             color: 'white',
                             border: 'none',
-                            borderRadius: '5px',
+                            borderRadius: '6px',
                             cursor: 'pointer',
+                            fontSize: '16px',
                         }}
                     >
                         OK

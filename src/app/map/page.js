@@ -50,7 +50,7 @@ const Map = () => {
         overflow: 'hidden',
       }}
     >
-      <IntroPopup/>
+      {/*<IntroPopup/>*/}
       <MaintenanceBanner />
       {/* Section carte : prend 75% de la largeur */}
       <div style={{ flex: 3, position: 'relative', height: '100%' }}>
