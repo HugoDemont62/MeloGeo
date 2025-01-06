@@ -168,7 +168,7 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
     };
 
     return (
-        <div className={`container`}>
+        <div className={`city-details-container ${backgroundClass}`}>
             {backgroundVideo && (
                 <video
                     autoPlay
@@ -182,71 +182,63 @@ export default function CityDetailsComponent({ cityName, weatherData, airPolluti
                 <img
                     className="background-video"
                     src={backgroundGif}
-                    alt="background GIF"
+                    alt="Background GIF"
                 />
             )}
-            <div className='sub-container'>
-            <h2 className='item'>{cityName}</h2>
-            <span className='item'>Actuellement sur la ville :</span>
-            <div className="datas-container">
-                <div className='item'>
-                    <p><strong>Aujourd'hui</strong></p>
-                    <div className='current-temperatures'>
+            <div className="city-details-content">
+                <h2 className="city-name">{cityName}</h2>
+                <p className="subtitle">Actuellement sur la ville</p>
+
+                <div className="current-weather">
+                    <div className="temperature-section">
+                        <p className="temperature">{currentTemp}°C</p>
+                        <img
+                            src={currentWeatherIcon}
+                            alt="Weather Icon"
+                            className="weather-icon"
+                        />
+                    </div>
+                    <div className="temperature-details">
                         <div>
-                            <img src='/images/map-menu/rain.png' alt="icone humidité"/>
-                            <p>{humidityLevel}%</p>
+                            <img src="/images/map-menu/rain.png" alt="Humidité" />
+                            <p>{humidityLevel}% Humidité</p>
                         </div>
                         <div>
-                            <img src='/images/map-menu/temp-max.png' alt="icone temperature maximun"/>
-                            <p>{maxTemp}°</p>
+                            <img src="/images/map-menu/temp-max.png" alt="Max Temp" />
+                            <p>{maxTemp}° Max</p>
                         </div>
                         <div>
-                            <img src='/images/map-menu/temp-min.png' alt="icone temperature minimum"/>
-                            <p>{minTemp}°</p>
+                            <img src="/images/map-menu/temp-min.png" alt="Min Temp" />
+                            <p>{minTemp}° Min</p>
                         </div>
                         <div>
                             <p>Ressentie</p>
                             <p>{feltTemp}°</p>
                         </div>
                     </div>
-                    <div style={{width: 350}}>
-                        <TemperatureBar value={currentTemp}/>
+                </div>
+
+                <div className="forecast-section">
+                    <h3>Prévisions à venir</h3>
+                    <div className="forecast-list">
+                        {dailyForecasts.length > 0 ? (
+                            dailyForecasts.map((forecast, index) => (
+                                <div className="forecast-item" key={index}>
+                                    <p>{new Date(forecast.date).toLocaleDateString()}</p>
+                                    <img src={forecast.icon} alt="Forecast Icon" />
+                                    <p>{forecast.temp}°C</p>
+                                </div>
+                            ))
+                        ) : (
+                            <p>Aucune prévision disponible.</p>
+                        )}
                     </div>
                 </div>
-                <div className="item temp">
-                    <p><strong>Climat actuel</strong></p><br/>
-                    <img
-                        src={currentWeatherIcon}
-                        alt="weather icon"
-                        style={{width: '60px', height: '60px'}}
-                    />
+
+                <div className="air-quality">
+                    <AirQualityGauge airPollution={airPollution} />
                 </div>
             </div>
-
-            <div className="forecast-container item">
-                <p><strong>Prévisions à venir</strong></p>
-                {dailyForecasts.length > 0 ? (
-                    <div className="forecast-scroll">
-                        {dailyForecasts.map((forecast, index) => (
-                            <div className="prevision" key={index}>
-                                <p><strong>{new Date(forecast.date).toLocaleDateString()}</strong></p>
-                                <img src={forecast.icon} alt="icone climat"/>
-                                <p>{forecast.temp}°C</p>
-                            </div>
-                        ))}
-                    </div>
-                ) : (
-                    <p>Aucune prévision disponible.</p>
-                )}
-            </div>
-            <div className="datas-container">
-                <div className="air item">
-                    <AirQualityGauge airPollution={airPollution}/>
-                </div>
-            </div>
-            </div>
-
-
         </div>
     );
 }
