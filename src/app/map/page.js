@@ -10,6 +10,7 @@ import HowItWorksComponent
   from '@/components/menu/menu-parts/HowItWorksComponent';
 import './page.css';
 import MaintenanceBanner from "@/app/MaintenanceBanner";
+import IntroPopup from "@/app/introPopup";
 
 const Map = () => {
 
@@ -49,6 +50,7 @@ const Map = () => {
         overflow: 'hidden',
       }}
     >
+      <IntroPopup/>
       <MaintenanceBanner />
       {/* Section carte : prend 75% de la largeur */}
       <div style={{ flex: 3, position: 'relative', height: '100%' }}>
