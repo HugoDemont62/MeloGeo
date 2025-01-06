@@ -10,6 +10,28 @@ import WaveBarComponent from '@/components/wave-bar/WaveBarComponent';
 import Slide from "@mui/material/Slide";
 import MaintenanceBanner from "@/app/MaintenanceBanner";
 
+const useWindowSize = () => {
+    const [isMobile, setIsMobile] = useState(false);
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
+
+    return { isMobile, isClient };
+};
+
 export default function MapboxComponent({
                                             setClickedElement,
                                             weatherData,
@@ -347,7 +369,7 @@ export default function MapboxComponent({
                     })
                     .then(weatherData => {
                         if (weatherData && weatherData.weather && weatherData.weather.length > 0) {
-                            playSoundForWeather(weatherData.weather[0].main, airQualityIndex, longitude, latitude);                        
+                            playSoundForWeather(weatherData.weather[0].main, airQualityIndex, longitude, latitude);
                         } else {
                             console.error('Weather data is not in the expected format:', weatherData);
                         }
@@ -454,69 +476,62 @@ export default function MapboxComponent({
     };
 
 
-    const [isMobile, setIsMobile] = useState(false);
+    // Replace the existing isMobile state with the custom hook
+    const { isMobile, isClient } = useWindowSize();
 
-    useEffect(() => {
-        // Vérifie si on est côté client avant d'utiliser `window`
-        const handleResize = () => {
-          setIsMobile(window.innerWidth <= 768); // Détecte la taille de l'écran
+    // Modify your styles to use the isClient check
+    const stylesTravel = !isClient ? {} : isMobile
+        ? { display: 'none' }
+        : {
+            position: 'absolute',
+            top: 10,
+            left: 100,
+            zIndex: 1,
+            backgroundColor: 'white',
+            padding: '10px',
+            borderRadius: '5px',
+            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: 4,
         };
-    
-        if (typeof window !== 'undefined') {
-          handleResize(); // Exécute au montage du composant
-          window.addEventListener('resize', handleResize); // Ajoute un listener d'événement
-    
-          return () => window.removeEventListener('resize', handleResize); // Nettoyage à la destruction
-        }
-      }, []);
-  
-    const stylesTravel = isMobile
-      ? { display: 'none' } // Style pour mobile
-      : { // Style pour desktop
-          position: 'absolute',
-          top: 10,
-          left: 100,
-          zIndex: 1,
-          backgroundColor: 'white',
-          padding: '10px',
-          borderRadius: '5px',
-          boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-          display: 'flex',
-          alignItems: 'center',
-          gap: 4,
-        };
-    
 
     return (
         <div style={{cursor: 'crosshair'}}>
-            <MaintenanceBanner />  
+            <MaintenanceBanner />
             <div style={{position: 'relative', height: '100vh'}}>
-                <div className="travel-element" style={stylesTravel}>
-                    <div>
-                        <button className="button-icon" onClick={startVoyage}><img height={24}
-                                                                                   src="./images/weather-markers/play.png"
-                                                                                   title="play icons"/></button>
-                    </div>
-                    <hr/>
-                    <Slide in={isVoyageStartedRef.current} direction="right" mountOnEnter unmountOnExit>
+                {isClient && (
+                    <div className="travel-element" style={stylesTravel}>
                         <div>
-                            <button className="button-icon" onClick={stopVoyage}><img height={28}
-                                                                                      src="./images/weather-markers/pause-button.png"/>
+                            <button className="button-icon" onClick={startVoyage}>
+                                <img height={24} src="./images/weather-markers/play.png" title="play icons"/>
                             </button>
                         </div>
-                    </Slide>
-                    <button className="button-icon" onClick={clearMarkersList}><img height={28}
-                                                            src="./images/weather-markers/location.png"/></button>
-                    <input type="range" min="20" max="1000" step="1"
-                           value={Tone.Transport?.bpm?.value || 120}  // Valeur par défaut si undefined
-                           onChange={(e) => {
-                               if (Tone.Transport?.bpm) {
-                                   Tone.Transport.bpm.value = e.target.value;
-                               }
-                           }}/>
-
-
-                </div>
+                        <hr/>
+                        <Slide in={isVoyageStartedRef.current} direction="right" mountOnEnter unmountOnExit>
+                            <div>
+                                <button className="button-icon" onClick={stopVoyage}>
+                                    <img height={28} src="./images/weather-markers/pause-button.png"/>
+                                </button>
+                            </div>
+                        </Slide>
+                        <button className="button-icon" onClick={clearMarkersList}>
+                            <img height={28} src="./images/weather-markers/location.png"/>
+                        </button>
+                        <input
+                            type="range"
+                            min="20"
+                            max="1000"
+                            step="1"
+                            value={Tone.Transport?.bpm?.value || 120}
+                            onChange={(e) => {
+                                if (Tone.Transport?.bpm) {
+                                    Tone.Transport.bpm.value = e.target.value;
+                                }
+                            }}
+                        />
+                    </div>
+                )}
 
                 <Map
                     ref={mapRef}
@@ -539,14 +554,13 @@ export default function MapboxComponent({
                             key={marker.id}
                             longitude={marker.longitude}
                             latitude={marker.latitude}
-                            anchor="bottom">
-
+                            anchor="bottom"
+                        >
                             <img
                                 src={marker.image}
                                 alt="weather icon"
                                 style={{width: '24px', height: '24px'}}
                             />
-
                         </Marker>
                     ))}
 
@@ -566,7 +580,6 @@ export default function MapboxComponent({
                     ))}
 
                     <WaveBarComponent synth={synth}/>
-
                 </Map>
             </div>
         </div>
