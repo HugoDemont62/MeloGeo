@@ -325,21 +325,18 @@ export default function MapboxComponent({
     }, [isVoyageStarted]);
 
     const startVoyage = () => {
-        // Vérifie si le voyage est déjà commencé avant d'exécuter le reste
-        setMenuCity(false)
-        playPercussionLoop()
+        setMenuCity(false);
+        playPercussionLoop();
         if (isVoyageStartedRef.current) return;
 
-        // Démarre le voyage
         setIsVoyageStarted(true);
-        isVoyageStartedRef.current = true; // Met à jour la référence
+        isVoyageStartedRef.current = true;
 
         if (markersList.length === 0) return;
 
         Tone.start().then(() => {
             let localIndex = 0;
 
-            // Assurez-vous d'arrêter le voyage en cours s'il existe déjà un intervalle
             if (voyageInterval) {
                 clearInterval(voyageInterval);
                 setVoyageInterval(null);
@@ -349,9 +346,9 @@ export default function MapboxComponent({
                 if (localIndex >= markersList.length) {
                     clearInterval(intervalId);
                     setVoyageInterval(null);
-                    stopVoyage();  // Arrêter la boucle de percussions
-                    setIsVoyageStarted(false);  // Voyage terminé
-                    isVoyageStartedRef.current = false; // Met à jour la référence
+                    stopVoyage();
+                    setIsVoyageStarted(false);
+                    isVoyageStartedRef.current = false;
                     return;
                 }
 
@@ -360,31 +357,30 @@ export default function MapboxComponent({
                 apiManager.getCityByLngLat(marker.longitude, marker.latitude, tokenMapbox)
                     .then(cityResponse => {
                         const cityName = cityResponse.features[0].properties.name;
+                        setCityName(cityName); // Met à jour le nom de la ville
                         return apiManager.getWeatherByCity(cityName, tokenOWeather);
                     })
                     .then(weatherData => {
-                        if (weatherData && weatherData.weather && weatherData.weather.length > 0) {
-                            playSoundForWeather(weatherData.weather[0].main, airQualityIndex, longitude, latitude);
-                        } else {
-                            console.error('Weather data is not in the expected format:', weatherData);
-                        }
-
-                        mapRef.current?.flyTo({
-                            center: [marker.longitude, marker.latitude],
-                            zoom: 10,
-                        });
-
-                        localIndex++;
+                        setWeatherData(weatherData); // Met à jour les données météo
+                        return apiManager.getAirPollution(marker.longitude, marker.latitude, tokenOWeather);
                     })
-                    .catch(error => {
-                        console.error('Error fetching weather data:', error);
-                    });
-            }, 2000);  // Intervalle de 2 secondes entre chaque marker
+                    .then(airPollution => {
+                        setAirPollution(airPollution); // Met à jour les données de qualité de l'air
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+
+                mapRef.current?.flyTo({
+                    center: [marker.longitude, marker.latitude],
+                    zoom: 10,
+                });
+
+                localIndex++;
+            }, 2000);
 
             setVoyageInterval(intervalId);
-
         });
     };
+
 
     const playPercussionLoop = () => {
         const kick = new Tone.MembraneSynth().toDestination();
