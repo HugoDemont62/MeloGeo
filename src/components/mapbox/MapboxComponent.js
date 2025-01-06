@@ -8,7 +8,20 @@ import apiManager from "../../services/api-manager";
 import * as Tone from 'tone';
 import WaveBarComponent from '@/components/wave-bar/WaveBarComponent';
 import Slide from "@mui/material/Slide";
-import MaintenanceBanner from "@/app/MaintenanceBanner";
+import confetti from 'canvas-confetti';
+
+const effectStyles = `
+  @keyframes rippleEffect {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(100);
+      opacity: 0;
+    }
+  }
+`;
 
 export default function MapboxComponent({
                                             setClickedElement,
@@ -87,18 +100,18 @@ export default function MapboxComponent({
 
             // Récupérez la qualité de l'air via l'API
             apiManager
-            .getAirPollution(clickedLngLat.lng, clickedLngLat.lat, tokenOWeather)
-            .then((data) => {
-                if (data && data.list && data.list.length > 0) {
-                    // Mise à jour de l'état avec l'AQI récupéré
-                    setAirQualityIndex(data.list[0].main.aqi);
-                } else {
-                    console.log("Impossible de récupérer la qualité de l'air");
-                }
-            })
-            .catch((err) =>
-              console.log("Erreur lors de la récupération de l'Air Quality Index :", err)
-            );
+                .getAirPollution(clickedLngLat.lng, clickedLngLat.lat, tokenOWeather)
+                .then((data) => {
+                    if (data && data.list && data.list.length > 0) {
+                        // Mise à jour de l'état avec l'AQI récupéré
+                        setAirQualityIndex(data.list[0].main.aqi);
+                    } else {
+                        console.log("Impossible de récupérer la qualité de l'air");
+                    }
+                })
+                .catch((err) =>
+                    console.log("Erreur lors de la récupération de l'Air Quality Index :", err)
+                );
         }
     }, [clickedLngLat, tokenOWeather]);
 
@@ -148,8 +161,12 @@ export default function MapboxComponent({
             const features = mapRef.current.queryRenderedFeatures(event.point);
             setClickedElement(features);
             setClickedLngLat(event.lngLat);
+
+            shakeCamera();
+            createClickEffect(event);
         }
-    }, []);
+    }, [ambiancePlayer, setClickedElement, setClickedLngLat]);
+
 
     const handleDoubleClick = useCallback((event) => {
         const newMarker = {
@@ -266,7 +283,7 @@ export default function MapboxComponent({
 
             case "Wind":
                 synth = new Tone.AMSynth({
-                    oscillator: { type: "square" },
+                    oscillator: {type: "square"},
                     harmonicity: Math.max(0, 1.5 + effectIntensity * longitude),
                     envelope: {
                         attack: 0.02,
@@ -453,26 +470,93 @@ export default function MapboxComponent({
         }
     };
 
+    const shakeCamera = useCallback(() => {
+        if (!mapRef.current) return;
 
-    // Replace the existing isMobile state with the custom hook
+        const startPos = {
+            center: mapRef.current.getCenter(),
+            zoom: mapRef.current.getZoom()
+        };
+
+        let frame = 0;
+        const animate = () => {
+            if (frame >= 15) {
+                mapRef.current.easeTo({
+                    center: startPos.center,
+                    zoom: startPos.zoom,
+                    duration: 150
+                });
+                return;
+            }
+
+            const offset = Math.sin(frame * 1.5) * (10 - frame) * 0.5;
+            mapRef.current.easeTo({
+                center: [
+                    startPos.center.lng + offset * 0.001,
+                    startPos.center.lat + offset * 0.001
+                ],
+                duration: 50
+            });
+
+            frame++;
+            requestAnimationFrame(animate);
+        };
+
+        animate();
+    }, [mapRef]);
+
+    const createClickEffect = useCallback((e) => {
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: {
+                x: e.point.x / window.innerWidth,
+                y: e.point.y / window.innerHeight
+            },
+            colors: ['#ff0000', '#00ff00', '#0000ff'],
+            startVelocity: 20,
+            gravity: 0.5,
+            ticks: 100
+        });
+
+        const ripple = document.createElement('div');
+        ripple.style.cssText = `
+      position: fixed;
+      left: ${e.point.x}px;
+      top: ${e.point.y}px;
+      width: 2px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: rippleEffect 1s ease-out;
+      z-index: 1000;
+    `;
+
+        document.body.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 1000);
+    }, []);
+
+
 
     // Modify your styles to use the isClient check
     const stylesTravel = {
-            position: 'absolute',
-            top: 10,
-            left: 100,
-            zIndex: 1,
-            backgroundColor: 'white',
-            padding: '10px',
-            borderRadius: '5px',
-            boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-            display: 'flex',
-            alignItems: 'center',
-            gap: 4,
-        };
+        position: 'absolute',
+        top: 10,
+        left: 100,
+        zIndex: 1,
+        backgroundColor: 'white',
+        padding: '10px',
+        borderRadius: '5px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 4,
+    };
 
     return (
         <div style={{cursor: 'crosshair'}}>
+            <style>{effectStyles}</style>
             <div style={{position: 'relative', height: '100vh'}}>
                 <div className="travel-element" style={stylesTravel}>
                     <div>
@@ -489,7 +573,8 @@ export default function MapboxComponent({
                         </div>
                     </Slide>
                     <button className="button-icon" onClick={clearMarkersList}><img height={28}
-                                                            src="./images/weather-markers/location.png"/></button>
+                                                                                    src="./images/weather-markers/location.png"/>
+                    </button>
                     <input type="range" min="20" max="1000" step="1"
                            value={Tone.Transport?.bpm?.value || 120}  // Valeur par défaut si undefined
                            onChange={(e) => {
