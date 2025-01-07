@@ -533,7 +533,19 @@ export default function MapboxComponent({
         setTimeout(() => ripple.remove(), 1000);
     }, []);
 
+    const [isMobile, setIsMobile] = useState(false);
+    const [isClient, setIsClient] = useState(false);
 
+    useEffect(() => {
+        setIsClient(true);
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     // Modify your styles to use the isClient check
     const stylesTravel = {
@@ -550,36 +562,41 @@ export default function MapboxComponent({
         gap: 4,
     };
 
+    const stylesTravelMobile = {
+        ...stylesTravel,
+        top: 50,
+        padding: '5px',
+        left: 10,
+    };
+
     return (
         <div style={{cursor: 'crosshair'}}>
             <style>{effectStyles}</style>
             <div style={{position: 'relative', height: '100vh'}}>
-                <div className="travel-element" style={stylesTravel}>
+                <div className="travel-element" style={isMobile ? stylesTravelMobile : stylesTravel}>
                     <div>
-                        <button className="button-icon" onClick={startVoyage}><img height={24}
-                                                                                   src="./images/weather-markers/play.png"
-                                                                                   title="play icons"/></button>
+                        <button className="button-icon" onClick={startVoyage}>
+                            <img height={24} src="./images/weather-markers/play.png" title="play icons"/>
+                        </button>
                     </div>
                     <hr/>
                     <Slide in={isVoyageStartedRef.current} direction="right" mountOnEnter unmountOnExit>
                         <div>
-                            <button className="button-icon" onClick={stopVoyage}><img height={28}
-                                                                                      src="./images/weather-markers/pause-button.png"/>
+                            <button className="button-icon" onClick={stopVoyage}>
+                                <img height={28} src="./images/weather-markers/pause-button.png"/>
                             </button>
                         </div>
                     </Slide>
-                    <button className="button-icon" onClick={clearMarkersList}><img height={28}
-                                                                                    src="./images/weather-markers/location.png"/>
+                    <button className="button-icon" onClick={clearMarkersList}>
+                        <img height={28} src="./images/weather-markers/location.png"/>
                     </button>
                     <input type="range" min="20" max="1000" step="1"
-                           value={Tone.Transport?.bpm?.value || 120}  // Valeur par défaut si undefined
+                           value={Tone.Transport?.bpm?.value || 120}
                            onChange={(e) => {
                                if (Tone.Transport?.bpm) {
                                    Tone.Transport.bpm.value = e.target.value;
                                }
                            }}/>
-
-
                 </div>
 
                 <Map

@@ -38,11 +38,6 @@ const MaintenanceBanner = () => {
         <div style={bannerStyles} id="maintenance-banner">
           <p style={textStyles} className="banner-text">⚠️ Site en cours de travail ⚠️</p>
         </div>
-        <style jsx global>{`
-        .travel-element {
-          display: ${isMobile ? 'none' : 'flex'} !important;
-        }
-      `}</style>
       </>
   );
 };
