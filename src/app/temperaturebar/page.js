@@ -8,7 +8,6 @@ export default function TestTemperatureBar() {
     ];
 
     return (
-        <main className={styles.main}>
             <section className={styles.container}>
                 {impacts.map((impact, index) => (
                     <div key={index} className={styles.item}>
@@ -26,6 +25,5 @@ export default function TestTemperatureBar() {
                     ))}
                 </div>
             </section>
-        </main>
     );
 }

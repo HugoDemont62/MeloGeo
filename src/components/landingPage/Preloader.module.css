@@ -1,0 +1,38 @@
+.preloader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #040505; /* Une couleur sombre pour l'élégance */
+    z-index: 9999;
+    opacity: 0; /* Pour l'animation d'apparition */
+}
+
+.logo {
+    width: 150px;
+    height: auto;
+    margin-bottom: 20px; /* Séparation entre le logo et le loader */
+}
+
+.loader {
+    width: 50px;
+    height: 50px;
+    border: 4px solid #a08af1;
+    border-top: 4px solid white; /* Une couleur différenciée pour l'animation */
+    border-radius: 50%;
+    animation: spin 1.2s linear infinite; /* Effet de rotation */
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

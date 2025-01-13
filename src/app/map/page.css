@@ -1,0 +1,23 @@
+@media (max-width: 768px) {
+
+    .panel {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background-color: rgba(255, 255, 255, 0.9);
+        padding: 10px;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        max-height: 30%; /* Limite la hauteur à 30% de l'écran */
+        overflow-y: auto; /* Permet le défilement vertical si le contenu dépasse la hauteur */
+        overflow-x: hidden; /* Empêche le défilement horizontal */
+    }
+
+    .city-details {
+        display: block;
+    }
+
+    .how-it-works {
+        display: block;
+    }
+}

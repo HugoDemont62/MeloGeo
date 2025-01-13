@@ -59,12 +59,18 @@
 .image {
     height: 3.5rem;
 }
-/* .links:hover {
-    font-weight: 600;
-} */
 
-/* .link:hover { */
-/* background-color: #a9e5ac; */
-/* color: #fff;
-font-weight: 600;
-} */
+/* Mobile */
+@media (max-width: 700px) {
+    .header {
+        padding: .1rem;
+    }
+
+    .nav {
+        display: none;
+    }
+
+    .logo {
+        padding-left: 5rem;
+    }
+}

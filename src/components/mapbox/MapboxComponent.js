@@ -8,6 +8,20 @@ import apiManager from "../../services/api-manager";
 import * as Tone from 'tone';
 import WaveBarComponent from '@/components/wave-bar/WaveBarComponent';
 import Slide from "@mui/material/Slide";
+import confetti from 'canvas-confetti';
+
+const effectStyles = `
+  @keyframes rippleEffect {
+    0% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(100);
+      opacity: 0;
+    }
+  }
+`;
 
 export default function MapboxComponent({
                                             setClickedElement,
@@ -32,6 +46,9 @@ export default function MapboxComponent({
     const [voyagePlayer, setVoyagePlayer] = useState(null);
     const [voyageInterval, setVoyageInterval] = useState(null);
     const [markersList, setMarkersList] = useState([]);
+    const [airQualityIndex, setAirQualityIndex] = useState(null); // Par défaut null
+    const [longitude, setLongitude] = useState(null); // Par défaut null
+    const [latitude, setLatitude] = useState(null); // Par défaut null
     const [isVoyageStarted, setIsVoyageStarted] = useState(false);
     let isVoyageStartedRef = useRef(isVoyageStarted);
     const cities = [
@@ -76,12 +93,35 @@ export default function MapboxComponent({
     };
 
     useEffect(() => {
+        if (clickedLngLat) {
+            // Met à jour longitude et latitude
+            setLongitude(clickedLngLat.lng);
+            setLatitude(clickedLngLat.lat);
+
+            // Récupérez la qualité de l'air via l'API
+            apiManager
+                .getAirPollution(clickedLngLat.lng, clickedLngLat.lat, tokenOWeather)
+                .then((data) => {
+                    if (data && data.list && data.list.length > 0) {
+                        // Mise à jour de l'état avec l'AQI récupéré
+                        setAirQualityIndex(data.list[0].main.aqi);
+                    } else {
+                        console.log("Impossible de récupérer la qualité de l'air");
+                    }
+                })
+                .catch((err) =>
+                    console.log("Erreur lors de la récupération de l'Air Quality Index :", err)
+                );
+        }
+    }, [clickedLngLat, tokenOWeather]);
+
+    useEffect(() => {
         getWeatherByCities();
     }, []);
 
     useEffect(() => {
         if (weatherData) {
-            playSoundForWeather(weatherData.weather[0].main);
+            playSoundForWeather(weatherData.weather[0].main, airQualityIndex, longitude, latitude);
         }
     }, [weatherData]);
 
@@ -121,8 +161,12 @@ export default function MapboxComponent({
             const features = mapRef.current.queryRenderedFeatures(event.point);
             setClickedElement(features);
             setClickedLngLat(event.lngLat);
+
+            shakeCamera();
+            createClickEffect(event);
         }
-    }, []);
+    }, [ambiancePlayer, setClickedElement, setClickedLngLat]);
+
 
     const handleDoubleClick = useCallback((event) => {
         const newMarker = {
@@ -135,75 +179,138 @@ export default function MapboxComponent({
         setMarkersList(prevMarkersList => [...prevMarkersList, newMarker]);
     }, [selectedTree]);
 
-    const playSunnyAmbience = () => {
-        setAmbiancePlayer(new Tone.Player({
-            url: "/sons/sunny-ambiance.mp3",
-            loop: true,
-            autostart: true,
-            volume: -10,
-        }).toDestination());
-    };
-
-    const playRainyAmbience = () => {
-        setAmbiancePlayer(new Tone.Player({
-            url: "/sons/rain-ambiance.mp3",
-            loop: true,
-            autostart: true,
-            volume: -10,
-        }).toDestination());
-    };
-
-    const playSoundForWeather = (weatherType) => {
+    const playSoundForWeather = (weatherType, airQualityIndex, longitude, latitude) => {
         stopAmbiancePlayer();
 
+        let baseFrequency = 440;
+        let effectIntensity = 0;
+        let synth;
+
+        if (longitude !== null && latitude !== null) {
+            longitude = Math.abs(longitude);
+            latitude = Math.abs(latitude);
+            baseFrequency = 200 + Math.abs(longitude - latitude) * 10;
+            effectIntensity = Math.abs(longitude * latitude) % 1;
+        }
+
         switch (weatherType) {
-            case 'Clear':
-                const sunnySynth = new Tone.Synth().toDestination();
-                sunnySynth.triggerAttackRelease('C4', '8n');
-                setSynth(sunnySynth);
-                if (!isVoyageStartedRef.current) {
-                    playSunnyAmbience(); // Only play ambiance if voyage is not started
-                }
-                break;
-            case 'Rain':
-                const rainSampler = new Tone.MembraneSynth().toDestination();
-                rainSampler.triggerAttackRelease('C2', '8n');
-                setSynth(rainSampler);
-                break;
-            case 'Clouds':
-                const cloudSynth = new Tone.FMSynth().toDestination();
-                cloudSynth.triggerAttackRelease('E3', '8n');
-                setSynth(cloudSynth);
-                break;
-            case 'Snow':
-                const snowSynth = new Tone.Synth({
-                    oscillator: {type: 'triangle'}
+            case "Clear":
+                synth = new Tone.Synth({
+                    oscillator: { type: "sine" },
+                    envelope: { attack: 0.02 + effectIntensity * (longitude % 1), decay: 0.01 + effectIntensity * (latitude / 100) , release: 0.1 },
+                    harmonicity: Math.max(0, 4 + effectIntensity * longitude),
+
                 }).toDestination();
-                snowSynth.triggerAttackRelease('G4', '8n');
-                setSynth(snowSynth);
+                synth.triggerAttackRelease("C4", "2n");
+                setSynth(synth);
+
                 break;
-            case 'Thunderstorm':
-                const thunderNoise = new Tone.Noise("pink").start();
-                const thunderFilter = new Tone.Filter(800, "lowpass").toDestination();
+
+            case "Rain":
+                synth = new Tone.MembraneSynth({
+                    pitchDecay: 0.05 + effectIntensity / 4,
+                    octaves: 1 + effectIntensity,
+                    envelope: {
+                        attack: 0.01,
+                        sustain: effectIntensity / 2,
+                        decay: 0.2,
+                        release: 0.1,
+                    },
+                    harmonicity: Math.max(0, 2 + effectIntensity * longitude),
+                }).toDestination();
+
+                const rainDelay = new Tone.FeedbackDelay("8n", 0.5).toDestination();
+                synth.connect(rainDelay);
+                synth.triggerAttackRelease("D3", "8n");
+                setSynth(synth);
+                break;
+
+            case "Clouds":
+                synth = new Tone.FMSynth({
+                    harmonicity: Math.max(0, 2 + effectIntensity * longitude),
+                    modulationIndex: Math.max(0, longitude + effectIntensity * longitude),
+                    envelope: {
+                        attack: 0.01 + effectIntensity * (longitude % 1),
+                        decay: 0.02 + effectIntensity * (longitude / 100),
+                        sustain: 0.04,
+                        release: 1 + effectIntensity * (longitude / 10),
+                    },
+                    modulationEnvelope: {
+                        attack: 0.03 + effectIntensity * 0.1,
+                        decay: 0.02,
+                        sustain: 0.03,
+                        release: 0.4,
+                    },
+                }).toDestination();
+                synth.triggerAttackRelease("A3", "8n");
+                setSynth(synth);
+                break;
+
+            case "Snow":
+                synth = new Tone.Synth({
+                    oscillator: { type: "triangle" },
+                    envelope: {
+                        attack: 0.05 + effectIntensity * (longitude % 1),
+                        decay: 0.03 + effectIntensity * (longitude / 100),
+                        sustain: effectIntensity * 0.09,
+                        release: 0.05 + effectIntensity * (longitude / 10),
+                    },
+                    harmonicity: Math.max(0, 0.2 + effectIntensity * longitude),
+                }).toDestination();
+                synth.triggerAttackRelease("E5", "4n");
+                setSynth(synth);
+                break;
+
+            case "Thunderstorm":
+                const thunderNoise = new Tone.Noise("brown").start();
+                const thunderFilter = new Tone.Filter(150 + effectIntensity * 50, "lowpass").toDestination();
+                const thunderDistortion = new Tone.Distortion(effectIntensity * 2).toDestination();
+
                 thunderNoise.connect(thunderFilter);
-                thunderNoise.stop("+0.5");
+                thunderFilter.connect(thunderDistortion);
+                thunderNoise.stop("+1.5");
                 setSynth(thunderNoise);
                 break;
-            case 'Drizzle':
-                const drizzleSynth = new Tone.NoiseSynth().toDestination();
-                drizzleSynth.triggerAttackRelease('8n');
-                break;
-            case 'Wind':
-                const windSynth = new Tone.Synth({
-                    oscillator: {type: 'sine'}
+
+            case "Drizzle":
+                synth = new Tone.NoiseSynth({
+                    noise: { type: "white" },
+                    envelope: { attack: 0.02, decay: 0.01, sustain: 0.01 },
+                    harmonicity: Math.max(0, 2 + effectIntensity * longitude),
                 }).toDestination();
-                windSynth.triggerAttackRelease('A3', '8n');
+                synth.triggerAttackRelease("4n");
                 break;
+
+            case "Wind":
+                synth = new Tone.AMSynth({
+                    oscillator: {type: "square"},
+                    harmonicity: Math.max(0, 1.5 + effectIntensity * longitude),
+                    envelope: {
+                        attack: 0.02,
+                        decay: 0.05,
+                        sustain: 0.03,
+                        release: effectIntensity,
+                    },
+                }).toDestination();
+                synth.triggerAttackRelease(`${baseFrequency + 150}Hz`, "2n");
+                break;
+
             default:
-                const defaultSynth = new Tone.Synth().toDestination();
-                defaultSynth.triggerAttackRelease('B4', '8n');
+                synth = new Tone.Synth().toDestination();
+                synth.triggerAttackRelease(`${baseFrequency}Hz`, "8n");
                 break;
         }
+
+        const reverb = new Tone.Reverb({
+            decay: 2 + effectIntensity * 5,
+            wet: 0.3 + effectIntensity / 2,
+        }).toDestination();
+
+        const delay = new Tone.FeedbackDelay("16n", 0.2).toDestination();
+        synth.connect(reverb);
+        synth.connect(delay);
+
+        setSynth(synth);
     };
 
     useEffect(() => {
@@ -218,21 +325,18 @@ export default function MapboxComponent({
     }, [isVoyageStarted]);
 
     const startVoyage = () => {
-        // Vérifie si le voyage est déjà commencé avant d'exécuter le reste
-        setMenuCity(false)
-        playPercussionLoop()
+        setMenuCity(false);
+        playPercussionLoop();
         if (isVoyageStartedRef.current) return;
 
-        // Démarre le voyage
         setIsVoyageStarted(true);
-        isVoyageStartedRef.current = true; // Met à jour la référence
+        isVoyageStartedRef.current = true;
 
         if (markersList.length === 0) return;
 
         Tone.start().then(() => {
             let localIndex = 0;
 
-            // Assurez-vous d'arrêter le voyage en cours s'il existe déjà un intervalle
             if (voyageInterval) {
                 clearInterval(voyageInterval);
                 setVoyageInterval(null);
@@ -242,9 +346,9 @@ export default function MapboxComponent({
                 if (localIndex >= markersList.length) {
                     clearInterval(intervalId);
                     setVoyageInterval(null);
-                    stopVoyage();  // Arrêter la boucle de percussions
-                    setIsVoyageStarted(false);  // Voyage terminé
-                    isVoyageStartedRef.current = false; // Met à jour la référence
+                    stopVoyage();
+                    setIsVoyageStarted(false);
+                    isVoyageStartedRef.current = false;
                     return;
                 }
 
@@ -253,37 +357,36 @@ export default function MapboxComponent({
                 apiManager.getCityByLngLat(marker.longitude, marker.latitude, tokenMapbox)
                     .then(cityResponse => {
                         const cityName = cityResponse.features[0].properties.name;
+                        setCityName(cityName); // Met à jour le nom de la ville
                         return apiManager.getWeatherByCity(cityName, tokenOWeather);
                     })
                     .then(weatherData => {
-                        if (weatherData && weatherData.weather && weatherData.weather.length > 0) {
-                            playSoundForWeather(weatherData.weather[0].main);
-                        } else {
-                            console.error('Weather data is not in the expected format:', weatherData);
-                        }
-
-                        mapRef.current?.flyTo({
-                            center: [marker.longitude, marker.latitude],
-                            zoom: 10,
-                        });
-
-                        localIndex++;
+                        setWeatherData(weatherData); // Met à jour les données météo
+                        return apiManager.getAirPollution(marker.longitude, marker.latitude, tokenOWeather);
                     })
-                    .catch(error => {
-                        console.error('Error fetching weather data:', error);
-                    });
-            }, 2000);  // Intervalle de 2 secondes entre chaque marker
+                    .then(airPollution => {
+                        setAirPollution(airPollution); // Met à jour les données de qualité de l'air
+                    })
+                    .catch(error => console.error('Error fetching data:', error));
+
+                mapRef.current?.flyTo({
+                    center: [marker.longitude, marker.latitude],
+                    zoom: 10,
+                });
+
+                localIndex++;
+            }, 2000);
 
             setVoyageInterval(intervalId);
-
         });
     };
+
 
     const playPercussionLoop = () => {
         const kick = new Tone.MembraneSynth().toDestination();
         const snare = new Tone.NoiseSynth({
-            noise: {type: 'white'},
-            envelope: {attack: 0.005, decay: 0.1, sustain: 0}
+            noise: { type: 'white' },
+            envelope: { attack: 0.005, decay: 0.1, sustain: 0 },
         }).toDestination();
         const hiHat = new Tone.MetalSynth({
             frequency: 400,
@@ -298,9 +401,27 @@ export default function MapboxComponent({
             octaves: 1.5,
         }).toDestination();
 
+        // Liste des patterns possibles (varie selon les voyages)
+        const patterns = [
+            ['kick', 'hihat', 'snare', 'hihat'],
+            ['kick', 'kick', 'snare', 'hihat'],
+            ['hihat', 'snare', 'kick', 'snare'],
+            ['kick', 'hihat', 'kick', 'snare', 'hihat'],
+        ];
+
+        // Sélectionner aléatoirement un pattern
+        const randomPattern = patterns[Math.floor(Math.random() * patterns.length)];
+
+        // Ajouter des variations sur les BPM (entre 90 et 150)
+        const randomBPM = Math.floor(Math.random() * (150 - 90 + 1)) + 90;
+        Tone.Transport.bpm.value = randomBPM;
+
+        // Initialiser un pattern dynamique
         const pattern = new Tone.Pattern((time, note) => {
             if (note === 'kick') {
-                kick.triggerAttackRelease('C2', '8n', time);
+                // Jouer des notes aléatoires pour le kick
+                const randomNote = ['C2', 'D2', 'E2'][Math.floor(Math.random() * 3)];
+                kick.triggerAttackRelease(randomNote, '8n', time);
                 setSynth(kick);
             } else if (note === 'snare') {
                 snare.triggerAttackRelease('8n', time);
@@ -309,10 +430,12 @@ export default function MapboxComponent({
                 hiHat.triggerAttackRelease('16n', time);
                 setSynth(hiHat);
             }
-        }, ['kick', 'hihat', 'snare', 'hihat'], 'up').start(0);
+        }, randomPattern, 'up').start(0);
 
-        Tone.Transport.bpm.value = 120;
+        // Démarrer le transport pour chaque voyage
         Tone.Transport.start();
+
+        // Garder la référence du player
         setVoyagePlayer(pattern);
     };
 
@@ -343,48 +466,137 @@ export default function MapboxComponent({
         }
     };
 
+    const shakeCamera = useCallback(() => {
+        if (!mapRef.current) return;
+
+        const startPos = {
+            center: mapRef.current.getCenter(),
+            zoom: mapRef.current.getZoom()
+        };
+
+        let frame = 0;
+        const animate = () => {
+            if (frame >= 15) {
+                mapRef.current.easeTo({
+                    center: startPos.center,
+                    zoom: startPos.zoom,
+                    duration: 150
+                });
+                return;
+            }
+
+            const offset = Math.sin(frame * 1.5) * (10 - frame) * 0.5;
+            mapRef.current.easeTo({
+                center: [
+                    startPos.center.lng + offset * 0.001,
+                    startPos.center.lat + offset * 0.001
+                ],
+                duration: 50
+            });
+
+            frame++;
+            requestAnimationFrame(animate);
+        };
+
+        animate();
+    }, [mapRef]);
+
+    const createClickEffect = useCallback((e) => {
+        confetti({
+            particleCount: 100,
+            spread: 70,
+            origin: {
+                x: e.point.x / window.innerWidth,
+                y: e.point.y / window.innerHeight
+            },
+            colors: ['#ff0000', '#00ff00', '#0000ff'],
+            startVelocity: 20,
+            gravity: 0.5,
+            ticks: 100
+        });
+
+        const ripple = document.createElement('div');
+        ripple.style.cssText = `
+      position: fixed;
+      left: ${e.point.x}px;
+      top: ${e.point.y}px;
+      width: 2px;
+      height: 2px;
+      background: rgba(255, 255, 255, 0.8);
+      border-radius: 50%;
+      pointer-events: none;
+      animation: rippleEffect 1s ease-out;
+      z-index: 1000;
+    `;
+
+        document.body.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 1000);
+    }, []);
+
+    const [isMobile, setIsMobile] = useState(false);
+    const [isClient, setIsClient] = useState(false);
+
+    useEffect(() => {
+        setIsClient(true);
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    // Modify your styles to use the isClient check
+    const stylesTravel = {
+        position: 'absolute',
+        top: 10,
+        left: 100,
+        zIndex: 1,
+        backgroundColor: 'white',
+        padding: '10px',
+        borderRadius: '5px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        display: 'flex',
+        alignItems: 'center',
+        gap: 4,
+    };
+
+    const stylesTravelMobile = {
+        ...stylesTravel,
+        top: 50,
+        padding: '5px',
+        left: 10,
+    };
 
     return (
-
         <div style={{cursor: 'crosshair'}}>
+            <style>{effectStyles}</style>
             <div style={{position: 'relative', height: '100vh'}}>
-                <div style={{
-                    position: 'absolute',
-                    top: 10,
-                    left: 10,
-                    zIndex: 1,
-                    backgroundColor: 'white',
-                    padding: '10px',
-                    borderRadius: '5px',
-                    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 4
-                }}>
+                <div className="travel-element" style={isMobile ? stylesTravelMobile : stylesTravel}>
                     <div>
-                        <button className="button-icon" onClick={startVoyage}><img height={24}
-                                                                                   src="./images/weather-markers/play.png"
-                                                                                   title="play icons"/></button>
+                        <button className="button-icon" onClick={startVoyage}>
+                            <img height={24} src="./images/weather-markers/play.png" title="play icons"/>
+                        </button>
                     </div>
                     <hr/>
                     <Slide in={isVoyageStartedRef.current} direction="right" mountOnEnter unmountOnExit>
                         <div>
-                            <button className="button-icon" onClick={stopVoyage}><img height={28}
-                                                                                      src="./images/weather-markers/pause-button.png"/>
+                            <button className="button-icon" onClick={stopVoyage}>
+                                <img height={28} src="./images/weather-markers/pause-button.png"/>
                             </button>
                         </div>
                     </Slide>
-                    <button className="button-icon" onClick={clearMarkersList}><img height={28}
-                                                            src="./images/weather-markers/location.png"/></button>
+                    <button className="button-icon" onClick={clearMarkersList}>
+                        <img height={28} src="./images/weather-markers/location.png"/>
+                    </button>
                     <input type="range" min="20" max="1000" step="1"
-                           value={Tone.Transport?.bpm?.value || 120}  // Valeur par défaut si undefined
+                           value={Tone.Transport?.bpm?.value || 120}
                            onChange={(e) => {
                                if (Tone.Transport?.bpm) {
                                    Tone.Transport.bpm.value = e.target.value;
                                }
                            }}/>
-
-
                 </div>
 
                 <Map
@@ -408,14 +620,13 @@ export default function MapboxComponent({
                             key={marker.id}
                             longitude={marker.longitude}
                             latitude={marker.latitude}
-                            anchor="bottom">
-
+                            anchor="bottom"
+                        >
                             <img
                                 src={marker.image}
                                 alt="weather icon"
                                 style={{width: '24px', height: '24px'}}
                             />
-
                         </Marker>
                     ))}
 
@@ -435,7 +646,6 @@ export default function MapboxComponent({
                     ))}
 
                     <WaveBarComponent synth={synth}/>
-
                 </Map>
             </div>
         </div>

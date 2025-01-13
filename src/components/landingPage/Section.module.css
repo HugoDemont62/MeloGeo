@@ -1,7 +1,12 @@
 .sectionContainer {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: space-evenly;
+    padding: 5rem 2rem; /* Ajout d'espacements uniformes */
+    background-color: #F6F6F8; /* Couleur d'arrière-plan équilibrée */
+    border-radius: 10px; /* Bordures arrondies */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Ombre subtile */
+    overflow: hidden;
 }
 
 .flexRowReverse {
@@ -10,34 +15,50 @@
 
 .content {
     flex: 1;
-    padding: 20px;
-    margin-left: 20rem;
-    margin-top: 13rem;
-    margin-bottom: 13rem;
+    padding: 1.5rem 2rem;
+    margin: 2rem;
 }
 
 .title {
-    font-size: 34px;
-    margin-bottom: 10px;
+    font-size: 36px;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
 }
 
 .description {
     font-size: 18px;
     font-weight: 400;
     line-height: 27px;
-    color: #666;
-    margin-top: 2rem;
+    color: #333;
 }
 
 .image {
     flex: 1;
-    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .imageElement {
-    max-width: 100%;
+    max-width: 90%;
     height: auto;
-    border-radius: 8px;
-    margin-left: 16rem;
-    margin-top: -48rem;
+    border-radius: 10px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Mobile adaptatif */
+@media (max-width: 768px) {
+    .sectionContainer {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem 1rem;
+    }
+
+    .content {
+        margin: 1rem 0;
+    }
+
+    .imageElement {
+        max-width: 70%;
+    }
 }
